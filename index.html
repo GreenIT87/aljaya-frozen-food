@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>²AL JAYA Frozen Food - POS & Stok</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/@zxing/browser@0.1.5/umd/index.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -114,7 +115,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
       <div class="grid lg:grid-cols-[1fr_360px] gap-4 items-start">
         <div>
           <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1" id="posCats"><button onclick="setPosCat('',this)" class="poscat chip-active px-4 py-2 rounded-full bg-white text-xs font-bold whitespace-nowrap shadow-sm">Semua</button><button onclick="setPosCat('Ayam',this)" class="poscat px-4 py-2 rounded-full bg-white text-xs font-bold whitespace-nowrap shadow-sm">🍗 Ayam</button><button onclick="setPosCat('Sapi',this)" class="poscat px-4 py-2 rounded-full bg-white text-xs font-bold whitespace-nowrap shadow-sm">🥩 Sapi</button><button onclick="setPosCat('Seafood',this)" class="poscat px-4 py-2 rounded-full bg-white text-xs font-bold whitespace-nowrap shadow-sm">🦐 Seafood</button><button onclick="setPosCat('Kentang & Snack',this)" class="poscat px-4 py-2 rounded-full bg-white text-xs font-bold whitespace-nowrap shadow-sm">🍟 Snack</button><button onclick="setPosCat('Dimsum',this)" class="poscat px-4 py-2 rounded-full bg-white text-xs font-bold whitespace-nowrap shadow-sm">🥟 Dimsum</button></div>
-          <input id="posSearch" oninput="renderPOS()" placeholder="Cari produk untuk kasir..." class="w-full mt-3 bg-white rounded-full px-4 py-3 text-sm shadow-sm outline-none">
+          <div class="flex gap-2 mt-3"><input id="posSearch" oninput="renderPOS()" placeholder="Cari produk untuk kasir..." class="flex-1 bg-white rounded-full px-4 py-3 text-sm shadow-sm outline-none"><button onclick="openBarcodeScanner()" class="bg-[#FF6B35] text-white px-4 py-3 rounded-full text-xs font-black whitespace-nowrap"><i class="fa fa-camera"></i> Scan Barcode</button></div>
           <div id="posGrid" class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3"></div>
         </div>
         <!-- CART -->
@@ -137,7 +138,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
 
     <!-- HISTORY -->
     <section id="view-history" class="view hidden">
-      <h2 class="text-xl font-black text-[#0A3558]">Riwayat Transaksi</h2><p class="text-xs text-slate-500">Klik struk untuk cetak ulang format thermal 58mm</p>
+      <div class="flex flex-wrap items-center justify-between gap-2"><div><h2 class="text-xl font-black text-[#0A3558]">Riwayat Transaksi</h2><p class="text-xs text-slate-500">Klik struk untuk cetak ulang format thermal 58mm</p></div><button onclick="clearTransactions()" class="bg-red-50 text-red-600 border border-red-200 px-4 py-2.5 rounded-full text-xs font-black">🗑 Hapus Semua Riwayat</button></div>
       <div id="trxList" class="space-y-3 mt-4"></div>
     </section>
 
@@ -156,7 +157,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
           <label class="text-xs font-bold block mt-4">Spreadsheet ID / URL</label><input id="sheetUrl" value="https://docs.google.com/spreadsheets/d/1ALJAYA_FROZEN_2026/edit" class="w-full bg-slate-100 rounded-xl px-3 py-2.5 text-xs mt-1 outline-none">
           <label class="text-xs font-bold block mt-3">Apps Script Web App URL (doGet/doPost)</label><input id="scriptUrl" value="https://script.google.com/macros/s/AKfyc_ALJAYA/exec" class="w-full bg-slate-100 rounded-xl px-3 py-2.5 text-xs mt-1 outline-none">
           <label class="text-xs font-bold block mt-3">Nama Sheet</label><div class="flex gap-2 mt-1"><button class="bg-[#0A4D7A] text-white px-3 py-2 rounded-full text-xs font-bold">Produk</button><button class="bg-slate-100 px-3 py-2 rounded-full text-xs font-bold">Transaksi</button><button class="bg-slate-100 px-3 py-2 rounded-full text-xs font-bold">Users</button></div>
-          <div class="flex gap-2 mt-5"><button onclick="syncSheets(true)" class="flex-1 bg-emerald-600 text-white py-3 rounded-xl font-black text-xs">↻ SYNC SEKARANG</button><button onclick="showToast('Koneksi Sheets OK! 12 produk terbaca')" class="flex-1 bg-[#0A4D7A] text-white py-3 rounded-xl font-black text-xs">TES KONEKSI</button><button onclick="copyScript()" class="bg-slate-100 px-4 rounded-xl text-xs font-bold">Copy Script</button></div>
+          <div class="flex gap-2 mt-5"><button onclick="syncSheets(true)" class="flex-1 bg-emerald-600 text-white py-3 rounded-xl font-black text-xs">↻ SYNC SEKARANG</button><button onclick="showToast('Koneksi Sheets OK! '+products.length+' produk terbaca')" class="flex-1 bg-[#0A4D7A] text-white py-3 rounded-xl font-black text-xs">TES KONEKSI</button><button onclick="copyScript()" class="bg-slate-100 px-4 rounded-xl text-xs font-bold">Copy Script</button></div>
+          <div class="mt-3 pt-3 border-t"><p class="text-[10px] text-slate-400 font-bold mb-2">HAPUS DATA PER SHEET</p><div class="grid grid-cols-3 gap-2"><button onclick="clearSheetData('products')" class="bg-red-50 text-red-600 py-2 rounded-xl text-[10px] font-black">Hapus Produk</button><button onclick="clearSheetData('transactions')" class="bg-red-50 text-red-600 py-2 rounded-xl text-[10px] font-black">Hapus Transaksi</button><button onclick="clearSheetData('users')" class="bg-red-50 text-red-600 py-2 rounded-xl text-[10px] font-black">Hapus Users</button></div></div>
           <div id="syncLog" class="bg-slate-900 text-emerald-300 mono text-[11px] rounded-xl p-3 mt-4 h-28 overflow-auto">> Connected to Sheets...<br>> GET Produk: 12 rows OK<br>> POST Transaksi: ready</div>
         </div>
         <div class="bg-white rounded-[22px] p-5 card-shadow overflow-hidden">
@@ -178,6 +180,28 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
   </nav>
 </div>
 
+<!-- BARCODE SCANNER MODAL -->
+<div id="barcodeModal" class="fixed inset-0 z-[110] hidden bg-black/80 backdrop-blur-sm p-3 overflow-auto">
+  <div class="bg-white max-w-md mx-auto rounded-[24px] overflow-hidden mt-6">
+    <div class="bg-[#0A4D7A] text-white p-4 flex justify-between items-center">
+      <div><b>Scan Barcode Produk</b><p class="text-[10px] text-cyan-200">Arahkan barcode ke kamera</p></div>
+      <button onclick="closeBarcodeScanner()" class="text-xl">✕</button>
+    </div>
+    <div class="p-4">
+      <div class="relative bg-black rounded-2xl overflow-hidden aspect-video">
+        <video id="barcodeVideo" class="w-full h-full object-cover" muted playsinline></video>
+        <div class="absolute left-[10%] right-[10%] top-1/2 border-t-2 border-red-400"></div>
+      </div>
+      <p id="barcodeStatus" class="text-xs text-slate-500 text-center mt-3">Meminta akses kamera...</p>
+      <div class="flex gap-2 mt-3">
+        <button onclick="switchBarcodeCamera()" class="flex-1 bg-slate-100 py-3 rounded-xl text-xs font-bold">↻ Ganti Kamera</button>
+        <button onclick="closeBarcodeScanner()" class="flex-1 bg-red-50 text-red-600 py-3 rounded-xl text-xs font-bold">Tutup</button>
+      </div>
+      <p class="text-[10px] text-slate-400 text-center mt-3">Gunakan HTTPS dan izinkan akses kamera pada browser.</p>
+    </div>
+  </div>
+</div>
+
 <!-- PRODUCT MODAL -->
 <div id="productModal" class="fixed inset-0 z-[90] hidden bg-black/60 backdrop-blur-sm p-3 overflow-auto"><div class="bg-white max-w-lg mx-auto rounded-[24px] overflow-hidden mt-4">
   <div class="bg-[#0A4D7A] text-white p-4 flex justify-between"><b id="pmTitle">Tambah Produk</b><button onclick="closeModal('productModal')" class="text-xl">✕</button></div>
@@ -185,6 +209,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
     <input type="hidden" id="pId">
     <div class="flex gap-3"><div id="imgPreview" class="w-24 h-24 bg-slate-100 rounded-2xl grid place-items-center text-3xl overflow-hidden shrink-0">🧊</div><div class="flex-1"><label class="text-xs font-bold">Upload Gambar Produk</label><input id="pImageFile" type="file" accept="image/*" class="w-full text-xs mt-1"><input id="pImageUrl" placeholder="atau URL gambar https://..." class="w-full bg-slate-100 rounded-xl px-3 py-2 text-xs mt-2 outline-none"><p class="text-[10px] text-slate-400 mt-1">JPG/PNG, akan tersimpan lokal & URL-nya ke Sheets</p></div></div>
     <input id="pName" required placeholder="Nama produk * ex: Nugget Ayam 500g" class="w-full bg-slate-100 rounded-xl px-3 py-3 text-sm outline-none font-semibold">
+    <input id="pBarcode" placeholder="Barcode produk, contoh: 8991234567890" class="w-full bg-slate-100 rounded-xl px-3 py-3 text-sm outline-none">
     <div class="grid grid-cols-2 gap-3"><select id="pCat" class="bg-slate-100 rounded-xl px-3 py-3 text-sm outline-none"><option>Ayam</option><option>Sapi</option><option>Seafood</option><option>Kentang & Snack</option><option>Dimsum</option><option>Lainnya</option></select><input id="pPrice" type="number" required placeholder="Harga Rp *" class="bg-slate-100 rounded-xl px-3 py-3 text-sm outline-none font-bold"></div>
     <div class="grid grid-cols-2 gap-3"><input id="pStock" type="number" required placeholder="Stok *" class="bg-slate-100 rounded-xl px-3 py-3 text-sm outline-none"><input id="pUnit" placeholder="Satuan: pack / kg" value="pack" class="bg-slate-100 rounded-xl px-3 py-3 text-sm outline-none"></div>
     <textarea id="pDesc" placeholder="Deskripsi singkat" class="w-full bg-slate-100 rounded-xl px-3 py-3 text-sm outline-none" rows="2"></textarea>
@@ -213,6 +238,58 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
 const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztBp43Gl0XhwgeVP4u6pbN_DMJH88S8vj8i-I8wOMmu4zTmDvfFB-oSs_3RvJaFeOtnA/exec';
 const LOGO="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171";
 const fmt=n=> 'Rp '+Number(n||0).toLocaleString('id-ID');
+let barcodeStream=null, barcodeReader=null, barcodeScanning=false, barcodeFacingMode='environment';
+function setBarcodeStatus(message){const el=document.getElementById('barcodeStatus');if(el)el.textContent=message}
+function normalizeBarcode(value){return String(value||'').trim().replace(/\s+/g,'')}
+function findProductByBarcode(code){const normalized=normalizeBarcode(code);return products.find(p=>normalizeBarcode(p.barcode)===normalized||String(p.id)===normalized)}
+async function openBarcodeScanner(){
+  document.getElementById('barcodeModal').classList.remove('hidden');
+  barcodeFacingMode='environment';
+  setBarcodeStatus('Meminta akses kamera...');
+  await startBarcodeScanner();
+}
+function closeBarcodeScanner(){
+  barcodeScanning=false;
+  if(barcodeReader&&barcodeReader.reset){try{barcodeReader.reset()}catch(e){}}
+  barcodeReader=null;
+  if(barcodeStream){barcodeStream.getTracks().forEach(track=>track.stop());barcodeStream=null}
+  const video=document.getElementById('barcodeVideo');
+  if(video){video.pause();video.srcObject=null}
+  document.getElementById('barcodeModal').classList.add('hidden');
+}
+async function switchBarcodeCamera(){barcodeFacingMode=barcodeFacingMode==='environment'?'user':'environment';await startBarcodeScanner()}
+async function startBarcodeScanner(){
+  if(barcodeStream){barcodeStream.getTracks().forEach(track=>track.stop());barcodeStream=null}
+  if(barcodeReader&&barcodeReader.reset){try{barcodeReader.reset()}catch(e){}}
+  const video=document.getElementById('barcodeVideo');
+  if(!video)return;
+  try{
+    barcodeStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:barcodeFacingMode},width:{ideal:1280},height:{ideal:720}},audio:false});
+    video.srcObject=barcodeStream;await video.play();barcodeScanning=true;
+    setBarcodeStatus('Kamera aktif. Arahkan barcode ke garis merah.');
+    if('BarcodeDetector' in window){
+      const formats=await BarcodeDetector.getSupportedFormats();
+      const wanted=['ean_13','ean_8','upc_a','upc_e','code_128','code_39','codabar','itf'];
+      const detector=new BarcodeDetector({formats:wanted.filter(x=>formats.includes(x))});
+      scanWithBarcodeDetector(detector,video);
+    }else if(window.ZXing&&window.ZXing.BrowserMultiFormatReader){
+      barcodeReader=new ZXing.BrowserMultiFormatReader();
+      barcodeReader.decodeFromVideoElement(video,(result,error)=>{if(result&&barcodeScanning)handleBarcodeResult(result.getText())});
+    }else{
+      setBarcodeStatus('Browser tidak mendukung scanner. Gunakan Chrome Android terbaru.');
+    }
+  }catch(error){console.error(error);setBarcodeStatus('Kamera gagal dibuka: '+error.message)}
+}
+async function scanWithBarcodeDetector(detector,video){
+  if(!barcodeScanning)return;
+  try{const codes=await detector.detect(video);if(codes.length)handleBarcodeResult(codes[0].rawValue)}catch(e){}
+  if(barcodeScanning)requestAnimationFrame(()=>scanWithBarcodeDetector(detector,video));
+}
+function handleBarcodeResult(rawValue){
+  const code=normalizeBarcode(rawValue), product=findProductByBarcode(code);
+  if(product){closeBarcodeScanner();addToCart(product.id);showToast('Barcode cocok: '+product.name)}
+  else setBarcodeStatus('Barcode '+code+' belum terdaftar. Tambahkan di Produk > Edit Produk.');
+}
 const sheetsConfigured = () => GOOGLE_APPS_SCRIPT_URL.startsWith('https://script.google.com/macros/s/AKfycbztBp43Gl0XhwgeVP4u6pbN_DMJH88S8vj8i-I8wOMmu4zTmDvfFB-oSs_3RvJaFeOtnA/exec') && GOOGLE_APPS_SCRIPT_URL.endsWith('/exec');
 async function sheetsGet(action='all'){
   if(!sheetsConfigured()) return null;
@@ -271,9 +348,9 @@ function deleteProduct(id){if(!confirm('Hapus produk ini dari toko & Sheets?'))r
 let editingImgData="";
 document.getElementById('pImageFile').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=ev=>{editingImgData=ev.target.result;document.getElementById('imgPreview').innerHTML=`<img src="${editingImgData}" class="w-full h-full object-cover">`;document.getElementById('pImageUrl').value='(gambar terupload)';};r.readAsDataURL(f)});
 document.getElementById('pImageUrl').addEventListener('input',e=>{if(e.target.value.startsWith('http')){editingImgData=e.target.value;document.getElementById('imgPreview').innerHTML=`<img src="${editingImgData}" class="w-full h-full object-cover">`}});
-function openProductModal(id=null){document.getElementById('productModal').classList.remove('hidden');editingImgData="";if(id){let p=products.find(x=>x.id===id);document.getElementById('pmTitle').textContent='Edit Produk';document.getElementById('pId').value=p.id;document.getElementById('pName').value=p.name;document.getElementById('pCat').value=p.cat;document.getElementById('pPrice').value=p.price;document.getElementById('pStock').value=p.stock;document.getElementById('pUnit').value=p.unit;document.getElementById('pDesc').value=p.desc||'';document.getElementById('pImageUrl').value=p.img;editingImgData=p.img;document.getElementById('imgPreview').innerHTML=`<img src="${p.img}" class="w-full h-full object-cover">`;}else{document.getElementById('pmTitle').textContent='Tambah Produk Baru';document.getElementById('productForm').reset();document.getElementById('pId').value='';document.getElementById('imgPreview').innerHTML='🧊';}}
+function openProductModal(id=null){document.getElementById('productModal').classList.remove('hidden');editingImgData="";if(id){let p=products.find(x=>x.id===id);document.getElementById('pmTitle').textContent='Edit Produk';document.getElementById('pId').value=p.id;document.getElementById('pName').value=p.name;document.getElementById('pBarcode').value=p.barcode||'';document.getElementById('pCat').value=p.cat;document.getElementById('pPrice').value=p.price;document.getElementById('pStock').value=p.stock;document.getElementById('pUnit').value=p.unit;document.getElementById('pDesc').value=p.desc||'';document.getElementById('pImageUrl').value=p.img;editingImgData=p.img;document.getElementById('imgPreview').innerHTML=`<img src="${p.img}" class="w-full h-full object-cover">`;}else{document.getElementById('pmTitle').textContent='Tambah Produk Baru';document.getElementById('productForm').reset();document.getElementById('pId').value='';document.getElementById('pBarcode').value='';document.getElementById('imgPreview').innerHTML='🧊';}}
 function closeModal(id){document.getElementById(id).classList.add('hidden')}
-document.getElementById('productForm').addEventListener('submit',e=>{e.preventDefault();let id=document.getElementById('pId').value;let data={name:document.getElementById('pName').value,cat:document.getElementById('pCat').value,price:+document.getElementById('pPrice').value,stock:+document.getElementById('pStock').value,unit:document.getElementById('pUnit').value||'pack',desc:document.getElementById('pDesc').value,img:editingImgData||document.getElementById('pImageUrl').value||'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600'};if(id){Object.assign(products.find(p=>p.id==id),data);showToast('Produk diperbarui ✓')}else{data.id=Date.now();products.unshift(data);showToast('Produk baru ditambahkan ✓')}saveAll();closeModal('productModal');renderAll();syncSheets(false);});
+document.getElementById('productForm').addEventListener('submit',e=>{e.preventDefault();let id=document.getElementById('pId').value;let data={name:document.getElementById('pName').value,barcode:normalizeBarcode(document.getElementById('pBarcode').value),cat:document.getElementById('pCat').value,price:+document.getElementById('pPrice').value,stock:+document.getElementById('pStock').value,unit:document.getElementById('pUnit').value||'pack',desc:document.getElementById('pDesc').value,img:editingImgData||document.getElementById('pImageUrl').value||'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600'};if(id){Object.assign(products.find(p=>p.id==id),data);showToast('Produk diperbarui ✓')}else{data.id=Date.now();products.unshift(data);showToast('Produk baru ditambahkan ✓')}saveAll();closeModal('productModal');renderAll();syncSheets(false);});
 function setPosCat(c,el){posCat=c;document.querySelectorAll('.poscat').forEach(b=>b.classList.remove('chip-active'));el.classList.add('chip-active');renderPOS()}
 function renderPOS(){let q=(document.getElementById('posSearch').value||'').toLowerCase();let f=products.filter(p=>(!posCat||p.cat===posCat)&&(!q||p.name.toLowerCase().includes(q)));document.getElementById('posGrid').innerHTML=f.map(p=>{let st=stockStatus(p.stock);return `<button onclick="addToCart(${p.id})" class="bg-white rounded-[18px] overflow-hidden text-left card-shadow disabled:opacity-50" ${p.stock==0?'disabled':''}><img src="${p.img}" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=600'" class="w-full h-[110px] object-cover"><div class="p-3"><p class="font-extrabold text-xs leading-tight line-clamp-2 min-h-[28px]">${p.name}</p><div class="flex justify-between mt-1"><b class="text-[#0A4D7A] text-sm">${fmt(p.price)}</b><span class="text-[10px] font-bold ${p.stock==0?'text-red-500':p.stock<=10?'text-amber-600':'text-emerald-600'}">${p.stock==0?'Habis':'Stok '+p.stock}</span></div></div></button>`}).join('')||'<p class="col-span-full text-center text-slate-400 font-bold py-8">Tidak ada produk</p>'}
 function addToCart(id){let p=products.find(x=>x.id===id);if(!p||p.stock==0)return;let ex=cart.find(c=>c.id===id);if(ex){if(ex.qty>=p.stock){showToast('Stok tidak cukup');return} ex.qty++}else cart.push({id:p.id,name:p.name,price:p.price,qty:1});renderCart();showToast('Ditambahkan: '+p.name)}
@@ -290,7 +367,34 @@ function changePaper(v){let w=v==='58'?'302px':'380px';document.getElementById('
 function printReceipt(){if(!lastReceipt)return;let pa=document.getElementById('printArea');pa.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;width:58mm">${buildReceipt(lastReceipt)}</div>`;setTimeout(()=>window.print(),80)}
 async function printViaBluetooth(){showToast('Mencari printer Bluetooth 58mm...');try{if(navigator.bluetooth){await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:['000018f0-0000-1000-8000-00805f9b34fb']});showToast('Printer terhubung! Mencetak...')}else{showToast('Web Bluetooth tidak didukung, membuka print dialog...')}}catch(e){} setTimeout(printReceipt,600)}
 function shareWA(){if(!lastReceipt)return;let txt=`Struk ²AL JAYA Frozen Food%0ANo: ${lastReceipt.id}%0ATotal: ${fmt(lastReceipt.total)}%0ATerima kasih!`;window.open('https://wa.me/?text='+txt,'_blank')}
-function renderHistory(){document.getElementById('trxList').innerHTML=transactions.map(t=>`<div class="bg-white rounded-2xl p-4 card-shadow flex flex-wrap gap-3 items-center justify-between"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-cyan-50 rounded-2xl grid place-items-center text-xl">🧾</div><div><p class="font-black text-sm">${t.id} • ${fmt(t.total)}</p><p class="text-[11px] text-slate-500">${new Date(t.date).toLocaleString('id-ID')} • ${t.customer} • ${t.pay} • ${t.items.reduce((a,c)=>a+c.qty,0)} item</p><p class="text-[11px] text-slate-400">${t.items.map(i=>i.name+' x'+i.qty).join(', ')}</p></div></div><div class="flex gap-2"><button onclick='openReceipt(${JSON.stringify(t)})' class="bg-[#0A4D7A] text-white px-4 py-2 rounded-full text-xs font-black">Lihat Struk</button><button onclick='lastReceipt=${JSON.stringify(t)};printReceipt()' class="bg-slate-100 px-4 py-2 rounded-full text-xs font-bold">🖨 Cetak Ulang</button></div></div>`).join('')||'<p class="text-center text-slate-400 font-bold py-10">Belum ada transaksi</p>'}
+function deleteTransaction(id){
+  const trx=transactions.find(t=>String(t.id)===String(id));
+  if(!trx)return showToast('Transaksi tidak ditemukan');
+  if(!confirm('Hapus transaksi '+trx.id+'? Data yang sudah dihapus tidak dapat dikembalikan.'))return;
+  transactions=transactions.filter(t=>String(t.id)!==String(id));
+  saveAll();renderAll();showToast('Transaksi dihapus');syncSheets(false);
+}
+function clearTransactions(){
+  if(!transactions.length)return showToast('Riwayat transaksi sudah kosong');
+  if(!confirm('Hapus SEMUA riwayat transaksi? Data tidak dapat dikembalikan.'))return;
+  transactions=[];saveAll();renderAll();showToast('Semua riwayat transaksi dihapus');syncSheets(false);
+}
+function clearSheetData(type){
+  if(type==='products'){
+    if(!confirm('Hapus semua produk? Data tidak dapat dikembalikan.'))return;
+    products=[];
+  }else if(type==='transactions'){
+    if(!confirm('Hapus semua transaksi? Data tidak dapat dikembalikan.'))return;
+    transactions=[];
+  }else if(type==='users'){
+    if(users.length<=1)return showToast('Minimal harus ada 1 user');
+    if(!confirm('Hapus semua user kecuali user yang sedang login?'))return;
+    users=users.filter(u=>currentUser&&String(u.id)===String(currentUser.id));
+    if(!users.length)users=[currentUser];
+  }
+  saveAll();renderAll();showToast('Data berhasil dihapus');syncSheets(false);
+}
+function renderHistory(){document.getElementById('trxList').innerHTML=transactions.map(t=>`<div class="bg-white rounded-2xl p-4 card-shadow flex flex-wrap gap-3 items-center justify-between"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-cyan-50 rounded-2xl grid place-items-center text-xl">🧾</div><div><p class="font-black text-sm">${t.id} • ${fmt(t.total)}</p><p class="text-[11px] text-slate-500">${new Date(t.date).toLocaleString('id-ID')} • ${t.customer} • ${t.pay} • ${t.items.reduce((a,c)=>a+c.qty,0)} item</p><p class="text-[11px] text-slate-400">${t.items.map(i=>i.name+' x'+i.qty).join(', ')}</p></div></div><div class="flex gap-2"><button onclick='openReceipt(${JSON.stringify(t)})' class="bg-[#0A4D7A] text-white px-4 py-2 rounded-full text-xs font-black">Lihat Struk</button><button onclick='lastReceipt=${JSON.stringify(t)};printReceipt()' class="bg-slate-100 px-4 py-2 rounded-full text-xs font-bold">🖨 Cetak Ulang</button><button onclick="deleteTransaction('${t.id}')" class="bg-red-50 text-red-600 px-4 py-2 rounded-full text-xs font-bold">🗑 Hapus</button></div></div>`).join('')||'<p class="text-center text-slate-400 font-bold py-10">Belum ada transaksi</p>'}
 function renderUsers(){document.getElementById('userGrid').innerHTML=users.map(u=>`<div class="bg-white rounded-[20px] p-4 card-shadow"><div class="flex gap-3 items-center"><img src="${u.avatar||'https://i.pravatar.cc/80?img=5'}" class="w-12 h-12 rounded-full object-cover border-2 border-cyan-400"><div><p class="font-black text-sm">${u.name}</p><p class="text-[11px] text-slate-500">@${u.username} • ${u.role}</p></div><span class="ml-auto bg-emerald-100 text-emerald-700 text-[10px] font-black px-2 py-1 rounded-full">AKTIF</span></div><div class="flex gap-2 mt-3"><button onclick="fillLogin('${u.username}','${u.pass}');logoutQuick('${u.username}','${u.pass}')" class="flex-1 bg-slate-100 py-2 rounded-full text-[11px] font-bold">Coba Login</button><button onclick="openUserModal(${u.id})" class="flex-1 bg-[#0A4D7A] text-white py-2 rounded-full text-[11px] font-bold">Edit</button><button onclick="deleteUser(${u.id})" class="w-9 bg-red-50 text-red-500 rounded-full">🗑</button></div><p class="text-[10px] text-slate-400 mt-2 mono">pass: ${u.pass}</p></div>`).join('')}
 function logoutQuick(u,p){let f=users.find(x=>x.username===u);currentUser=f;localStorage.setItem('aljaya_session',JSON.stringify(f));document.getElementById('loginView').classList.add('hidden');document.getElementById('appView').classList.remove('hidden');enterApp();showView('dashboard')}
 function openUserModal(id=null){document.getElementById('userModal').classList.remove('hidden');if(id){let u=users.find(x=>x.id===id);document.getElementById('umTitle').textContent='Edit Pengguna';document.getElementById('uId').value=u.id;document.getElementById('uName').value=u.name;document.getElementById('uUsername').value=u.username;document.getElementById('uPass').value=u.pass;document.getElementById('uRole').value=u.role}else{document.getElementById('umTitle').textContent='Tambah Pengguna';document.getElementById('userForm').reset();document.getElementById('uId').value=''}}

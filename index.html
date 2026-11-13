@@ -22,9 +22,10 @@
 .jagged{height:10px;background:linear-gradient(-45deg,transparent 8px,#fff 0) 0 0/16px 16px repeat-x,linear-gradient(45deg,transparent 8px,#fff 0) 8px 0/16px 16px repeat-x;transform:rotate(180deg)}
 @media print{
  @page{size:58mm auto;margin:0}
+ html,body{width:58mm!important;margin:0!important;padding:0!important;background:#fff!important}
  body>*{display:none!important}
- #printArea{display:block!important;position:absolute;left:0;top:0;width:58mm;padding:4mm 3mm;background:#fff}
- #printArea *{visibility:visible}
+ #printArea{display:block!important;position:static!important;width:54mm!important;margin:0 auto!important;padding:2mm 1mm!important;background:#fff!important;color:#000!important;font-family:'JetBrains Mono',monospace!important;font-size:10px!important;line-height:1.3!important}
+ #printArea *{visibility:visible!important;color:#000!important}
 }
 #printArea{display:none}
 input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset:1px}
@@ -44,7 +45,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
   <span class="snow text-2xl" style="left:10%;animation-duration:9s">❄</span><span class="snow text-xl" style="left:35%;animation-duration:12s;animation-delay:1s">❄</span><span class="snow text-3xl" style="left:70%;animation-duration:10s">❄</span><span class="snow text-lg" style="left:88%;animation-duration:13s">❄</span>
   <div class="relative w-full max-w-[980px] grid md:grid-cols-2 bg-white rounded-[28px] overflow-hidden shadow-2xl">
     <div class="p-6 md:p-8 bg-white flex flex-col items-center justify-center text-center border-r">
-      <img src="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171" class="w-[85%] max-w-[340px] object-contain" alt="logo">
+      <img src="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171" onerror="this.src='https://placehold.co/300x120/0A4D7A/FFFFFF?text=AL+JAYA+FROZEN'" class="w-[85%] max-w-[340px] object-contain" alt="logo">
       <div class="flex gap-2 mt-4"><span class="bg-cyan-100 text-[#0A4D7A] text-[11px] font-extrabold px-3 py-1.5 rounded-full">❄ FROZEN • FRESH • HALAL</span><span class="bg-emerald-100 text-emerald-700 text-[11px] font-extrabold px-3 py-1.5 rounded-full">● ONLINE</span></div>
       <p class="text-[13px] text-slate-500 mt-4 leading-relaxed">Sistem Kasir, Stok & Database Google Sheets<br>untuk toko frozen food modern.</p>
       <div class="grid grid-cols-1 gap-3 w-full mt-5 text-center"><div class="bg-slate-50 rounded-2xl py-3"><p class="font-black text-[#0A4D7A] text-lg" id="loginProdCount">12</p><p class="text-[10px] tracking-widest font-bold text-slate-400">PRODUK</p></div></div>
@@ -67,12 +68,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
   <!-- HEADER -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b">
     <div class="max-w-7xl mx-auto px-3 md:px-5 h-[68px] flex items-center gap-3">
-      <img src="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171" class="h-11 w-[110px] object-contain object-left" alt="logo">
+      <img src="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171" onerror="this.src='https://placehold.co/110x44/0A4D7A/FFFFFF?text=AL+JAYA'" class="h-11 w-[110px] object-contain object-left" alt="logo">
       <div class="hidden sm:block leading-none"><p class="font-black text-[#0A4D7A] text-[15px]">²AL JAYA <span class="text-[#1590C8] font-bold text-xs block tracking-widest mt-0.5">FROZEN FOOD • POS SYSTEM</span></p></div>
       <div class="flex-1 hidden md:flex max-w-md mx-auto"><div class="flex w-full items-center bg-slate-100 rounded-full px-3 py-2 gap-2"><i class="fa fa-search text-slate-400 text-xs"></i><input id="globalSearch" oninput="onGlobalSearch(this.value)" placeholder="Cari nugget, sosis, bakso..." class="bg-transparent w-full text-sm outline-none"></div></div>
       <button onclick="syncSheets(true)" class="hidden md:flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-2 rounded-full text-xs font-bold"><span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span><span id="syncLabel">Sheets Terhubung</span><i class="fa fa-rotate"></i></button>
       <button onclick="showView('pos')" class="relative bg-[#FF6B35] text-white px-3 py-2 rounded-full text-xs font-extrabold"><i class="fa fa-cart-shopping"></i> <span class="hidden sm:inline">Kasir</span> <span id="cartBadge" class="absolute -top-1 -right-1 bg-[#0A4D7A] text-white text-[10px] w-5 h-5 grid place-items-center rounded-full">0</span></button>
-      <div class="flex items-center gap-2 cursor-pointer" onclick="showView('users')"><img id="avatarImg" src="https://i.pravatar.cc/80?img=12" class="w-9 h-9 rounded-full border-2 border-cyan-500 object-cover"><div class="hidden lg:block leading-none"><p id="currentUserName" class="text-xs font-extrabold">Admin Jaya</p><p id="currentUserRole" class="text-[10px] text-slate-500">Owner / Admin</p></div></div>
+      <div class="flex items-center gap-2 cursor-pointer" onclick="showView('users')"><div class="w-9 h-9 rounded-full bg-cyan-100 text-[#0A4D7A] border-2 border-cyan-500 grid place-items-center"><i class="fa-solid fa-user text-sm"></i></div><div class="hidden lg:block leading-none"><p id="currentUserName" class="text-xs font-extrabold">Admin Jaya</p><p id="currentUserRole" class="text-[10px] text-slate-500">Owner / Admin</p></div></div>
       <button onclick="logout()" class="w-9 h-9 grid place-items-center rounded-full bg-red-50 text-red-500"><i class="fa fa-power-off text-sm"></i></button>
     </div>
     <nav class="max-w-7xl mx-auto px-3 md:px-5 hidden md:flex gap-1 pb-2 overflow-x-auto no-scrollbar" id="desktopNav">
@@ -155,7 +156,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
         <div class="bg-white rounded-[22px] p-5 card-shadow">
           <div class="flex items-center gap-3"><div class="w-11 h-11 bg-emerald-100 rounded-2xl grid place-items-center text-2xl">📊</div><div><h3 class="font-black">Google Sheets Database</h3><p class="text-xs text-emerald-600 font-bold">● Terhubung • Terakhir sync: <span id="lastSync">Baru saja</span></p></div></div>
           <label class="text-xs font-bold block mt-4">Spreadsheet ID / URL</label><input id="sheetUrl" value="https://docs.google.com/spreadsheets/d/1ALJAYA_FROZEN_2026/edit" class="w-full bg-slate-100 rounded-xl px-3 py-2.5 text-xs mt-1 outline-none">
-          <label class="text-xs font-bold block mt-3">Apps Script Web App URL (doGet/doPost)</label><input id="scriptUrl" value="https://script.google.com/macros/s/AKfyc_ALJAYA/exec" class="w-full bg-slate-100 rounded-xl px-3 py-2.5 text-xs mt-1 outline-none">
+          <label class="text-xs font-bold block mt-3">Apps Script Web App URL (doGet/doPost)</label><input id="scriptUrl" value="https://script.google.com/macros/s/AKfycbztBp43Gl0XhwgeVP4u6pbN_DMJH88S8vj8i-I8wOMmu4zTmDvfFB-oSs_3RvJaFeOtnA/exec" class="w-full bg-slate-100 rounded-xl px-3 py-2.5 text-xs mt-1 outline-none">
           <label class="text-xs font-bold block mt-3">Nama Sheet</label><div class="flex gap-2 mt-1"><button class="bg-[#0A4D7A] text-white px-3 py-2 rounded-full text-xs font-bold">Produk</button><button class="bg-slate-100 px-3 py-2 rounded-full text-xs font-bold">Transaksi</button><button class="bg-slate-100 px-3 py-2 rounded-full text-xs font-bold">Users</button></div>
           <div class="flex gap-2 mt-5"><button onclick="syncSheets(true)" class="flex-1 bg-emerald-600 text-white py-3 rounded-xl font-black text-xs">↻ SYNC SEKARANG</button><button onclick="showToast('Koneksi Sheets OK! '+products.length+' produk terbaca')" class="flex-1 bg-[#0A4D7A] text-white py-3 rounded-xl font-black text-xs">TES KONEKSI</button><button onclick="copyScript()" class="bg-slate-100 px-4 rounded-xl text-xs font-bold">Copy Script</button></div>
           <div class="mt-3 pt-3 border-t"><p class="text-[10px] text-slate-400 font-bold mb-2">HAPUS DATA PER SHEET</p><div class="grid grid-cols-3 gap-2"><button onclick="clearSheetData('products')" class="bg-red-50 text-red-600 py-2 rounded-xl text-[10px] font-black">Hapus Produk</button><button onclick="clearSheetData('transactions')" class="bg-red-50 text-red-600 py-2 rounded-xl text-[10px] font-black">Hapus Transaksi</button><button onclick="clearSheetData('users')" class="bg-red-50 text-red-600 py-2 rounded-xl text-[10px] font-black">Hapus Users</button></div></div>
@@ -232,182 +233,1000 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
   <p class="text-center text-white/70 text-[10px] mt-2">Pastikan printer ON & terpairing. Gunakan app RawBT / BT Print jika browser tidak menemukan printer.</p>
 </div></div>
 
+<!-- CONFIRMATION MODAL (Pengganti confirm() bawaan browser) -->
+<div id="confirmModal" class="fixed inset-0 z-[120] hidden bg-black/60 backdrop-blur-sm p-3 flex items-center justify-center">
+  <div class="bg-white max-w-sm w-full rounded-[24px] p-5 shadow-2xl text-center">
+    <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 grid place-items-center text-xl mx-auto mb-3"><i class="fa fa-triangle-exclamation"></i></div>
+    <h3 class="font-black text-base text-slate-800">Konfirmasi Hapus</h3>
+    <p id="confirmMsg" class="text-xs text-slate-500 mt-1">Apakah Anda yakin ingin menghapus data ini?</p>
+    <div class="flex gap-2 mt-5">
+      <button onclick="closeModal('confirmModal')" class="flex-1 bg-slate-100 py-2.5 rounded-xl text-xs font-bold text-slate-700">Batal</button>
+      <button id="confirmYesBtn" class="flex-1 bg-red-600 text-white py-2.5 rounded-xl text-xs font-black">Ya, Hapus</button>
+    </div>
+  </div>
+</div>
+
 <div id="printArea"></div>
 
 <script>
 const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztBp43Gl0XhwgeVP4u6pbN_DMJH88S8vj8i-I8wOMmu4zTmDvfFB-oSs_3RvJaFeOtnA/exec';
 const LOGO="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171";
 const fmt=n=> 'Rp '+Number(n||0).toLocaleString('id-ID');
+
+// --- STATE & DEFAULT DATA ---
+const DEFAULT_PRODUCTS = [
+  {id:'PRD001',barcode:'899123456001',name:'Nugget Ayam Crispy 500g',cat:'Ayam',price:24000,stock:28,unit:'pack',img:'https://images.unsplash.com/photo-1562967914-608f82629710?w=400&q=80',desc:'Nugget ayam renyah siap goreng'},
+  {id:'PRD002',barcode:'899123456002',name:'Sosis Sapi Bratwurst 500g',cat:'Sapi',price:35000,stock:15,unit:'pack',img:'https://images.unsplash.com/photo-1585325701956-60dd9c8553bc?w=400&q=80',desc:'Sosis sapi premium isi 10'},
+  {id:'PRD003',barcode:'899123456003',name:'Bakso Sapi Urat 500g',cat:'Sapi',price:32000,stock:4,unit:'pack',img:'https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400&q=80',desc:'Bakso daging sapi asli'},
+  {id:'PRD004',barcode:'899123456004',name:'Tempura Udang Ebi Furai',cat:'Seafood',price:38000,stock:12,unit:'pack',img:'https://images.unsplash.com/photo-1559742811-822873691df8?w=400&q=80',desc:'Udang lapis tepung roti'},
+  {id:'PRD005',barcode:'899123456005',name:'Kentang Goreng Shoestring 1kg',cat:'Kentang & Snack',price:29000,stock:22,unit:'pack',img:'https://images.unsplash.com/photo-1576107232684-1279f390859f?w=400&q=80',desc:'French fries gurih renyah'},
+  {id:'PRD006',barcode:'899123456006',name:'Dimsum Ayam Udang Isi 20',cat:'Dimsum',price:42000,stock:3,unit:'pack',img:'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&q=80',desc:'Lengkap dengan saus sambal'},
+  {id:'PRD007',barcode:'899123456007',name:'Spicy Chicken Wings 500g',cat:'Ayam',price:36000,stock:18,unit:'pack',img:'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=400&q=80',desc:'Sayap ayam bumbu pedas manis'},
+  {id:'PRD008',barcode:'899123456008',name:'Cireng Rujak Crispy Isi 20',cat:'Kentang & Snack',price:16000,stock:0,unit:'pack',img:'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=400&q=80',desc:'Cireng renyah bumbu rujak'},
+  {id:'PRD009',barcode:'899123456009',name:'Otak-Otak Ikan Bandeng 500g',cat:'Seafood',price:22000,stock:20,unit:'pack',img:'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=400&q=80',desc:'Otak-otak ikan segar'},
+  {id:'PRD010',barcode:'899123456010',name:'Daging Slice Yoshinoya 500g',cat:'Sapi',price:58000,stock:9,unit:'pack',img:'https://images.unsplash.com/photo-1603048297172-c92544798d5a?w=400&q=80',desc:'Shortplate beef slice tipis'},
+  {id:'PRD011',barcode:'899123456011',name:'Gyoza Ayam Panggang Isi 15',cat:'Dimsum',price:34000,stock:14,unit:'pack',img:'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?w=400&q=80',desc:'Dumpling ala Jepang'},
+  {id:'PRD012',barcode:'899123456012',name:'Kebab Mini Daging Sapi Isi 10',cat:'Lainnya',price:33000,stock:11,unit:'pack',img:'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=400&q=80',desc:'Tortilla lembut isian melimpah'}
+];
+
+const DEFAULT_USERS = [
+  {id:'USR1',name:'Admin Jaya',username:'admin',pass:'admin123',role:'Admin'},
+  {id:'USR2',name:'Siti Kasir',username:'kasir',pass:'kasir123',role:'Kasir'}
+];
+
+let products = JSON.parse(localStorage.getItem('aljaya_products') || 'null') || DEFAULT_PRODUCTS;
+let users = JSON.parse(localStorage.getItem('aljaya_users') || 'null') || DEFAULT_USERS;
+let transactions = JSON.parse(localStorage.getItem('aljaya_trx') || '[]');
+let currentUser = JSON.parse(localStorage.getItem('aljaya_session') || 'null');
+let cart = [];
+let posCat = '';
+let payMethod = 'Tunai';
+let prodLayout = 'grid';
+let activeReceiptTrx = null;
+
+// --- BARCODE SCANNER ---
 let barcodeStream=null, barcodeReader=null, barcodeScanning=false, barcodeFacingMode='environment';
 function setBarcodeStatus(message){const el=document.getElementById('barcodeStatus');if(el)el.textContent=message}
 function normalizeBarcode(value){return String(value||'').trim().replace(/\s+/g,'')}
 function findProductByBarcode(code){const normalized=normalizeBarcode(code);return products.find(p=>normalizeBarcode(p.barcode)===normalized||String(p.id)===normalized)}
+
 async function openBarcodeScanner(){
   document.getElementById('barcodeModal').classList.remove('hidden');
   barcodeFacingMode='environment';
   setBarcodeStatus('Meminta akses kamera...');
   await startBarcodeScanner();
 }
+
+async function startBarcodeScanner(){
+  stopBarcodeScanner();
+  const video = document.getElementById('barcodeVideo');
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setBarcodeStatus('Browser tidak mendukung akses kamera.');
+      return;
+    }
+    barcodeStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: barcodeFacingMode },
+      audio: false
+    });
+    video.srcObject = barcodeStream;
+    await video.play();
+    barcodeScanning = true;
+    setBarcodeStatus('Kamera aktif. Arahkan ke barcode...');
+
+    // Gunakan BarcodeDetector bawaan browser jika tersedia, atau fallback ZXing
+    if ('BarcodeDetector' in window) {
+      const detector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'code_128', 'code_39', 'qr_code', 'upc_a', 'upc_e'] });
+      const scanLoop = async () => {
+        if (!barcodeScanning) return;
+        try {
+          const codes = await detector.detect(video);
+          if (codes.length > 0) {
+            handleDetectedBarcode(codes[0].rawValue);
+            return;
+          }
+        } catch(e){}
+        requestAnimationFrame(scanLoop);
+      };
+      requestAnimationFrame(scanLoop);
+    } else if (window.ZXingBrowser) {
+      barcodeReader = new ZXingBrowser.BrowserMultiFormatReader();
+      barcodeReader.decodeFromVideoElement(video, (result, err) => {
+        if (result && barcodeScanning) {
+          handleDetectedBarcode(result.getText());
+        }
+      });
+    } else {
+      setBarcodeStatus('Library pemindai tidak termuat. Gunakan pencarian manual.');
+    }
+  } catch (err) {
+    setBarcodeStatus('Gagal membuka kamera: ' + (err.message || 'Izin ditolak'));
+  }
+}
+
+function handleDetectedBarcode(rawCode){
+  const code = normalizeBarcode(rawCode);
+  if (!code) return;
+  const prod = findProductByBarcode(code);
+  if (prod) {
+    addToCart(prod.id);
+    showToast(`Scan berhasil: ${prod.name}`);
+    closeBarcodeScanner();
+  } else {
+    setBarcodeStatus(`Barcode "${code}" tidak ditemukan di produk!`);
+  }
+}
+
+function stopBarcodeScanner(){
+  barcodeScanning = false;
+  if (barcodeReader && typeof barcodeReader.reset === 'function') {
+    try { barcodeReader.reset(); } catch(e){}
+  }
+  if (barcodeStream) {
+    barcodeStream.getTracks().forEach(t => t.stop());
+    barcodeStream = null;
+  }
+}
+
+async function switchBarcodeCamera(){
+  barcodeFacingMode = barcodeFacingMode === 'environment' ? 'user' : 'environment';
+  setBarcodeStatus('Mengganti kamera...');
+  await startBarcodeScanner();
+}
+
 function closeBarcodeScanner(){
-  barcodeScanning=false;
-  if(barcodeReader&&barcodeReader.reset){try{barcodeReader.reset()}catch(e){}}
-  barcodeReader=null;
-  if(barcodeStream){barcodeStream.getTracks().forEach(track=>track.stop());barcodeStream=null}
-  const video=document.getElementById('barcodeVideo');
-  if(video){video.pause();video.srcObject=null}
+  stopBarcodeScanner();
   document.getElementById('barcodeModal').classList.add('hidden');
 }
-async function switchBarcodeCamera(){barcodeFacingMode=barcodeFacingMode==='environment'?'user':'environment';await startBarcodeScanner()}
-async function startBarcodeScanner(){
-  if(barcodeStream){barcodeStream.getTracks().forEach(track=>track.stop());barcodeStream=null}
-  if(barcodeReader&&barcodeReader.reset){try{barcodeReader.reset()}catch(e){}}
-  const video=document.getElementById('barcodeVideo');
-  if(!video)return;
-  try{
-    barcodeStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:barcodeFacingMode},width:{ideal:1280},height:{ideal:720}},audio:false});
-    video.srcObject=barcodeStream;await video.play();barcodeScanning=true;
-    setBarcodeStatus('Kamera aktif. Arahkan barcode ke garis merah.');
-    if('BarcodeDetector' in window){
-      const formats=await BarcodeDetector.getSupportedFormats();
-      const wanted=['ean_13','ean_8','upc_a','upc_e','code_128','code_39','codabar','itf'];
-      const detector=new BarcodeDetector({formats:wanted.filter(x=>formats.includes(x))});
-      scanWithBarcodeDetector(detector,video);
-    }else if(window.ZXing&&window.ZXing.BrowserMultiFormatReader){
-      barcodeReader=new ZXing.BrowserMultiFormatReader();
-      barcodeReader.decodeFromVideoElement(video,(result,error)=>{if(result&&barcodeScanning)handleBarcodeResult(result.getText())});
-    }else{
-      setBarcodeStatus('Browser tidak mendukung scanner. Gunakan Chrome Android terbaru.');
-    }
-  }catch(error){console.error(error);setBarcodeStatus('Kamera gagal dibuka: '+error.message)}
+
+// --- UTILITIES & STORAGE ---
+function saveLocal(){
+  localStorage.setItem('aljaya_products', JSON.stringify(products));
+  localStorage.setItem('aljaya_users', JSON.stringify(users));
+  localStorage.setItem('aljaya_trx', JSON.stringify(transactions));
 }
-async function scanWithBarcodeDetector(detector,video){
-  if(!barcodeScanning)return;
-  try{const codes=await detector.detect(video);if(codes.length)handleBarcodeResult(codes[0].rawValue)}catch(e){}
-  if(barcodeScanning)requestAnimationFrame(()=>scanWithBarcodeDetector(detector,video));
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.remove('hidden');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.classList.add('hidden'), 2800);
 }
-function handleBarcodeResult(rawValue){
-  const code=normalizeBarcode(rawValue), product=findProductByBarcode(code);
-  if(product){closeBarcodeScanner();addToCart(product.id);showToast('Barcode cocok: '+product.name)}
-  else setBarcodeStatus('Barcode '+code+' belum terdaftar. Tambahkan di Produk > Edit Produk.');
+
+function closeModal(id){
+  document.getElementById(id).classList.add('hidden');
 }
-const sheetsConfigured = () => GOOGLE_APPS_SCRIPT_URL.startsWith('https://script.google.com/macros/s/AKfycbztBp43Gl0XhwgeVP4u6pbN_DMJH88S8vj8i-I8wOMmu4zTmDvfFB-oSs_3RvJaFeOtnA/exec') && GOOGLE_APPS_SCRIPT_URL.endsWith('/exec');
-async function sheetsGet(action='all'){
-  if(!sheetsConfigured()) return null;
-  const r=await fetch(GOOGLE_APPS_SCRIPT_URL+'?action='+encodeURIComponent(action),{cache:'no-store'});
-  const data=await r.json();
-  if(!data.ok) throw new Error(data.error||'GET Google Sheets gagal');
-  return data;
+
+function askConfirm(msg, onYes){
+  document.getElementById('confirmMsg').textContent = msg;
+  const btn = document.getElementById('confirmYesBtn');
+  btn.onclick = () => { closeModal('confirmModal'); onYes(); };
+  document.getElementById('confirmModal').classList.remove('hidden');
 }
-async function sheetsPost(payload){
-  if(!sheetsConfigured()) return null;
-  const r=await fetch(GOOGLE_APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
-  const data=await r.json();
-  if(!data.ok) throw new Error(data.error||'POST Google Sheets gagal');
-  return data;
+
+function appendLog(text){
+  const log = document.getElementById('syncLog');
+  if(!log) return;
+  const time = new Date().toLocaleTimeString('id-ID');
+  log.innerHTML += `<br>> [${time}] ${text}`;
+  log.scrollTop = log.scrollHeight;
 }
-let products=JSON.parse(localStorage.getItem('aljaya_products')||'null')||[
-{id:1,name:"Nugget Ayam Premium 500g",cat:"Ayam",price:28500,stock:48,unit:"pack",img:"https://images.unsplash.com/photo-1562967914-608f82629710?w=600&auto=format&fit=crop",desc:"Crispy, juicy, favorit anak"},
-{id:2,name:"Sosis Sapi Bratwurst 450g",cat:"Sapi",price:32000,stock:5,unit:"pack",img:"https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=600&auto=format&fit=crop",desc:"Sosis sapi asli gurih"},
-{id:3,name:"Bakso Sapi Premium 500g",cat:"Sapi",price:35000,stock:32,unit:"pack",img:"https://images.unsplash.com/photo-1541544741938-0af808871cc0?w=600&auto=format&fit=crop",desc:"Kenyal, daging terasa"},
-{id:4,name:"Kentang Shoestring 1kg",cat:"Kentang & Snack",price:27000,stock:0,unit:"pack",img:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&auto=format&fit=crop",desc:"Renyah untuk camilan"},
-{id:5,name:"Dimsum Ayam Udang 20pcs",cat:"Dimsum",price:22000,stock:24,unit:"pack",img:"https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=600&auto=format&fit=crop",desc:"Dimsum lembut isi melimpah"},
-{id:6,name:"Chicken Katsu Frozen",cat:"Ayam",price:38000,stock:18,unit:"pack",img:"https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=600&auto=format&fit=crop",desc:"Siap goreng, crispy"},
-{id:7,name:"Udang Kupas Vaname 250g",cat:"Seafood",price:45000,stock:9,unit:"pack",img:"https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=600&auto=format&fit=crop",desc:"Segar beku, bersih"},
-{id:8,name:"Risol Mayo Smoked Beef",cat:"Kentang & Snack",price:18000,stock:41,unit:"pack",img:"https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&auto=format&fit=crop",desc:"Lumer mayo-nya"},
-{id:9,name:"Daging Slice Shortplate 500g",cat:"Sapi",price:52000,stock:27,unit:"pack",img:"https://images.unsplash.com/photo-1603048297172-c92544798d5a?w=600&auto=format&fit=crop",desc:"Untuk grill & shabu"},
-{id:10,name:"Cireng Bumbu Rujak",cat:"Kentang & Snack",price:12000,stock:60,unit:"pack",img:"https://images.unsplash.com/photo-1626074353765-517a681e40be?w=600&auto=format&fit=crop",desc:"Pedas manis nagih"},
-{id:11,name:"Otak-Otak Ikan 500g",cat:"Seafood",price:19500,stock:14,unit:"pack",img:"https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&auto=format&fit=crop",desc:"Ikan tenggiri asli"},
-{id:12,name:"Ekkado Ayam Telur Puyuh",cat:"Dimsum",price:24000,stock:22,unit:"pack",img:"https://images.unsplash.com/photo-1541696432-82a6da8ce7bf?w=600&auto=format&fit=crop",desc:"Favorit bento anak"},
-];
-let users=JSON.parse(localStorage.getItem('aljaya_users')||'null')||[
-{id:1,name:"Admin Jaya",username:"admin",pass:"admin123",role:"Admin",avatar:"https://i.pravatar.cc/80?img=12"},
-{id:2,name:"Siti Kasir",username:"kasir",pass:"kasir123",role:"Kasir",avatar:"https://i.pravatar.cc/80?img=47"},
-{id:3,name:"Budi Gudang",username:"budi",pass:"budi123",role:"Gudang",avatar:"https://i.pravatar.cc/80?img=33"},
-];
-let transactions=JSON.parse(localStorage.getItem('aljaya_trx')||'null')||[
-{id:"ALJ-260520-001",date:new Date().toISOString(),customer:"Bu Rina",pay:"Tunai",items:[{name:"Nugget Ayam Premium 500g",qty:2,price:28500},{name:"Dimsum Ayam Udang 20pcs",qty:1,price:22000}],total:79000,kasir:"Admin Jaya"},
-{id:"ALJ-260520-002",date:new Date(Date.now()-3600000).toISOString(),customer:"Pak Dedi",pay:"QRIS",items:[{name:"Bakso Sapi Premium 500g",qty:1,price:35000}],total:35000,kasir:"Siti Kasir"},
-];
-let cart=[], currentUser=null, payMethod='Tunai', posCat='', prodLayout='grid', lastReceipt=null;
-function saveAll(){localStorage.setItem('aljaya_products',JSON.stringify(products));localStorage.setItem('aljaya_users',JSON.stringify(users));localStorage.setItem('aljaya_trx',JSON.stringify(transactions));}
-function showToast(m){document.getElementById('toastMsg').textContent=m;let t=document.getElementById('toast');t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),2400)}
-function stockStatus(s){return s==0?{t:'HABIS',c:'bg-red-500 text-white',dot:'bg-red-500',label:'🔴 Habis'}:s<=10?{t:'MENIPIS',c:'bg-amber-400 text-amber-900',dot:'bg-amber-400',label:'🟡 Menipis'}:{t:'AMAN',c:'bg-emerald-500 text-white',dot:'bg-emerald-500',label:'🟢 Aman'}}
-function togglePass(){let i=document.getElementById('loginPass');i.type=i.type=='password'?'text':'password'}
-function fillLogin(u,p){document.getElementById('loginUser').value=u;document.getElementById('loginPass').value=p;showToast('Akun demo terisi, klik Masuk')}
-document.getElementById('loginForm').addEventListener('submit',async e=>{e.preventDefault();let u=document.getElementById('loginUser').value.trim(),p=document.getElementById('loginPass').value.trim();let found=null;try{if(sheetsConfigured()){let result=await sheetsPost({action:'login',username:u,password:p});found=result.data.user;found.pass=p;found.avatar=found.avatar||'https://i.pravatar.cc/80?img=12'}else{found=users.find(x=>x.username===u&&x.pass===p)}}catch(error){console.error(error);found=users.find(x=>x.username===u&&x.pass===p)}if(!found){alert('Username / password salah!');return}currentUser=found;localStorage.setItem('aljaya_session',JSON.stringify(found));enterApp();});
-function enterApp(){document.getElementById('loginView').classList.add('hidden');document.getElementById('appView').classList.remove('hidden');document.getElementById('currentUserName').textContent=currentUser.name;document.getElementById('currentUserRole').textContent=currentUser.role+' • '+currentUser.username;document.getElementById('helloName').textContent=currentUser.name.split(' ')[0]+'!';document.getElementById('avatarImg').src=currentUser.avatar||'https://i.pravatar.cc/80?img=12';renderAll();}
-function logout(){localStorage.removeItem('aljaya_session');location.reload()}
-let sess=JSON.parse(localStorage.getItem('aljaya_session')||'null'); if(sess){currentUser=sess; setTimeout(enterApp,50)}
-function showView(v){document.querySelectorAll('.view').forEach(s=>s.classList.add('hidden'));document.getElementById('view-'+v).classList.remove('hidden');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active-nav',b.dataset.view===v));window.scrollTo({top:0,behavior:'smooth'}); if(v==='products')renderProducts(); if(v==='pos')renderPOS(); if(v==='history')renderHistory(); if(v==='users')renderUsers(); if(v==='sheets')renderSheetPreview();}
-function onGlobalSearch(v){showView('products');document.getElementById('prodSearch').value=v;renderProducts()}
-function setProdLayout(l){prodLayout=l;document.getElementById('productGrid').classList.toggle('hidden',l!=='grid');document.getElementById('productList').classList.toggle('hidden',l!=='list');document.getElementById('btnGrid').className=l==='grid'?'px-3 py-1.5 rounded-full text-xs font-bold bg-white shadow':'px-3 py-1.5 rounded-full text-xs font-bold';document.getElementById('btnList').className=l==='list'?'px-3 py-1.5 rounded-full text-xs font-bold bg-white shadow':'px-3 py-1.5 rounded-full text-xs font-bold'}
-function productCard(p,forDash=false){let st=stockStatus(p.stock);return `<div class="bg-white rounded-[20px] overflow-hidden card-shadow group"><div class="relative"><img src="${p.img}" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=600'" class="w-full product-img"><span class="absolute top-2 left-2 ${st.c} text-[10px] font-black px-2 py-1 rounded-full">${st.label} • ${p.stock} ${p.unit}</span><span class="absolute top-2 right-2 bg-white/90 text-[10px] font-bold px-2 py-1 rounded-full">${p.cat}</span></div><div class="p-3"><p class="font-extrabold text-[13px] leading-tight line-clamp-2 min-h-[34px]">${p.name}</p><p class="text-[11px] text-slate-400 line-clamp-1">${p.desc||''}</p><div class="flex justify-between items-center mt-2"><b class="text-[#0A4D7A]">${fmt(p.price)}</b><span class="text-[10px] bg-slate-100 px-2 py-1 rounded-full font-bold">ID ${String(p.id).padStart(3,'0')}</span></div><div class="flex gap-1.5 mt-3"><button onclick="addToCart(${p.id})" ${p.stock==0?'disabled':''} class="flex-1 ${p.stock==0?'bg-slate-200 text-slate-400':'bg-[#FF6B35] text-white'} py-2 rounded-full text-[11px] font-black">+ KERANJANG</button><button onclick="openProductModal(${p.id})" class="w-8 h-8 grid place-items-center bg-slate-100 rounded-full text-xs">✎</button><button onclick="deleteProduct(${p.id})" class="w-8 h-8 grid place-items-center bg-red-50 text-red-500 rounded-full text-xs"><i class="fa fa-trash"></i></button></div><div class="flex items-center gap-1 mt-2"><button onclick="adjustStock(${p.id},-1)" class="flex-1 bg-slate-100 rounded-full text-xs font-bold py-1">- Stok</button><button onclick="adjustStock(${p.id},5)" class="flex-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-bold py-1">+5 Restock</button></div></div></div>`}
-function renderProducts(){let q=(document.getElementById('prodSearch').value||'').toLowerCase(),cat=document.getElementById('catFilter').value,sf=document.getElementById('stockFilter').value;let filtered=products.filter(p=>(!q||p.name.toLowerCase().includes(q))&&(!cat||p.cat===cat)&&(!sf||(sf==='aman'&&p.stock>10)||(sf==='menipis'&&p.stock>0&&p.stock<=10)||(sf==='habis'&&p.stock==0)));document.getElementById('productGrid').innerHTML=filtered.length?filtered.map(p=>productCard(p)).join(''):`<div class="col-span-full bg-white rounded-2xl p-8 text-center text-slate-400 font-bold">Produk tidak ditemukan</div>`;document.getElementById('productTableBody').innerHTML=filtered.map(p=>{let st=stockStatus(p.stock);return `<tr class="border-t"><td class="p-3"><div class="flex gap-2 items-center"><img src="${p.img}" class="w-10 h-10 rounded-xl object-cover"><b class="text-xs">${p.name}</b></div></td><td class="p-3 font-bold text-xs">${fmt(p.price)}</td><td class="p-3"><button onclick="adjustStock(${p.id},-1)" class="px-2 bg-slate-100 rounded-full">-</button> <b>${p.stock}</b> <button onclick="adjustStock(${p.id},1)" class="px-2 bg-slate-100 rounded-full">+</button></td><td class="p-3"><span class="${st.c} text-[10px] px-2 py-1 rounded-full font-black">${st.t}</span></td><td class="p-3 text-right"><button onclick="openProductModal(${p.id})" class="bg-slate-100 px-3 py-1.5 rounded-full text-xs font-bold">Edit</button> <button onclick="deleteProduct(${p.id})" class="bg-red-50 text-red-600 px-3 py-1.5 rounded-full text-xs font-bold">Hapus</button></td></tr>`}).join('');renderSheetPreview();}
-function adjustStock(id,d){let p=products.find(x=>x.id===id);p.stock=Math.max(0,p.stock+d);saveAll();renderAll();showToast(`Stok ${p.name} = ${p.stock}`);syncSheets(false)}
-function deleteProduct(id){if(!confirm('Hapus produk ini dari toko & Sheets?'))return;products=products.filter(p=>p.id!==id);saveAll();renderAll();showToast('Produk dihapus & sync Sheets');syncSheets(false)}
-let editingImgData="";
-document.getElementById('pImageFile').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=ev=>{editingImgData=ev.target.result;document.getElementById('imgPreview').innerHTML=`<img src="${editingImgData}" class="w-full h-full object-cover">`;document.getElementById('pImageUrl').value='(gambar terupload)';};r.readAsDataURL(f)});
-document.getElementById('pImageUrl').addEventListener('input',e=>{if(e.target.value.startsWith('http')){editingImgData=e.target.value;document.getElementById('imgPreview').innerHTML=`<img src="${editingImgData}" class="w-full h-full object-cover">`}});
-function openProductModal(id=null){document.getElementById('productModal').classList.remove('hidden');editingImgData="";if(id){let p=products.find(x=>x.id===id);document.getElementById('pmTitle').textContent='Edit Produk';document.getElementById('pId').value=p.id;document.getElementById('pName').value=p.name;document.getElementById('pBarcode').value=p.barcode||'';document.getElementById('pCat').value=p.cat;document.getElementById('pPrice').value=p.price;document.getElementById('pStock').value=p.stock;document.getElementById('pUnit').value=p.unit;document.getElementById('pDesc').value=p.desc||'';document.getElementById('pImageUrl').value=p.img;editingImgData=p.img;document.getElementById('imgPreview').innerHTML=`<img src="${p.img}" class="w-full h-full object-cover">`;}else{document.getElementById('pmTitle').textContent='Tambah Produk Baru';document.getElementById('productForm').reset();document.getElementById('pId').value='';document.getElementById('pBarcode').value='';document.getElementById('imgPreview').innerHTML='🧊';}}
-function closeModal(id){document.getElementById(id).classList.add('hidden')}
-document.getElementById('productForm').addEventListener('submit',e=>{e.preventDefault();let id=document.getElementById('pId').value;let data={name:document.getElementById('pName').value,barcode:normalizeBarcode(document.getElementById('pBarcode').value),cat:document.getElementById('pCat').value,price:+document.getElementById('pPrice').value,stock:+document.getElementById('pStock').value,unit:document.getElementById('pUnit').value||'pack',desc:document.getElementById('pDesc').value,img:editingImgData||document.getElementById('pImageUrl').value||'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600'};if(id){Object.assign(products.find(p=>p.id==id),data);showToast('Produk diperbarui ✓')}else{data.id=Date.now();products.unshift(data);showToast('Produk baru ditambahkan ✓')}saveAll();closeModal('productModal');renderAll();syncSheets(false);});
-function setPosCat(c,el){posCat=c;document.querySelectorAll('.poscat').forEach(b=>b.classList.remove('chip-active'));el.classList.add('chip-active');renderPOS()}
-function renderPOS(){let q=(document.getElementById('posSearch').value||'').toLowerCase();let f=products.filter(p=>(!posCat||p.cat===posCat)&&(!q||p.name.toLowerCase().includes(q)));document.getElementById('posGrid').innerHTML=f.map(p=>{let st=stockStatus(p.stock);return `<button onclick="addToCart(${p.id})" class="bg-white rounded-[18px] overflow-hidden text-left card-shadow disabled:opacity-50" ${p.stock==0?'disabled':''}><img src="${p.img}" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=600'" class="w-full h-[110px] object-cover"><div class="p-3"><p class="font-extrabold text-xs leading-tight line-clamp-2 min-h-[28px]">${p.name}</p><div class="flex justify-between mt-1"><b class="text-[#0A4D7A] text-sm">${fmt(p.price)}</b><span class="text-[10px] font-bold ${p.stock==0?'text-red-500':p.stock<=10?'text-amber-600':'text-emerald-600'}">${p.stock==0?'Habis':'Stok '+p.stock}</span></div></div></button>`}).join('')||'<p class="col-span-full text-center text-slate-400 font-bold py-8">Tidak ada produk</p>'}
-function addToCart(id){let p=products.find(x=>x.id===id);if(!p||p.stock==0)return;let ex=cart.find(c=>c.id===id);if(ex){if(ex.qty>=p.stock){showToast('Stok tidak cukup');return} ex.qty++}else cart.push({id:p.id,name:p.name,price:p.price,qty:1});renderCart();showToast('Ditambahkan: '+p.name)}
-function renderCart(){let el=document.getElementById('cartItems');if(!cart.length)el.innerHTML=`<div class="text-center py-8 text-slate-400"><p class="text-3xl">🛒</p><p class="text-xs font-bold mt-1">Keranjang kosong<br>Klik produk untuk menambah</p></div>`;else el.innerHTML=cart.map((c,i)=>`<div class="flex gap-2 items-center bg-slate-50 rounded-2xl p-2"><div class="flex-1"><p class="text-xs font-extrabold leading-tight">${c.name}</p><p class="text-[11px] text-slate-500">${fmt(c.price)} x ${c.qty}</p></div><div class="flex items-center gap-1"><button onclick="chQty(${i},-1)" class="w-7 h-7 bg-white rounded-full shadow text-sm font-black">-</button><b class="w-5 text-center text-sm">${c.qty}</b><button onclick="chQty(${i},1)" class="w-7 h-7 bg-white rounded-full shadow text-sm font-black">+</button></div><b class="text-xs w-[74px] text-right">${fmt(c.price*c.qty)}</b><button onclick="cart.splice(${i},1);renderCart()" class="text-red-400 px-1">✕</button></div>`).join('');let sub=cart.reduce((a,c)=>a+c.price*c.qty,0),disc=sub*(+document.getElementById('discountSel').value/100),total=sub-disc;document.getElementById('subTotal').textContent=fmt(sub);document.getElementById('grandTotal').textContent=fmt(total);document.getElementById('cartBadge').textContent=cart.reduce((a,c)=>a+c.qty,0);document.getElementById('cartInfo').textContent=`${cart.reduce((a,c)=>a+c.qty,0)} item • Kasir: ${currentUser?.name||'Admin'}`;calcChange(total);}
-function chQty(i,d){let item=cart[i];let p=products.find(x=>x.id===item.id);item.qty+=d;if(item.qty<=0)cart.splice(i,1);if(p&&item.qty>p.stock){item.qty=p.stock;showToast('Maksimal stok tersedia')}renderCart()}
-function clearCart(){cart=[];renderCart()}
-function setPay(m,el){payMethod=m;document.querySelectorAll('.paybtn').forEach(b=>b.className='paybtn bg-slate-100 py-2 rounded-xl text-xs font-bold');el.className='paybtn bg-[#0A4D7A] text-white py-2 rounded-xl text-xs font-bold'}
-function getTotal(){let sub=cart.reduce((a,c)=>a+c.price*c.qty,0);return sub-sub*(+document.getElementById('discountSel').value/100)}
-function calcChange(){let cash=+document.getElementById('cashInput').value||0,total=getTotal();document.getElementById('changeText').textContent=fmt(Math.max(0,cash-total))}
-function checkout(){if(!cart.length){showToast('Keranjang masih kosong');return}let total=getTotal(),cash=+document.getElementById('cashInput').value||total;if(payMethod==='Tunai'&&cash<total){showToast('Uang diterima kurang!');return}let trx={id:'ALJ-'+new Date().toISOString().slice(2,10).replace(/-/g,'')+'-'+String(transactions.length+1).padStart(3,'0'),date:new Date().toISOString(),customer:document.getElementById('custName').value||'Pelanggan Umum',pay:payMethod,items:JSON.parse(JSON.stringify(cart)),total,kasir:currentUser.name,cash,change:Math.max(0,cash-total),disc:+document.getElementById('discountSel').value};cart.forEach(c=>{let p=products.find(x=>x.id===c.id);if(p)p.stock=Math.max(0,p.stock-c.qty)});transactions.unshift(trx);saveAll();lastReceipt=trx;cart=[];renderCart();renderAll();openReceipt(trx);showToast('Transaksi berhasil! Stok berkurang & tersync');syncSheets(false);}
-function buildReceipt(trx){let d=new Date(trx.date);return `<div style="padding:14px 10px 8px;text-align:center"><img src="${LOGO}" style="width:92%;height:62px;object-fit:contain;margin:0 auto"><div style="border-top:1.5px dashed #000;margin:8px 0"></div><p style="font-size:11px;line-height:1.4"><b>²AL JAYA Frozen Food</b><br>Jl. Raya Frozen No. 88, Jakarta<br>WA: 0812-3456-7890 • Halal & Fresh<br>--------------------------------<br>No: ${trx.id}<br>${d.toLocaleDateString('id-ID')} ${d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})} • Kasir: ${trx.kasir}<br>Plg: ${trx.customer} • ${trx.pay}<br>--------------------------------</p><div style="text-align:left;font-size:11px;line-height:1.5">${trx.items.map(it=>`<div style="display:flex;justify-content:space-between;gap:6px"><span style="flex:1">${it.name}<br>&nbsp;&nbsp;${it.qty} x ${Number(it.price).toLocaleString('id-ID')}</span><b>${Number(it.price*it.qty).toLocaleString('id-ID')}</b></div>`).join('')}</div><div style="border-top:1.5px dashed #000;margin:8px 0"></div><p style="font-size:11px;text-align:right;line-height:1.6">Subtotal: Rp ${trx.items.reduce((a,c)=>a+c.price*c.qty,0).toLocaleString('id-ID')}<br>${trx.disc?`Diskon ${trx.disc}%: -Rp ${(trx.items.reduce((a,c)=>a+c.price*c.qty,0)*trx.disc/100).toLocaleString('id-ID')}<br>`:''}<b style="font-size:13px">TOTAL: Rp ${Number(trx.total).toLocaleString('id-ID')}</b><br>Bayar: Rp ${Number(trx.cash||trx.total).toLocaleString('id-ID')} • Kembali: Rp ${Number(trx.change||0).toLocaleString('id-ID')}</p><div style="border-top:1.5px dashed #000;margin:8px 0"></div><p style="font-size:10px;line-height:1.4">*** TERIMA KASIH ***<br>Simpan struk untuk penukaran<br>❄ Tetap Dingin, Tetap Segar ❄<br>IG: @aljaya.frozenfood</p><div style="margin:8px auto 2px;width:110px;height:34px;background:repeating-linear-gradient(90deg,#000 0 2px,#fff 2px 4px,#000 4px 7px,#fff 7px 9px)"></div><p style="font-size:9px">${trx.id}</p></div>`}
-function openReceipt(trx){lastReceipt=trx;document.getElementById('receiptPaper').innerHTML=buildReceipt(trx);document.getElementById('receiptModal').classList.remove('hidden')}
-function changePaper(v){let w=v==='58'?'302px':'380px';document.getElementById('receiptPaper').style.maxWidth=w;document.getElementById('receiptPaper').style.width=v==='58'?'58mm':'80mm';document.getElementById('jaggedEl').style.maxWidth=w;document.getElementById('printArea').style.width=v==='58'?'58mm':'80mm'}
-function printReceipt(){if(!lastReceipt)return;let pa=document.getElementById('printArea');pa.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;width:58mm">${buildReceipt(lastReceipt)}</div>`;setTimeout(()=>window.print(),80)}
-async function printViaBluetooth(){showToast('Mencari printer Bluetooth 58mm...');try{if(navigator.bluetooth){await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:['000018f0-0000-1000-8000-00805f9b34fb']});showToast('Printer terhubung! Mencetak...')}else{showToast('Web Bluetooth tidak didukung, membuka print dialog...')}}catch(e){} setTimeout(printReceipt,600)}
-function shareWA(){if(!lastReceipt)return;let txt=`Struk ²AL JAYA Frozen Food%0ANo: ${lastReceipt.id}%0ATotal: ${fmt(lastReceipt.total)}%0ATerima kasih!`;window.open('https://wa.me/?text='+txt,'_blank')}
-function deleteTransaction(id){
-  const trx=transactions.find(t=>String(t.id)===String(id));
-  if(!trx)return showToast('Transaksi tidak ditemukan');
-  if(!confirm('Hapus transaksi '+trx.id+'? Data yang sudah dihapus tidak dapat dikembalikan.'))return;
-  transactions=transactions.filter(t=>String(t.id)!==String(id));
-  saveAll();renderAll();showToast('Transaksi dihapus');syncSheets(false);
+
+// --- AUTHENTICATION ---
+function togglePass(){
+  const inp = document.getElementById('loginPass');
+  const icon = document.getElementById('eyeIcon');
+  if(inp.type === 'password'){ inp.type = 'text'; icon.className = 'fa fa-eye-slash'; }
+  else { inp.type = 'password'; icon.className = 'fa fa-eye'; }
 }
-function clearTransactions(){
-  if(!transactions.length)return showToast('Riwayat transaksi sudah kosong');
-  if(!confirm('Hapus SEMUA riwayat transaksi? Data tidak dapat dikembalikan.'))return;
-  transactions=[];saveAll();renderAll();showToast('Semua riwayat transaksi dihapus');syncSheets(false);
-}
-function clearSheetData(type){
-  if(type==='products'){
-    if(!confirm('Hapus semua produk? Data tidak dapat dikembalikan.'))return;
-    products=[];
-  }else if(type==='transactions'){
-    if(!confirm('Hapus semua transaksi? Data tidak dapat dikembalikan.'))return;
-    transactions=[];
-  }else if(type==='users'){
-    if(users.length<=1)return showToast('Minimal harus ada 1 user');
-    if(!confirm('Hapus semua user kecuali user yang sedang login?'))return;
-    users=users.filter(u=>currentUser&&String(u.id)===String(currentUser.id));
-    if(!users.length)users=[currentUser];
+
+document.getElementById('loginForm').onsubmit = function(e){
+  e.preventDefault();
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value.trim();
+  const found = users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.pass === p);
+  if(found){
+    currentUser = found;
+    localStorage.setItem('aljaya_session', JSON.stringify(found));
+    initApp();
+    showToast('Selamat datang, ' + found.name + '!');
+  } else {
+    showToast('Username atau Password salah!');
   }
-  saveAll();renderAll();showToast('Data berhasil dihapus');syncSheets(false);
+};
+
+function logout(){
+  currentUser = null;
+  localStorage.removeItem('aljaya_session');
+  document.getElementById('appView').classList.add('hidden');
+  document.getElementById('loginView').classList.remove('hidden');
+  document.getElementById('loginProdCount').textContent = products.length;
 }
-function renderHistory(){document.getElementById('trxList').innerHTML=transactions.map(t=>`<div class="bg-white rounded-2xl p-4 card-shadow flex flex-wrap gap-3 items-center justify-between"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-cyan-50 rounded-2xl grid place-items-center text-xl">🧾</div><div><p class="font-black text-sm">${t.id} • ${fmt(t.total)}</p><p class="text-[11px] text-slate-500">${new Date(t.date).toLocaleString('id-ID')} • ${t.customer} • ${t.pay} • ${t.items.reduce((a,c)=>a+c.qty,0)} item</p><p class="text-[11px] text-slate-400">${t.items.map(i=>i.name+' x'+i.qty).join(', ')}</p></div></div><div class="flex gap-2"><button onclick='openReceipt(${JSON.stringify(t)})' class="bg-[#0A4D7A] text-white px-4 py-2 rounded-full text-xs font-black">Lihat Struk</button><button onclick='lastReceipt=${JSON.stringify(t)};printReceipt()' class="bg-slate-100 px-4 py-2 rounded-full text-xs font-bold">🖨 Cetak Ulang</button><button onclick="deleteTransaction('${t.id}')" class="bg-red-50 text-red-600 px-4 py-2 rounded-full text-xs font-bold">🗑 Hapus</button></div></div>`).join('')||'<p class="text-center text-slate-400 font-bold py-10">Belum ada transaksi</p>'}
-function renderUsers(){document.getElementById('userGrid').innerHTML=users.map(u=>`<div class="bg-white rounded-[20px] p-4 card-shadow"><div class="flex gap-3 items-center"><img src="${u.avatar||'https://i.pravatar.cc/80?img=5'}" class="w-12 h-12 rounded-full object-cover border-2 border-cyan-400"><div><p class="font-black text-sm">${u.name}</p><p class="text-[11px] text-slate-500">@${u.username} • ${u.role}</p></div><span class="ml-auto bg-emerald-100 text-emerald-700 text-[10px] font-black px-2 py-1 rounded-full">AKTIF</span></div><div class="flex gap-2 mt-3"><button onclick="fillLogin('${u.username}','${u.pass}');logoutQuick('${u.username}','${u.pass}')" class="flex-1 bg-slate-100 py-2 rounded-full text-[11px] font-bold">Coba Login</button><button onclick="openUserModal(${u.id})" class="flex-1 bg-[#0A4D7A] text-white py-2 rounded-full text-[11px] font-bold">Edit</button><button onclick="deleteUser(${u.id})" class="w-9 bg-red-50 text-red-500 rounded-full">🗑</button></div><p class="text-[10px] text-slate-400 mt-2 mono">pass: ${u.pass}</p></div>`).join('')}
-function logoutQuick(u,p){let f=users.find(x=>x.username===u);currentUser=f;localStorage.setItem('aljaya_session',JSON.stringify(f));document.getElementById('loginView').classList.add('hidden');document.getElementById('appView').classList.remove('hidden');enterApp();showView('dashboard')}
-function openUserModal(id=null){document.getElementById('userModal').classList.remove('hidden');if(id){let u=users.find(x=>x.id===id);document.getElementById('umTitle').textContent='Edit Pengguna';document.getElementById('uId').value=u.id;document.getElementById('uName').value=u.name;document.getElementById('uUsername').value=u.username;document.getElementById('uPass').value=u.pass;document.getElementById('uRole').value=u.role}else{document.getElementById('umTitle').textContent='Tambah Pengguna';document.getElementById('userForm').reset();document.getElementById('uId').value=''}}
-function deleteUser(id){if(users.length<=1)return showToast('Minimal 1 user');if(!confirm('Hapus user ini?'))return;users=users.filter(u=>u.id!==id);saveAll();renderUsers();showToast('User dihapus');syncSheets(false)}
-document.getElementById('userForm').addEventListener('submit',e=>{e.preventDefault();let id=document.getElementById('uId').value;let data={name:document.getElementById('uName').value,username:document.getElementById('uUsername').value,pass:document.getElementById('uPass').value,role:document.getElementById('uRole').value,avatar:`https://i.pravatar.cc/80?img=${Math.floor(Math.random()*60)+1}`};if(id){let old=users.find(u=>u.id==id);Object.assign(old,data)}else{data.id=Date.now();users.push(data)}saveAll();closeModal('userModal');renderUsers();showToast('User tersimpan, bisa login sekarang');syncSheets(false)});
-function renderSheetPreview(){let tb=document.getElementById('sheetPreview');if(tb)tb.innerHTML=products.slice(0,8).map(p=>{let st=stockStatus(p.stock);return `<tr class="border-t"><td class="p-2 mono">${String(p.id).slice(-4)}</td><td class="p-2 font-semibold">${p.name}</td><td class="p-2 text-center">${p.price.toLocaleString()}</td><td class="p-2 text-center font-bold">${p.stock}</td><td class="p-2 text-center"><span class="${st.c} px-2 py-0.5 rounded-full text-[9px] font-black">${st.t}</span></td></tr>`}).join('')}
-async function syncSheets(manual=false){let log=document.getElementById('syncLog'),label=document.getElementById('syncLabel');if(!sheetsConfigured()){if(label)label.textContent='URL belum diisi';if(log)log.innerHTML+=`<br>> Isi GOOGLE_APPS_SCRIPT_URL terlebih dahulu`;if(manual)showToast('URL Google Apps Script belum diisi');return}if(label)label.textContent='Syncing...';if(log)log.innerHTML+=`<br>> Sync ${new Date().toLocaleTimeString()} : mengirim data...`;try{await sheetsPost({action:'sync',products,transactions,users:users.map(u=>({...u,password:u.pass}))});if(label)label.textContent='Sheets Terhubung';let waktu=new Date().toLocaleTimeString('id-ID');let last=document.getElementById('lastSync');if(last)last.textContent=waktu;if(log)log.innerHTML+=`<br>> ✓ Sync OK - Products, Transaksi, Users tersimpan`;if(manual)showToast('Google Sheets tersinkronisasi ✓')}catch(error){console.error(error);if(label)label.textContent='Sync Gagal';if(log)log.innerHTML+=`<br>> ✕ ${error.message}`;if(manual)showToast('Gagal terhubung ke Google Sheets')}}
-async function loadSheets(){if(!sheetsConfigured())return;try{let result=await sheetsGet('all'),data=result.data||{};if(Array.isArray(data.products)&&data.products.length){products=data.products;saveAll()}if(Array.isArray(data.transactions)){transactions=data.transactions;saveAll()}renderAll();let log=document.getElementById('syncLog');if(log)log.innerHTML+=`<br>> ✓ Data awal berhasil dibaca dari Google Sheets`}catch(error){console.error('Load Sheets:',error);let log=document.getElementById('syncLog');if(log)log.innerHTML+=`<br>> ! Data lokal digunakan: ${error.message}`}}
-function copyScript(){navigator.clipboard.writeText(`function doGet(e){return ContentService.createTextOutput(JSON.stringify({produk:getSheetData('Produk')}))}\nfunction doPost(e){/* simpan produk/transaksi dari web app */}`);showToast('Apps Script disalin! Paste di Extensions > Apps Script')}
-function exportCSV(){let csv='ID,Nama,Kategori,Harga,Stok,Status\n'+products.map(p=>`${p.id},"${p.name}",${p.cat},${p.price},${p.stock},${stockStatus(p.stock).t}`).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='aljaya-produk.csv';a.click();showToast('CSV diexport')}
-function renderAll(){document.getElementById('statProducts').textContent=products.length;let low=products.filter(p=>p.stock<=10).length;document.getElementById('statLow').textContent=low+' item';document.getElementById('statStock').textContent=products.reduce((a,p)=>a+p.stock,0);let todayRev=transactions.filter(t=>new Date(t.date).toDateString()===new Date().toDateString()).reduce((a,t)=>a+t.total,0);document.getElementById('statRevenue').textContent=fmt(todayRev||transactions.reduce((a,t)=>a+t.total,0));document.getElementById('statTrx').textContent=transactions.length;document.getElementById('loginProdCount').textContent=products.length;document.getElementById('miniChart').innerHTML=[40,65,50,80,55,90,75].map(h=>`<div class="flex-1 bg-cyan-300/80 rounded-t" style="height:${h}%"></div>`).join('');document.getElementById('dashboardProducts').innerHTML=products.slice(0,8).map(p=>productCard(p,true)).join('');renderProducts();renderPOS();renderCart();renderHistory();renderUsers();renderSheetPreview();}
-saveAll();
-loadSheets();
+
+function initApp(){
+  document.getElementById('loginView').classList.add('hidden');
+  document.getElementById('appView').classList.remove('hidden');
+  document.getElementById('currentUserName').textContent = currentUser.name;
+  document.getElementById('currentUserRole').textContent = currentUser.role;
+  document.getElementById('helloName').textContent = currentUser.name.split(' ')[0] + '!';
+  document.getElementById('scriptUrl').value = localStorage.getItem('aljaya_script_url') || GOOGLE_APPS_SCRIPT_URL;
+  refreshAll();
+  showView('dashboard');
+}
+
+// --- NAVIGATION ---
+function showView(view){
+  document.querySelectorAll('.view').forEach(el => el.classList.add('hidden'));
+  const target = document.getElementById('view-' + view);
+  if(target) target.classList.remove('hidden');
+
+  document.querySelectorAll('.navbtn').forEach(btn => {
+    if(btn.dataset.view === view) btn.classList.add('active-nav');
+    else btn.classList.remove('active-nav');
+  });
+
+  document.querySelectorAll('.mnav').forEach(btn => {
+    btn.classList.remove('text-[#0A4D7A]');
+    if(btn.getAttribute('onclick')?.includes(`'${view}'`)) btn.classList.add('text-[#0A4D7A]');
+  });
+
+  if(view === 'dashboard') renderDashboard();
+  if(view === 'products') renderProducts();
+  if(view === 'pos') { renderPOS(); renderCart(); }
+  if(view === 'history') renderHistory();
+  if(view === 'users') renderUsers();
+  if(view === 'sheets') renderSheetsPreview();
+}
+
+function onGlobalSearch(val){
+  document.getElementById('prodSearch').value = val;
+  document.getElementById('posSearch').value = val;
+  renderProducts();
+  renderPOS();
+}
+
+function refreshAll(){
+  saveLocal();
+  renderDashboard();
+  renderProducts();
+  renderPOS();
+  renderCart();
+  renderHistory();
+  renderUsers();
+  renderSheetsPreview();
+}
+
+// --- DASHBOARD ---
+function renderDashboard(){
+  const today = new Date().toLocaleDateString('id-ID');
+  const todayTrx = transactions.filter(t => new Date(t.date).toLocaleDateString('id-ID') === today);
+  const rev = todayTrx.reduce((s, t) => s + Number(t.total || 0), 0);
+  const lowItems = products.filter(p => Number(p.stock) <= 5).length;
+  const totalStock = products.reduce((s, p) => s + Number(p.stock || 0), 0);
+
+  document.getElementById('statRevenue').textContent = fmt(rev);
+  document.getElementById('statProducts').textContent = products.length;
+  document.getElementById('statLow').textContent = lowItems + ' item';
+  document.getElementById('statTrx').textContent = todayTrx.length;
+  document.getElementById('statStock').textContent = totalStock;
+
+  // Mini Chart
+  const bars = [45, 62, 55, 80, 72, 95, Math.min(100, Math.max(30, Math.round(rev / 15000)))];
+  document.getElementById('miniChart').innerHTML = bars.map(h => `<div class="flex-1 bg-cyan-300/80 rounded-t-md transition-all" style="height:${h}%"></div>`).join('');
+
+  // Top Products
+  const top = [...products].slice(0, 8);
+  document.getElementById('dashboardProducts').innerHTML = top.map(p => productCardHTML(p, false)).join('');
+}
+
+// --- PRODUCTS & STOCK ---
+function getStockBadge(stock){
+  const s = Number(stock);
+  if(s <= 0) return '<span class="bg-red-100 text-red-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Habis</span>';
+  if(s <= 5) return '<span class="bg-amber-100 text-amber-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Menipis ('+s+')</span>';
+  return '<span class="bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Stok '+s+'</span>';
+}
+
+function productCardHTML(p, withActions=true){
+  const imgSrc = p.img || 'https://placehold.co/400x300/EAF6FC/0A4D7A?text=FROZEN+FOOD';
+  return `
+    <div class="bg-white rounded-2xl overflow-hidden card-shadow flex flex-col justify-between">
+      <div>
+        <div class="relative bg-slate-100">
+          <img src="${imgSrc}" onerror="this.src='https://placehold.co/400x300/EAF6FC/0A4D7A?text=AL+JAYA'" class="w-full product-img" alt="${p.name}">
+          <span class="absolute top-2 left-2 bg-white/90 backdrop-blur text-[#0A4D7A] text-[10px] font-extrabold px-2.5 py-1 rounded-full">${p.cat}</span>
+          <div class="absolute bottom-2 right-2">${getStockBadge(p.stock)}</div>
+        </div>
+        <div class="p-3">
+          <h4 class="font-bold text-xs md:text-sm text-slate-800 line-clamp-2">${p.name}</h4>
+          <p class="text-[10px] text-slate-400 mono mt-0.5">${p.barcode || p.id}</p>
+          <p class="font-black text-[#0A4D7A] text-sm md:text-base mt-1">${fmt(p.price)} <span class="text-[10px] font-normal text-slate-400">/${p.unit||'pack'}</span></p>
+        </div>
+      </div>
+      ${withActions ? `
+      <div class="px-3 pb-3 flex gap-1.5">
+        <button onclick="openProductModal('${p.id}')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-xl text-xs font-bold"><i class="fa fa-pen"></i> Edit</button>
+        ${currentUser?.role !== 'Kasir' ? `<button onclick="deleteProduct('${p.id}')" class="w-9 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs"><i class="fa fa-trash"></i></button>` : ''}
+      </div>` : `
+      <div class="px-3 pb-3">
+        <button onclick="addToCart('${p.id}');showView('pos')" ${p.stock<=0?'disabled':''} class="w-full ${p.stock<=0?'bg-slate-200 text-slate-400':'bg-[#0A4D7A] text-white'} py-2 rounded-xl text-xs font-bold">${p.stock<=0?'Stok Habis':'+ Masuk Kasir'}</button>
+      </div>`}
+    </div>`;
+}
+
+function setProdLayout(mode){
+  prodLayout = mode;
+  document.getElementById('btnGrid').className = mode==='grid' ? 'px-3 py-1.5 rounded-full text-xs font-bold bg-white shadow' : 'px-3 py-1.5 rounded-full text-xs font-bold';
+  document.getElementById('btnList').className = mode==='list' ? 'px-3 py-1.5 rounded-full text-xs font-bold bg-white shadow' : 'px-3 py-1.5 rounded-full text-xs font-bold';
+  renderProducts();
+}
+
+function renderProducts(){
+  const q = (document.getElementById('prodSearch')?.value || '').toLowerCase();
+  const cat = document.getElementById('catFilter')?.value || '';
+  const st = document.getElementById('stockFilter')?.value || '';
+
+  const filtered = products.filter(p => {
+    const matchQ = p.name.toLowerCase().includes(q) || (p.barcode||'').toLowerCase().includes(q);
+    const matchCat = !cat || p.cat === cat;
+    const s = Number(p.stock);
+    const matchSt = !st || (st==='aman' && s>5) || (st==='menipis' && s>0 && s<=5) || (st==='habis' && s<=0);
+    return matchQ && matchCat && matchSt;
+  });
+
+  const gridEl = document.getElementById('productGrid');
+  const listEl = document.getElementById('productList');
+  if(prodLayout === 'grid'){
+    gridEl.classList.remove('hidden');
+    listEl.classList.add('hidden');
+    gridEl.innerHTML = filtered.length ? filtered.map(p => productCardHTML(p, true)).join('') : '<p class="col-span-full text-center text-slate-400 py-10 text-sm">Produk tidak ditemukan.</p>';
+  } else {
+    gridEl.classList.add('hidden');
+    listEl.classList.remove('hidden');
+    document.getElementById('productTableBody').innerHTML = filtered.map(p => `
+      <tr class="border-t hover:bg-slate-50">
+        <td class="p-3"><div class="font-bold text-xs">${p.name}</div><div class="text-[10px] text-slate-400">${p.cat} • ${p.barcode||p.id}</div></td>
+        <td class="p-3 font-bold text-[#0A4D7A] text-xs">${fmt(p.price)}</td>
+        <td class="p-3 font-bold text-xs">${p.stock} ${p.unit||'pack'}</td>
+        <td class="p-3">${getStockBadge(p.stock)}</td>
+        <td class="p-3 text-right space-x-1">
+          <button onclick="openProductModal('${p.id}')" class="bg-slate-100 px-2.5 py-1.5 rounded-lg text-xs font-bold">Edit</button>
+          ${currentUser?.role !== 'Kasir' ? `<button onclick="deleteProduct('${p.id}')" class="bg-red-50 text-red-600 px-2.5 py-1.5 rounded-lg text-xs font-bold">Hapus</button>` : ''}
+        </td>
+      </tr>`).join('');
+  }
+}
+
+document.getElementById('pImageFile').onchange = function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('pImageUrl').value = ev.target.result;
+    document.getElementById('imgPreview').innerHTML = `<img src="${ev.target.result}" class="w-full h-full object-cover">`;
+  };
+  reader.readAsDataURL(file);
+};
+
+document.getElementById('pImageUrl').oninput = function(e){
+  const url = e.target.value.trim();
+  document.getElementById('imgPreview').innerHTML = url ? `<img src="${url}" onerror="this.parentElement.innerHTML='🧊'" class="w-full h-full object-cover">` : '🧊';
+};
+
+function openProductModal(id=null){
+  const form = document.getElementById('productForm');
+  form.reset();
+  document.getElementById('pId').value = id || '';
+  document.getElementById('pmTitle').textContent = id ? 'Edit Produk' : 'Tambah Produk';
+  document.getElementById('imgPreview').innerHTML = '🧊';
+
+  if(id){
+    const p = products.find(x => x.id === id);
+    if(p){
+      document.getElementById('pName').value = p.name;
+      document.getElementById('pBarcode').value = p.barcode || '';
+      document.getElementById('pCat').value = p.cat;
+      document.getElementById('pPrice').value = p.price;
+      document.getElementById('pStock').value = p.stock;
+      document.getElementById('pUnit').value = p.unit || 'pack';
+      document.getElementById('pDesc').value = p.desc || '';
+      document.getElementById('pImageUrl').value = p.img || '';
+      if(p.img) document.getElementById('imgPreview').innerHTML = `<img src="${p.img}" class="w-full h-full object-cover">`;
+    }
+  }
+  document.getElementById('productModal').classList.remove('hidden');
+}
+
+document.getElementById('productForm').onsubmit = function(e){
+  e.preventDefault();
+  const id = document.getElementById('pId').value || 'PRD' + Date.now().toString().slice(-5);
+  const item = {
+    id,
+    name: document.getElementById('pName').value.trim(),
+    barcode: document.getElementById('pBarcode').value.trim(),
+    cat: document.getElementById('pCat').value,
+    price: Number(document.getElementById('pPrice').value),
+    stock: Number(document.getElementById('pStock').value),
+    unit: document.getElementById('pUnit').value.trim() || 'pack',
+    desc: document.getElementById('pDesc').value.trim(),
+    img: document.getElementById('pImageUrl').value.trim()
+  };
+
+  const idx = products.findIndex(x => x.id === id);
+  if(idx >= 0) products[idx] = item;
+  else products.unshift(item);
+
+  closeModal('productModal');
+  refreshAll();
+  syncToSheets('saveProduct', item);
+  showToast('Produk berhasil disimpan!');
+};
+
+function deleteProduct(id){
+  askConfirm('Hapus produk ini dari daftar & Google Sheets?', () => {
+    products = products.filter(p => p.id !== id);
+    refreshAll();
+    syncToSheets('deleteProduct', {id});
+    showToast('Produk telah dihapus');
+  });
+}
+
+function exportCSV(){
+  const rows = [['ID','Barcode','Nama','Kategori','Harga','Stok','Satuan']];
+  products.forEach(p => rows.push([p.id, p.barcode||'', `"${p.name}"`, p.cat, p.price, p.stock, p.unit||'pack']));
+  const csv = rows.map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Stok_ALJAYA_FrozenFood.csv';
+  a.click();
+  showToast('File CSV berhasil diunduh');
+}
+
+// --- POS / KASIR ---
+function setPosCat(cat, btn){
+  posCat = cat;
+  document.querySelectorAll('.poscat').forEach(b => b.classList.remove('chip-active'));
+  btn.classList.add('chip-active');
+  renderPOS();
+}
+
+function renderPOS(){
+  const q = (document.getElementById('posSearch')?.value || '').toLowerCase();
+  const list = products.filter(p => {
+    const mCat = !posCat || p.cat === posCat;
+    const mQ = p.name.toLowerCase().includes(q) || (p.barcode||'').toLowerCase().includes(q);
+    return mCat && mQ;
+  });
+
+  document.getElementById('posGrid').innerHTML = list.map(p => {
+    const out = Number(p.stock) <= 0;
+    const imgSrc = p.img || 'https://placehold.co/400x300/EAF6FC/0A4D7A?text=FROZEN';
+    return `
+      <div onclick="${out ? '' : `addToCart('${p.id}')`}" class="bg-white rounded-2xl overflow-hidden card-shadow ${out ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer active:scale-95 transition'}">
+        <div class="relative">
+          <img src="${imgSrc}" onerror="this.src='https://placehold.co/400x300/EAF6FC/0A4D7A?text=AL+JAYA'" class="w-full product-img">
+          <div class="absolute bottom-1.5 right-1.5">${getStockBadge(p.stock)}</div>
+        </div>
+        <div class="p-2.5">
+          <p class="font-bold text-xs line-clamp-1">${p.name}</p>
+          <p class="font-black text-[#0A4D7A] text-sm mt-0.5">${fmt(p.price)}</p>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function addToCart(id){
+  const p = products.find(x => x.id === id);
+  if(!p || p.stock <= 0){ showToast('Stok produk habis!'); return; }
+  const existing = cart.find(c => c.id === id);
+  if(existing){
+    if(existing.qty + 1 > p.stock){ showToast('Melebihi stok tersedia ('+p.stock+')'); return; }
+    existing.qty++;
+  } else {
+    cart.push({id: p.id, name: p.name, price: p.price, qty: 1, max: p.stock});
+  }
+  renderCart();
+}
+
+function updateCartQty(id, delta){
+  const idx = cart.findIndex(c => c.id === id);
+  if(idx < 0) return;
+  const p = products.find(x => x.id === id);
+  const nextQty = cart[idx].qty + delta;
+  if(nextQty <= 0) cart.splice(idx, 1);
+  else if(p && nextQty > p.stock) { showToast('Stok maksimal ' + p.stock); return; }
+  else cart[idx].qty = nextQty;
+  renderCart();
+}
+
+function clearCart(){
+  cart = [];
+  document.getElementById('cashInput').value = '';
+  document.getElementById('custName').value = '';
+  renderCart();
+}
+
+function setPay(method, btn){
+  payMethod = method;
+  document.querySelectorAll('.paybtn').forEach(b => {
+    b.className = 'paybtn bg-slate-100 py-2 rounded-xl text-xs font-bold';
+  });
+  btn.className = 'paybtn bg-[#0A4D7A] text-white py-2 rounded-xl text-xs font-bold';
+}
+
+function getCartTotals(){
+  const sub = cart.reduce((s, c) => s + (c.price * c.qty), 0);
+  const discPct = Number(document.getElementById('discountSel')?.value || 0);
+  const disc = Math.round(sub * discPct / 100);
+  const grand = sub - disc;
+  return { sub, discPct, disc, grand };
+}
+
+function renderCart(){
+  const totalQty = cart.reduce((s, c) => s + c.qty, 0);
+  document.getElementById('cartBadge').textContent = totalQty;
+  document.getElementById('cartInfo').textContent = `${totalQty} item • Kasir: ${currentUser?.name || 'Admin'}`;
+
+  const container = document.getElementById('cartItems');
+  if(!cart.length){
+    container.innerHTML = '<div class="text-center py-8 text-slate-400 text-xs"><i class="fa fa-basket-shopping text-2xl mb-2 block"></i>Keranjang masih kosong</div>';
+  } else {
+    container.innerHTML = cart.map(c => `
+      <div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl gap-2">
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-xs truncate">${c.name}</p>
+          <p class="text-[11px] text-[#0A4D7A] font-bold">${fmt(c.price * c.qty)}</p>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button onclick="updateCartQty('${c.id}',-1)" class="w-7 h-7 rounded-lg bg-white border font-bold text-xs">-</button>
+          <span class="w-6 text-center text-xs font-black">${c.qty}</span>
+          <button onclick="updateCartQty('${c.id}',1)" class="w-7 h-7 rounded-lg bg-[#0A4D7A] text-white font-bold text-xs">+</button>
+        </div>
+      </div>`).join('');
+  }
+
+  const { sub, grand } = getCartTotals();
+  document.getElementById('subTotal').textContent = fmt(sub);
+  document.getElementById('grandTotal').textContent = fmt(grand);
+  calcChange();
+}
+
+function calcChange(){
+  const { grand } = getCartTotals();
+  const cash = Number(document.getElementById('cashInput').value || 0);
+  const change = cash - grand;
+  const el = document.getElementById('changeText');
+  el.textContent = cash > 0 ? (change >= 0 ? fmt(change) : 'Kurang ' + fmt(Math.abs(change))) : 'Rp 0';
+}
+
+function checkout(){
+  if(!cart.length){ showToast('Pilih produk terlebih dahulu!'); return; }
+  const { sub, discPct, disc, grand } = getCartTotals();
+  const cashInput = Number(document.getElementById('cashInput').value || 0);
+  const cash = payMethod === 'Tunai' ? (cashInput || grand) : grand;
+  if(payMethod === 'Tunai' && cashInput > 0 && cashInput < grand){
+    showToast('Uang tunai kurang dari total!');
+    return;
+  }
+
+  // Kurangi stok
+  cart.forEach(c => {
+    const p = products.find(x => x.id === c.id);
+    if(p) p.stock = Math.max(0, Number(p.stock) - c.qty);
+  });
+
+  const trx = {
+    id: 'INV-' + Date.now().toString().slice(-6),
+    date: new Date().toISOString(),
+    cashier: currentUser?.name || 'Admin',
+    customer: document.getElementById('custName').value.trim() || 'Umum',
+    items: JSON.parse(JSON.stringify(cart)),
+    sub, discPct, disc, total: grand,
+    payMethod,
+    cash,
+    change: Math.max(0, cash - grand)
+  };
+
+  transactions.unshift(trx);
+  clearCart();
+  refreshAll();
+  syncToSheets('addTransaction', trx);
+  openReceipt(trx.id);
+  showToast('Transaksi berhasil disimpan!');
+}
+
+// --- HISTORY & RECEIPT ---
+function renderHistory(){
+  const el = document.getElementById('trxList');
+  if(!transactions.length){
+    el.innerHTML = '<div class="bg-white rounded-2xl p-8 text-center text-slate-400 text-xs card-shadow">Belum ada riwayat transaksi.</div>';
+    return;
+  }
+  el.innerHTML = transactions.map(t => `
+    <div class="bg-white rounded-2xl p-4 card-shadow flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="font-black text-sm text-[#0A4D7A] mono">${t.id}</span>
+          <span class="bg-cyan-100 text-[#0A4D7A] text-[10px] font-bold px-2 py-0.5 rounded-full">${t.payMethod}</span>
+        </div>
+        <p class="text-xs text-slate-500 mt-0.5">${new Date(t.date).toLocaleString('id-ID')} • Pelanggan: <b>${t.customer}</b></p>
+        <p class="text-[11px] text-slate-400 mt-1">${t.items.map(i => `${i.name} (${i.qty}x)`).join(', ')}</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="text-right">
+          <p class="font-black text-base text-slate-800">${fmt(t.total)}</p>
+          <p class="text-[10px] text-slate-400">Kasir: ${t.cashier}</p>
+        </div>
+        <button onclick="openReceipt('${t.id}')" class="bg-[#0A4D7A] text-white px-3.5 py-2.5 rounded-xl text-xs font-bold"><i class="fa fa-receipt"></i> Struk</button>
+      </div>
+    </div>`).join('');
+}
+
+function clearTransactions(){
+  askConfirm('Hapus semua riwayat transaksi dari perangkat ini?', () => {
+    transactions = [];
+    refreshAll();
+    showToast('Semua riwayat transaksi dihapus');
+  });
+}
+
+function openReceipt(trxId){
+  const t = transactions.find(x => x.id === trxId);
+  if(!t) return;
+  activeReceiptTrx = t;
+
+  const html = `
+    <div class="p-4 text-[11px] leading-snug">
+      <div class="text-center border-b border-dashed border-black pb-2">
+        <img src="${LOGO}" onerror="this.style.display='none'" class="h-10 mx-auto mb-1 object-contain">
+        <p class="font-bold text-sm">²AL JAYA FROZEN FOOD</p>
+        <p class="text-[10px]">Segar, Higienis & Halal</p>
+        <p class="text-[10px]">WA: 0812-3456-7890</p>
+      </div>
+      <div class="py-2 border-b border-dashed border-black text-[10px]">
+        <div class="flex justify-between"><span>No:</span><span>${t.id}</span></div>
+        <div class="flex justify-between"><span>Tgl:</span><span>${new Date(t.date).toLocaleString('id-ID')}</span></div>
+        <div class="flex justify-between"><span>Kasir:</span><span>${t.cashier}</span></div>
+        <div class="flex justify-between"><span>Plg:</span><span>${t.customer}</span></div>
+      </div>
+      <div class="py-2 border-b border-dashed border-black space-y-1.5">
+        ${t.items.map(i => `
+          <div>
+            <p class="font-bold">${i.name}</p>
+            <div class="flex justify-between text-[10px]">
+              <span>${i.qty} x ${Number(i.price).toLocaleString('id-ID')}</span>
+              <span>${Number(i.qty*i.price).toLocaleString('id-ID')}</span>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div class="py-2 space-y-1 text-[10px]">
+        <div class="flex justify-between"><span>Subtotal</span><span>${fmt(t.sub)}</span></div>
+        ${t.disc > 0 ? `<div class="flex justify-between"><span>Diskon (${t.discPct}%)</span><span>-${fmt(t.disc)}</span></div>` : ''}
+        <div class="flex justify-between font-bold text-xs pt-1 border-t border-black"><span>TOTAL</span><span>${fmt(t.total)}</span></div>
+        <div class="flex justify-between"><span>Bayar (${t.payMethod})</span><span>${fmt(t.cash)}</span></div>
+        <div class="flex justify-between"><span>Kembali</span><span>${fmt(t.change)}</span></div>
+      </div>
+      <div class="text-center pt-2 border-t border-dashed border-black text-[10px]">
+        <p>Terima kasih telah berbelanja!</p>
+        <p>Simpan produk di freezer -18°C ❄</p>
+      </div>
+    </div>`;
+
+  document.getElementById('receiptPaper').innerHTML = html;
+  document.getElementById('printArea').innerHTML = html;
+  document.getElementById('receiptModal').classList.remove('hidden');
+}
+
+function changePaper(mm){
+  const paper = document.getElementById('receiptPaper');
+  const jagged = document.getElementById('jaggedEl');
+  if(mm === '80'){
+    paper.style.width = '80mm';
+    paper.style.maxWidth = '350px';
+    jagged.style.maxWidth = '350px';
+  } else {
+    paper.style.width = '58mm';
+    paper.style.maxWidth = '302px';
+    jagged.style.maxWidth = '302px';
+  }
+}
+
+function printReceipt(){
+  window.print();
+}
+
+function buildPlainReceiptText(t){
+  // Format 32 karakter per baris (Standar kertas thermal 58mm Font A)
+  const W = 32;
+  const line = '-'.repeat(W) + '\n';
+  const center = (str) => {
+    const s = String(str).slice(0, W);
+    const pad = Math.max(0, Math.floor((W - s.length) / 2));
+    return ' '.repeat(pad) + s + '\n';
+  };
+  const row = (left, right) => {
+    const l = String(left);
+    const r = String(right);
+    const space = Math.max(1, W - l.length - r.length);
+    return l.slice(0, W - r.length - 1) + ' '.repeat(space) + r + '\n';
+  };
+
+  let txt = center('2AL JAYA FROZEN FOOD');
+  txt += center('Segar, Higienis & Halal');
+  txt += center('WA: 0812-3456-7890');
+  txt += line;
+  txt += row('No   :', t.id);
+  txt += row('Tgl  :', new Date(t.date).toLocaleString('id-ID', {dateStyle:'short', timeStyle:'short'}));
+  txt += row('Kasir:', t.cashier);
+  txt += row('Plg  :', t.customer);
+  txt += line;
+
+  t.items.forEach(i => {
+    txt += i.name.slice(0, W) + '\n';
+    const qtyPrice = `${i.qty} x ${Number(i.price).toLocaleString('id-ID')}`;
+    const subItem = Number(i.qty * i.price).toLocaleString('id-ID');
+    txt += row(qtyPrice, subItem);
+  });
+
+  txt += line;
+  txt += row('Subtotal', Number(t.sub).toLocaleString('id-ID'));
+  if(t.disc > 0){
+    txt += row(`Diskon (${t.discPct}%)`, '-' + Number(t.disc).toLocaleString('id-ID'));
+  }
+  txt += row('TOTAL', fmt(t.total));
+  txt += row(`Bayar (${t.payMethod})`, fmt(t.cash));
+  txt += row('Kembali', fmt(t.change));
+  txt += line;
+  txt += center('Terima kasih telah berbelanja');
+  txt += center('Simpan di freezer -18 C');
+  txt += '\n\n\n';
+  return txt;
+}
+
+async function printViaBluetooth(){
+  if(!activeReceiptTrx) return;
+  const text = buildPlainReceiptText(activeReceiptTrx);
+  if(!navigator.bluetooth){
+    showToast('Bluetooth browser tidak aktif. Membuka print 58mm...');
+    window.print();
+    return;
+  }
+  try {
+    showToast('Pilih printer Bluetooth 58mm...');
+    const printerServices = [
+      '000018f0-0000-1000-8000-00805f9b34fb',
+      '49535343-fe7d-4ae5-8fa9-9fafd205e455',
+      'e7810a71-73ae-499d-8c15-faa9aef0c3f2'
+    ];
+    const device = await navigator.bluetooth.requestDevice({
+      acceptAllDevices: true,
+      optionalServices: printerServices
+    });
+    const server = await device.gatt.connect();
+    let writableChar = null;
+
+    for(const srvUuid of printerServices){
+      try {
+        const service = await server.getPrimaryService(srvUuid);
+        const chars = await service.getCharacteristics();
+        writableChar = chars.find(c => c.properties.write || c.properties.writeWithoutResponse);
+        if(writableChar) break;
+      } catch(e){}
+    }
+
+    if(!writableChar){
+      throw new Error('Karakteristik printer tidak ditemukan');
+    }
+
+    const encoder = new TextEncoder();
+    // ESC @ (Init), ESC ! 0 (Font A 32 kolom untuk 58mm)
+    const initCmd = new Uint8Array([0x1B, 0x40, 0x1B, 0x21, 0x00]);
+    const bodyBytes = encoder.encode(text);
+    const payload = new Uint8Array(initCmd.length + bodyBytes.length);
+    payload.set(initCmd, 0);
+    payload.set(bodyBytes, initCmd.length);
+
+    // Kirim per 20 byte (MTU aman untuk BLE thermal printer 58mm)
+    const chunkSize = 20;
+    for(let i = 0; i < payload.length; i += chunkSize){
+      const chunk = payload.slice(i, i + chunkSize);
+      if(writableChar.properties.writeWithoutResponse){
+        await writableChar.writeValueWithoutResponse(chunk);
+      } else {
+        await writableChar.writeValue(chunk);
+      }
+      await new Promise(r => setTimeout(r, 25));
+    }
+    showToast('Struk 58mm berhasil dicetak via Bluetooth!');
+  } catch(e){
+    showToast('Koneksi BT dilewati, gunakan Print Thermal / RawBT.');
+  }
+}
+
+function shareWA(){
+  if(!activeReceiptTrx) return;
+  const t = activeReceiptTrx;
+  let msg = `*STRUK ²AL JAYA FROZEN FOOD*\nNo: ${t.id}\nTgl: ${new Date(t.date).toLocaleString('id-ID')}\n\n`;
+  t.items.forEach(i => msg += `• ${i.name} (${i.qty}x) = ${fmt(i.qty*i.price)}\n`);
+  msg += `\n*TOTAL: ${fmt(t.total)}*\nMetode: ${t.payMethod}\nTerima kasih telah berbelanja! ❄`;
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+
+// --- USERS MANAGEMENT ---
+function renderUsers(){
+  document.getElementById('userGrid').innerHTML = users.map(u => `
+    <div class="bg-white rounded-2xl p-4 card-shadow flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-full bg-cyan-100 text-[#0A4D7A] grid place-items-center text-base"><i class="fa-solid fa-user"></i></div>
+        <div>
+          <p class="font-black text-sm">${u.name}</p>
+          <p class="text-xs text-slate-500">@${u.username} • <span class="font-bold text-[#0A4D7A]">${u.role}</span></p>
+        </div>
+      </div>
+      <div class="flex gap-1">
+        <button onclick="openUserModal('${u.id}')" class="w-8 h-8 rounded-lg bg-slate-100 text-xs"><i class="fa fa-pen"></i></button>
+        ${u.username !== 'admin' ? `<button onclick="deleteUser('${u.id}')" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 text-xs"><i class="fa fa-trash"></i></button>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function openUserModal(id=null){
+  document.getElementById('userForm').reset();
+  document.getElementById('uId').value = id || '';
+  document.getElementById('umTitle').textContent = id ? 'Edit Pengguna' : 'Tambah Pengguna';
+  if(id){
+    const u = users.find(x => x.id === id);
+    if(u){
+      document.getElementById('uName').value = u.name;
+      document.getElementById('uUsername').value = u.username;
+      document.getElementById('uPass').value = u.pass;
+      document.getElementById('uRole').value = u.role;
+    }
+  }
+  document.getElementById('userModal').classList.remove('hidden');
+}
+
+document.getElementById('userForm').onsubmit = function(e){
+  e.preventDefault();
+  const id = document.getElementById('uId').value || 'USR' + Date.now().toString().slice(-4);
+  const item = {
+    id,
+    name: document.getElementById('uName').value.trim(),
+    username: document.getElementById('uUsername').value.trim(),
+    pass: document.getElementById('uPass').value.trim(),
+    role: document.getElementById('uRole').value
+  };
+  const idx = users.findIndex(x => x.id === id);
+  if(idx >= 0) users[idx] = item;
+  else users.push(item);
+
+  closeModal('userModal');
+  refreshAll();
+  syncToSheets('saveUser', item);
+  showToast('Data pengguna tersimpan!');
+};
+
+function deleteUser(id){
+  askConfirm('Hapus pengguna ini?', () => {
+    users = users.filter(u => u.id !== id);
+    refreshAll();
+    showToast('Pengguna dihapus');
+  });
+}
+
+// --- GOOGLE SHEETS INTEGRATION ---
+function renderSheetsPreview(){
+  const tbody = document.getElementById('sheetPreview');
+  if(!tbody) return;
+  tbody.innerHTML = products.map(p => `
+    <tr class="border-t">
+      <td class="p-2 mono">${p.id}</td>
+      <td class="p-2 font-semibold">${p.name}</td>
+      <td class="p-2 text-right">${fmt(p.price)}</td>
+      <td class="p-2 text-center font-bold">${p.stock}</td>
+      <td class="p-2 text-center">${p.stock > 5 ? 'Aman' : (p.stock > 0 ? 'Menipis' : 'Habis')}</td>
+    </tr>`).join('');
+}
+
+async function syncToSheets(action, payload){
+  const url = document.getElementById('scriptUrl')?.value.trim() || GOOGLE_APPS_SCRIPT_URL;
+  localStorage.setItem('aljaya_script_url', url);
+  if(!url) return;
+  appendLog(`POST ${action}...`);
+  try {
+    await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, data: payload })
+    });
+    document.getElementById('lastSync').textContent = new Date().toLocaleTimeString('id-ID');
+    appendLog(`POST ${action} terkirim ✓`);
+  } catch(err){
+    appendLog(`Error sync: ${err.message}`);
+  }
+}
+
+async function syncSheets(manual=false){
+  const url = document.getElementById('scriptUrl')?.value.trim() || GOOGLE_APPS_SCRIPT_URL;
+  localStorage.setItem('aljaya_script_url', url);
+  if(manual) showToast('Menyinkronkan dengan Google Sheets...');
+  appendLog('GET data dari Google Sheets...');
+  try {
+    const res = await fetch(url + '?action=getAll');
+    const json = await res.json();
+    if(json && Array.isArray(json.products) && json.products.length > 0){
+      products = json.products;
+    }
+    if(json && Array.isArray(json.users) && json.users.length > 0){
+      users = json.users;
+    }
+    refreshAll();
+    document.getElementById('lastSync').textContent = new Date().toLocaleTimeString('id-ID');
+    appendLog(`Sync selesai: ${products.length} produk dimuat ✓`);
+    if(manual) showToast('Sinkronisasi berhasil!');
+  } catch(err){
+    appendLog('Mode lokal aktif (Apps Script CORS/offline)');
+    if(manual) showToast('Data lokal tersimpan & siap dikirim ke Sheets');
+  }
+}
+
+function clearSheetData(type){
+  askConfirm(`Kosongkan data ${type} di penyimpanan lokal?`, () => {
+    if(type === 'products') products = [];
+    if(type === 'transactions') transactions = [];
+    if(type === 'users') users = [DEFAULT_USERS[0]];
+    refreshAll();
+    showToast(`Data ${type} telah dikosongkan`);
+  });
+}
+
+function copyScript(){
+  const appsScriptCode = `function doGet(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var prodSheet = ss.getSheetByName('Produk') || ss.insertSheet('Produk');
+  var data = prodSheet.getDataRange().getValues();
+  var products = [];
+  for (var i = 1; i < data.length; i++) {
+    products.push({id: data[i][0], barcode: data[i][1], name: data[i][2], cat: data[i][3], price: Number(data[i][4]), stock: Number(data[i][5]), unit: data[i][6], img: data[i][7]});
+  }
+  return ContentService.createTextOutput(JSON.stringify({status: 'ok', products: products})).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var body = JSON.parse(e.postData.contents);
+  if (body.action === 'saveProduct') {
+    var sheet = ss.getSheetByName('Produk') || ss.insertSheet('Produk');
+    if (sheet.getLastRow() === 0) sheet.appendRow(['ID','Barcode','Nama','Kategori','Harga','Stok','Satuan','Gambar']);
+    var p = body.data;
+    sheet.appendRow([p.id, p.barcode, p.name, p.cat, p.price, p.stock, p.unit, p.img]);
+  } else if (body.action === 'addTransaction') {
+    var trxSheet = ss.getSheetByName('Transaksi') || ss.insertSheet('Transaksi');
+    if (trxSheet.getLastRow() === 0) trxSheet.appendRow(['ID','Tanggal','Kasir','Pelanggan','Total','Metode']);
+    var t = body.data;
+    trxSheet.appendRow([t.id, t.date, t.cashier, t.customer, t.total, t.payMethod]);
+  }
+  return ContentService.createTextOutput(JSON.stringify({status: 'saved'})).setMimeType(ContentService.MimeType.JSON);
+}`;
+  const ta = document.createElement('textarea');
+  ta.value = appsScriptCode;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  showToast('Kode Google Apps Script disalin ke clipboard!');
+}
+
+// --- BOOTSTRAP ---
+window.onload = function(){
+  document.getElementById('loginProdCount').textContent = products.length;
+  if(currentUser){
+    initApp();
+  }
+};
 </script>
 </body>
 </html>

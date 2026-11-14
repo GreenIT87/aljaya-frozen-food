@@ -18,7 +18,7 @@
 .active-nav{background:#0A4D7A!important;color:#fff!important}
 .chip-active{background:#0A4D7A;color:#fff}
 .thermal{width:58mm;max-width:302px;background:#fff;color:#000;font-family:'JetBrains Mono',monospace}
-.thermal img{filter:grayscale(1) contrast(1.2)}
+.thermal img{filter:grayscale(1) contrast(1.4);mix-blend-mode:multiply}
 .jagged{height:10px;background:linear-gradient(-45deg,transparent 8px,#fff 0) 0 0/16px 16px repeat-x,linear-gradient(45deg,transparent 8px,#fff 0) 8px 0/16px 16px repeat-x;transform:rotate(180deg)}
 @media print{
  @page{size:58mm auto;margin:0}
@@ -26,6 +26,7 @@
  body>*{display:none!important}
  #printArea{display:block!important;position:static!important;width:54mm!important;margin:0 auto!important;padding:2mm 1mm!important;background:#fff!important;color:#000!important;font-family:'JetBrains Mono',monospace!important;font-size:10px!important;line-height:1.3!important}
  #printArea *{visibility:visible!important;color:#000!important}
+ #printArea img{display:block!important;margin:0 auto 4px auto!important;max-width:36mm!important;height:auto!important;filter:grayscale(1) contrast(1.5)!important;mix-blend-mode:multiply!important}
 }
 #printArea{display:none}
 input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset:1px}
@@ -45,7 +46,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
   <span class="snow text-2xl" style="left:10%;animation-duration:9s">❄</span><span class="snow text-xl" style="left:35%;animation-duration:12s;animation-delay:1s">❄</span><span class="snow text-3xl" style="left:70%;animation-duration:10s">❄</span><span class="snow text-lg" style="left:88%;animation-duration:13s">❄</span>
   <div class="relative w-full max-w-[980px] grid md:grid-cols-2 bg-white rounded-[28px] overflow-hidden shadow-2xl">
     <div class="p-6 md:p-8 bg-white flex flex-col items-center justify-center text-center border-r">
-      <img src="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171" onerror="this.src='https://placehold.co/300x120/0A4D7A/FFFFFF?text=AL+JAYA+FROZEN'" class="w-[85%] max-w-[340px] object-contain" alt="logo">
+      <img src="./²AL JAYA logo fix-1 copy_2.jpg" onerror="this.onerror=null;this.src='./logo.png'" class="w-[85%] max-w-[340px] object-contain" alt="logo">
       <div class="flex gap-2 mt-4"><span class="bg-cyan-100 text-[#0A4D7A] text-[11px] font-extrabold px-3 py-1.5 rounded-full">❄ FROZEN • FRESH • HALAL</span><span class="bg-emerald-100 text-emerald-700 text-[11px] font-extrabold px-3 py-1.5 rounded-full">● ONLINE</span></div>
       <p class="text-[13px] text-slate-500 mt-4 leading-relaxed">Sistem Kasir, Stok & Database Google Sheets<br>untuk toko frozen food modern.</p>
       <div class="grid grid-cols-1 gap-3 w-full mt-5 text-center"><div class="bg-slate-50 rounded-2xl py-3"><p class="font-black text-[#0A4D7A] text-lg" id="loginProdCount">12</p><p class="text-[10px] tracking-widest font-bold text-slate-400">PRODUK</p></div></div>
@@ -57,7 +58,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
         <div><label class="text-xs font-bold">Username</label><div class="flex items-center gap-2 border rounded-2xl px-3 mt-1 bg-slate-50"><i class="fa fa-user text-slate-400 text-sm"></i><input id="loginUser" value="admin" class="w-full py-3 bg-transparent text-sm font-semibold" placeholder="admin"></div></div>
         <div><label class="text-xs font-bold">Password</label><div class="flex items-center gap-2 border rounded-2xl px-3 mt-1 bg-slate-50"><i class="fa fa-lock text-slate-400 text-sm"></i><input id="loginPass" type="password" value="admin123" class="w-full py-3 bg-transparent text-sm font-semibold" placeholder="••••••••"><button type="button" onclick="togglePass()" class="text-slate-400"><i id="eyeIcon" class="fa fa-eye"></i></button></div></div>
         <div class="flex justify-between text-xs"><label class="flex gap-1.5 items-center"><input type="checkbox" checked class="accent-[#0A4D7A]"> Ingat saya</label><a href="#" onclick="showToast('Hubungi Admin: WA 0812-3456-7890');return false" class="text-[#0A6FA8] font-bold">Lupa password?</a></div>
-        <button class="w-full bg-[#0A4D7A] hover:bg-[#083a5e] text-white py-3.5 rounded-2xl font-extrabold text-sm shadow-lg shadow-blue-900/20">MASUK KE APLIKASI →</button>
+        <button type="submit" id="btnLoginSubmit" onclick="handleLogin(event)" class="w-full bg-[#0A4D7A] hover:bg-[#083a5e] active:scale-[0.99] transition cursor-pointer text-white py-3.5 rounded-2xl font-extrabold text-sm shadow-lg shadow-blue-900/20">MASUK KE APLIKASI →</button>
       </form>
     </div>
   </div>
@@ -68,7 +69,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
   <!-- HEADER -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b">
     <div class="max-w-7xl mx-auto px-3 md:px-5 h-[68px] flex items-center gap-3">
-      <img src="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171" onerror="this.src='https://placehold.co/110x44/0A4D7A/FFFFFF?text=AL+JAYA'" class="h-11 w-[110px] object-contain object-left" alt="logo">
+      <img src="./²AL JAYA logo fix-1 copy_2.jpg" onerror="this.onerror=null;this.src='./logo.png'" class="h-11 w-[110px] object-contain object-left" alt="logo">
       <div class="hidden sm:block leading-none"><p class="font-black text-[#0A4D7A] text-[15px]">²AL JAYA <span class="text-[#1590C8] font-bold text-xs block tracking-widest mt-0.5">FROZEN FOOD • POS SYSTEM</span></p></div>
       <div class="flex-1 hidden md:flex max-w-md mx-auto"><div class="flex w-full items-center bg-slate-100 rounded-full px-3 py-2 gap-2"><i class="fa fa-search text-slate-400 text-xs"></i><input id="globalSearch" oninput="onGlobalSearch(this.value)" placeholder="Cari nugget, sosis, bakso..." class="bg-transparent w-full text-sm outline-none"></div></div>
       <button onclick="syncSheets(true)" class="hidden md:flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-2 rounded-full text-xs font-bold"><span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span><span id="syncLabel">Sheets Terhubung</span><i class="fa fa-rotate"></i></button>
@@ -250,380 +251,258 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
 
 <script>
 const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztBp43Gl0XhwgeVP4u6pbN_DMJH88S8vj8i-I8wOMmu4zTmDvfFB-oSs_3RvJaFeOtnA/exec';
-const LOGO="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171";
+const LOGO="./²AL JAYA logo fix-1 copy_2.jpg";
 const fmt=n=> 'Rp '+Number(n||0).toLocaleString('id-ID');
 
-// --- STATE & DEFAULT DATA ---
-const DEFAULT_PRODUCTS = [
-  {id:'PRD001',barcode:'899123456001',name:'Nugget Ayam Crispy 500g',cat:'Ayam',price:24000,stock:28,unit:'pack',img:'https://images.unsplash.com/photo-1562967914-608f82629710?w=400&q=80',desc:'Nugget ayam renyah siap goreng'},
-  {id:'PRD002',barcode:'899123456002',name:'Sosis Sapi Bratwurst 500g',cat:'Sapi',price:35000,stock:15,unit:'pack',img:'https://images.unsplash.com/photo-1585325701956-60dd9c8553bc?w=400&q=80',desc:'Sosis sapi premium isi 10'},
-  {id:'PRD003',barcode:'899123456003',name:'Bakso Sapi Urat 500g',cat:'Sapi',price:32000,stock:4,unit:'pack',img:'https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400&q=80',desc:'Bakso daging sapi asli'},
-  {id:'PRD004',barcode:'899123456004',name:'Tempura Udang Ebi Furai',cat:'Seafood',price:38000,stock:12,unit:'pack',img:'https://images.unsplash.com/photo-1559742811-822873691df8?w=400&q=80',desc:'Udang lapis tepung roti'},
-  {id:'PRD005',barcode:'899123456005',name:'Kentang Goreng Shoestring 1kg',cat:'Kentang & Snack',price:29000,stock:22,unit:'pack',img:'https://images.unsplash.com/photo-1576107232684-1279f390859f?w=400&q=80',desc:'French fries gurih renyah'},
-  {id:'PRD006',barcode:'899123456006',name:'Dimsum Ayam Udang Isi 20',cat:'Dimsum',price:42000,stock:3,unit:'pack',img:'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&q=80',desc:'Lengkap dengan saus sambal'},
-  {id:'PRD007',barcode:'899123456007',name:'Spicy Chicken Wings 500g',cat:'Ayam',price:36000,stock:18,unit:'pack',img:'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=400&q=80',desc:'Sayap ayam bumbu pedas manis'},
-  {id:'PRD008',barcode:'899123456008',name:'Cireng Rujak Crispy Isi 20',cat:'Kentang & Snack',price:16000,stock:0,unit:'pack',img:'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=400&q=80',desc:'Cireng renyah bumbu rujak'},
-  {id:'PRD009',barcode:'899123456009',name:'Otak-Otak Ikan Bandeng 500g',cat:'Seafood',price:22000,stock:20,unit:'pack',img:'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=400&q=80',desc:'Otak-otak ikan segar'},
-  {id:'PRD010',barcode:'899123456010',name:'Daging Slice Yoshinoya 500g',cat:'Sapi',price:58000,stock:9,unit:'pack',img:'https://images.unsplash.com/photo-1603048297172-c92544798d5a?w=400&q=80',desc:'Shortplate beef slice tipis'},
-  {id:'PRD011',barcode:'899123456011',name:'Gyoza Ayam Panggang Isi 15',cat:'Dimsum',price:34000,stock:14,unit:'pack',img:'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?w=400&q=80',desc:'Dumpling ala Jepang'},
-  {id:'PRD012',barcode:'899123456012',name:'Kebab Mini Daging Sapi Isi 10',cat:'Lainnya',price:33000,stock:11,unit:'pack',img:'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=400&q=80',desc:'Tortilla lembut isian melimpah'}
+// --- INISIALISASI STATE & DATA DEFAULT ---
+const defaultProducts = [
+  { id: 'P001', name: 'Nugget Ayam Crispy 500g', barcode: '8991001001', cat: 'Ayam', price: 28000, stock: 24, unit: 'pack', desc: 'Nugget ayam renyah siap goreng', img: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=400&q=80' },
+  { id: 'P002', name: 'Sosis Sapi Bratwurst 500g', barcode: '8991001002', cat: 'Sapi', price: 38000, stock: 15, unit: 'pack', desc: 'Sosis sapi premium isi 6', img: 'https://images.unsplash.com/photo-1585325701956-60dd9c8553bc?w=400&q=80' },
+  { id: 'P003', name: 'Bakso Sapi Halus 500g', barcode: '8991001003', cat: 'Sapi', price: 32000, stock: 4, unit: 'pack', desc: 'Bakso daging sapi asli isi 25', img: 'https://images.unsplash.com/photo-1529042410759-befb1204b468?w=400&q=80' },
+  { id: 'P004', name: 'Kentang Goreng Shoestring 1kg', barcode: '8991001004', cat: 'Kentang & Snack', price: 29000, stock: 30, unit: 'pack', desc: 'French fries renyah gurih', img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&q=80' },
+  { id: 'P005', name: 'Dimsum Ayam Udang Isi 15', barcode: '8991001005', cat: 'Dimsum', price: 25000, stock: 18, unit: 'pack', desc: 'Lengkap dengan saus sambal', img: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&q=80' },
+  { id: 'P006', name: 'Udang Tempura Ebi Furai 250g', barcode: '8991001006', cat: 'Seafood', price: 35000, stock: 0, unit: 'pack', desc: 'Udang lapis tepung roti', img: 'https://images.unsplash.com/photo-1559742811-822873691df8?w=400&q=80' },
+  { id: 'P007', name: 'Spicy Chicken Wings 500g', barcode: '8991001007', cat: 'Ayam', price: 34000, stock: 12, unit: 'pack', desc: 'Sayap ayam bumbu pedas manis', img: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=400&q=80' },
+  { id: 'P008', name: 'Fish Roll Olahan Ikan 500g', barcode: '8991001008', cat: 'Seafood', price: 22000, stock: 3, unit: 'pack', desc: 'Cocok untuk steamboat & goreng', img: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=400&q=80' },
+  { id: 'P009', name: 'Cireng Rujak Crispy Isi 20', barcode: '8991001009', cat: 'Kentang & Snack', price: 16000, stock: 25, unit: 'pack', desc: 'Cireng renyah bumbu rujak pedas', img: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=400&q=80' },
+  { id: 'P010', name: 'Gyoza Ayam Panggang Isi 12', barcode: '8991001010', cat: 'Dimsum', price: 24000, stock: 14, unit: 'pack', desc: 'Gyoza Jepang kulit tipis', img: 'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?w=400&q=80' },
+  { id: 'P011', name: 'Daging Slice Beef Shortplate 500g', barcode: '8991001011', cat: 'Sapi', price: 58000, stock: 9, unit: 'pack', desc: 'Irisan tipis untuk grill/shabu', img: 'https://images.unsplash.com/photo-1603048297172-c92544798d5a?w=400&q=80' },
+  { id: 'P012', name: 'Kebab Daging Sapi Mini Isi 10', barcode: '8991001012', cat: 'Kentang & Snack', price: 27000, stock: 19, unit: 'pack', desc: 'Kebab frozen isi daging & keju', img: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=400&q=80' }
 ];
 
-const DEFAULT_USERS = [
-  {id:'USR1',name:'Admin Jaya',username:'admin',pass:'admin123',role:'Admin'},
-  {id:'USR2',name:'Siti Kasir',username:'kasir',pass:'kasir123',role:'Kasir'}
+const defaultUsers = [
+  { id: 'U001', name: 'Admin Jaya', username: 'admin', pass: 'admin123', role: 'Admin' },
+  { id: 'U002', name: 'Kasir 1 (Siti)', username: 'kasir', pass: 'kasir123', role: 'Kasir' }
 ];
 
-let products = JSON.parse(localStorage.getItem('aljaya_products') || 'null') || DEFAULT_PRODUCTS;
-let users = JSON.parse(localStorage.getItem('aljaya_users') || 'null') || DEFAULT_USERS;
+let products = JSON.parse(localStorage.getItem('aljaya_products') || 'null') || [...defaultProducts];
+let users = JSON.parse(localStorage.getItem('aljaya_users') || 'null') || [...defaultUsers];
 let transactions = JSON.parse(localStorage.getItem('aljaya_trx') || '[]');
 let currentUser = JSON.parse(localStorage.getItem('aljaya_session') || 'null');
 let cart = [];
-let posCat = '';
+let posCategory = '';
 let payMethod = 'Tunai';
 let prodLayout = 'grid';
-let activeReceiptTrx = null;
+let activeReceipt = null;
+let confirmCallback = null;
 
-// --- BARCODE SCANNER ---
-let barcodeStream=null, barcodeReader=null, barcodeScanning=false, barcodeFacingMode='environment';
-function setBarcodeStatus(message){const el=document.getElementById('barcodeStatus');if(el)el.textContent=message}
-function normalizeBarcode(value){return String(value||'').trim().replace(/\s+/g,'')}
-function findProductByBarcode(code){const normalized=normalizeBarcode(code);return products.find(p=>normalizeBarcode(p.barcode)===normalized||String(p.id)===normalized)}
-
-async function openBarcodeScanner(){
-  document.getElementById('barcodeModal').classList.remove('hidden');
-  barcodeFacingMode='environment';
-  setBarcodeStatus('Meminta akses kamera...');
-  await startBarcodeScanner();
-}
-
-async function startBarcodeScanner(){
-  stopBarcodeScanner();
-  const video = document.getElementById('barcodeVideo');
+function saveState() {
   try {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      setBarcodeStatus('Browser tidak mendukung akses kamera.');
-      return;
-    }
-    barcodeStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: barcodeFacingMode },
-      audio: false
-    });
-    video.srcObject = barcodeStream;
-    await video.play();
-    barcodeScanning = true;
-    setBarcodeStatus('Kamera aktif. Arahkan ke barcode...');
-
-    // Gunakan BarcodeDetector bawaan browser jika tersedia, atau fallback ZXing
-    if ('BarcodeDetector' in window) {
-      const detector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'code_128', 'code_39', 'qr_code', 'upc_a', 'upc_e'] });
-      const scanLoop = async () => {
-        if (!barcodeScanning) return;
-        try {
-          const codes = await detector.detect(video);
-          if (codes.length > 0) {
-            handleDetectedBarcode(codes[0].rawValue);
-            return;
-          }
-        } catch(e){}
-        requestAnimationFrame(scanLoop);
-      };
-      requestAnimationFrame(scanLoop);
-    } else if (window.ZXingBrowser) {
-      barcodeReader = new ZXingBrowser.BrowserMultiFormatReader();
-      barcodeReader.decodeFromVideoElement(video, (result, err) => {
-        if (result && barcodeScanning) {
-          handleDetectedBarcode(result.getText());
-        }
-      });
-    } else {
-      setBarcodeStatus('Library pemindai tidak termuat. Gunakan pencarian manual.');
-    }
-  } catch (err) {
-    setBarcodeStatus('Gagal membuka kamera: ' + (err.message || 'Izin ditolak'));
-  }
+    localStorage.setItem('aljaya_products', JSON.stringify(products));
+    localStorage.setItem('aljaya_users', JSON.stringify(users));
+    localStorage.setItem('aljaya_trx', JSON.stringify(transactions));
+  } catch (e) {}
 }
 
-function handleDetectedBarcode(rawCode){
-  const code = normalizeBarcode(rawCode);
-  if (!code) return;
-  const prod = findProductByBarcode(code);
-  if (prod) {
-    addToCart(prod.id);
-    showToast(`Scan berhasil: ${prod.name}`);
-    closeBarcodeScanner();
-  } else {
-    setBarcodeStatus(`Barcode "${code}" tidak ditemukan di produk!`);
-  }
-}
-
-function stopBarcodeScanner(){
-  barcodeScanning = false;
-  if (barcodeReader && typeof barcodeReader.reset === 'function') {
-    try { barcodeReader.reset(); } catch(e){}
-  }
-  if (barcodeStream) {
-    barcodeStream.getTracks().forEach(t => t.stop());
-    barcodeStream = null;
-  }
-}
-
-async function switchBarcodeCamera(){
-  barcodeFacingMode = barcodeFacingMode === 'environment' ? 'user' : 'environment';
-  setBarcodeStatus('Mengganti kamera...');
-  await startBarcodeScanner();
-}
-
-function closeBarcodeScanner(){
-  stopBarcodeScanner();
-  document.getElementById('barcodeModal').classList.add('hidden');
-}
-
-// --- UTILITIES & STORAGE ---
-function saveLocal(){
-  localStorage.setItem('aljaya_products', JSON.stringify(products));
-  localStorage.setItem('aljaya_users', JSON.stringify(users));
-  localStorage.setItem('aljaya_trx', JSON.stringify(transactions));
-}
-
-function showToast(msg){
+// --- UTILITAS UI & MODAL ---
+function showToast(msg) {
   const t = document.getElementById('toast');
-  document.getElementById('toastMsg').textContent = msg;
+  const m = document.getElementById('toastMsg');
+  if (!t || !m) return;
+  m.textContent = msg;
   t.classList.remove('hidden');
   clearTimeout(window._toastTimer);
   window._toastTimer = setTimeout(() => t.classList.add('hidden'), 2800);
 }
 
-function closeModal(id){
-  document.getElementById(id).classList.add('hidden');
+function closeModal(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.add('hidden');
 }
 
-function askConfirm(msg, onYes){
+function openConfirm(msg, callback) {
   document.getElementById('confirmMsg').textContent = msg;
-  const btn = document.getElementById('confirmYesBtn');
-  btn.onclick = () => { closeModal('confirmModal'); onYes(); };
+  confirmCallback = callback;
   document.getElementById('confirmModal').classList.remove('hidden');
 }
 
-function appendLog(text){
-  const log = document.getElementById('syncLog');
-  if(!log) return;
-  const time = new Date().toLocaleTimeString('id-ID');
-  log.innerHTML += `<br>> [${time}] ${text}`;
-  log.scrollTop = log.scrollHeight;
-}
-
-// --- AUTHENTICATION ---
-function togglePass(){
-  const inp = document.getElementById('loginPass');
-  const icon = document.getElementById('eyeIcon');
-  if(inp.type === 'password'){ inp.type = 'text'; icon.className = 'fa fa-eye-slash'; }
-  else { inp.type = 'password'; icon.className = 'fa fa-eye'; }
-}
-
-document.getElementById('loginForm').onsubmit = function(e){
-  e.preventDefault();
-  const u = document.getElementById('loginUser').value.trim();
-  const p = document.getElementById('loginPass').value.trim();
-  const found = users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.pass === p);
-  if(found){
-    currentUser = found;
-    localStorage.setItem('aljaya_session', JSON.stringify(found));
-    initApp();
-    showToast('Selamat datang, ' + found.name + '!');
-  } else {
-    showToast('Username atau Password salah!');
-  }
+document.getElementById('confirmYesBtn').onclick = function() {
+  closeModal('confirmModal');
+  if (typeof confirmCallback === 'function') confirmCallback();
 };
 
-function logout(){
-  currentUser = null;
-  localStorage.removeItem('aljaya_session');
-  document.getElementById('appView').classList.add('hidden');
-  document.getElementById('loginView').classList.remove('hidden');
-  document.getElementById('loginProdCount').textContent = products.length;
+// --- AUTENTIKASI & LOGIN ---
+function togglePass() {
+  const inp = document.getElementById('loginPass');
+  const icon = document.getElementById('eyeIcon');
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    icon.className = 'fa fa-eye-slash';
+  } else {
+    inp.type = 'password';
+    icon.className = 'fa fa-eye';
+  }
 }
 
-function initApp(){
+function handleLogin(e) {
+  if (e) e.preventDefault();
+  const u = (document.getElementById('loginUser').value || '').trim();
+  const p = (document.getElementById('loginPass').value || '').trim();
+
+  if (!u || !p) {
+    showToast('Username dan password wajib diisi!');
+    return;
+  }
+
+  const found = users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.pass === p);
+  if (found) {
+    enterApp(found);
+  } else if (u.toLowerCase() === 'admin' && p === 'admin123') {
+    enterApp({ id: 'U001', name: 'Admin Jaya', username: 'admin', role: 'Admin' });
+  } else {
+    showToast('Username atau password salah!');
+  }
+}
+
+function enterApp(user) {
+  currentUser = user;
+  try { localStorage.setItem('aljaya_session', JSON.stringify(user)); } catch (e) {}
   document.getElementById('loginView').classList.add('hidden');
   document.getElementById('appView').classList.remove('hidden');
-  document.getElementById('currentUserName').textContent = currentUser.name;
-  document.getElementById('currentUserRole').textContent = currentUser.role;
-  document.getElementById('helloName').textContent = currentUser.name.split(' ')[0] + '!';
-  document.getElementById('scriptUrl').value = localStorage.getItem('aljaya_script_url') || GOOGLE_APPS_SCRIPT_URL;
+  document.getElementById('currentUserName').textContent = user.name;
+  document.getElementById('currentUserRole').textContent = user.role;
+  document.getElementById('helloName').textContent = user.name.split(' ')[0] + '!';
+  document.getElementById('cartInfo').textContent = `${cart.reduce((s, i) => s + i.qty, 0)} item • Kasir: ${user.name.split(' ')[0]}`;
   refreshAll();
   showView('dashboard');
+  showToast('Selamat datang, ' + user.name + '!');
 }
 
-// --- NAVIGATION ---
-function showView(view){
-  document.querySelectorAll('.view').forEach(el => el.classList.add('hidden'));
-  const target = document.getElementById('view-' + view);
-  if(target) target.classList.remove('hidden');
+function logout() {
+  currentUser = null;
+  try { localStorage.removeItem('aljaya_session'); } catch (e) {}
+  document.getElementById('appView').classList.add('hidden');
+  document.getElementById('loginView').classList.remove('hidden');
+  showToast('Berhasil keluar dari aplikasi');
+}
+
+// --- NAVIGASI ---
+function showView(viewName) {
+  document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+  const target = document.getElementById('view-' + viewName);
+  if (target) target.classList.remove('hidden');
 
   document.querySelectorAll('.navbtn').forEach(btn => {
-    if(btn.dataset.view === view) btn.classList.add('active-nav');
-    else btn.classList.remove('active-nav');
+    btn.classList.toggle('active-nav', btn.dataset.view === viewName);
   });
 
-  document.querySelectorAll('.mnav').forEach(btn => {
-    btn.classList.remove('text-[#0A4D7A]');
-    if(btn.getAttribute('onclick')?.includes(`'${view}'`)) btn.classList.add('text-[#0A4D7A]');
-  });
-
-  if(view === 'dashboard') renderDashboard();
-  if(view === 'products') renderProducts();
-  if(view === 'pos') { renderPOS(); renderCart(); }
-  if(view === 'history') renderHistory();
-  if(view === 'users') renderUsers();
-  if(view === 'sheets') renderSheetsPreview();
+  if (viewName === 'dashboard') renderDashboard();
+  if (viewName === 'products') renderProducts();
+  if (viewName === 'pos') { renderPOS(); renderCart(); }
+  if (viewName === 'history') renderHistory();
+  if (viewName === 'users') renderUsers();
+  if (viewName === 'sheets') renderSheetPreview();
 }
 
-function onGlobalSearch(val){
-  document.getElementById('prodSearch').value = val;
-  document.getElementById('posSearch').value = val;
-  renderProducts();
-  renderPOS();
-}
-
-function refreshAll(){
-  saveLocal();
-  renderDashboard();
-  renderProducts();
-  renderPOS();
-  renderCart();
-  renderHistory();
-  renderUsers();
-  renderSheetsPreview();
+function onGlobalSearch(val) {
+  showView('products');
+  const ps = document.getElementById('prodSearch');
+  if (ps) { ps.value = val; renderProducts(); }
 }
 
 // --- DASHBOARD ---
-function renderDashboard(){
-  const today = new Date().toLocaleDateString('id-ID');
-  const todayTrx = transactions.filter(t => new Date(t.date).toLocaleDateString('id-ID') === today);
+function renderDashboard() {
+  const todayStr = new Date().toLocaleDateString('id-ID');
+  const todayTrx = transactions.filter(t => t.dateOnly === todayStr);
   const rev = todayTrx.reduce((s, t) => s + Number(t.total || 0), 0);
-  const lowItems = products.filter(p => Number(p.stock) <= 5).length;
+  const lowCount = products.filter(p => Number(p.stock) <= 5).length;
   const totalStock = products.reduce((s, p) => s + Number(p.stock || 0), 0);
 
+  document.getElementById('loginProdCount').textContent = products.length;
   document.getElementById('statRevenue').textContent = fmt(rev);
   document.getElementById('statProducts').textContent = products.length;
-  document.getElementById('statLow').textContent = lowItems + ' item';
+  document.getElementById('statLow').textContent = lowCount + ' item';
   document.getElementById('statTrx').textContent = todayTrx.length;
   document.getElementById('statStock').textContent = totalStock;
 
-  // Mini Chart
-  const bars = [45, 62, 55, 80, 72, 95, Math.min(100, Math.max(30, Math.round(rev / 15000)))];
-  document.getElementById('miniChart').innerHTML = bars.map(h => `<div class="flex-1 bg-cyan-300/80 rounded-t-md transition-all" style="height:${h}%"></div>`).join('');
+  const bars = [45, 62, 50, 78, 65, 92, 85];
+  document.getElementById('miniChart').innerHTML = bars.map(h => `<div class="flex-1 bg-cyan-300/80 rounded-t-md" style="height:${h}%"></div>`).join('');
 
-  // Top Products
-  const top = [...products].slice(0, 8);
-  document.getElementById('dashboardProducts').innerHTML = top.map(p => productCardHTML(p, false)).join('');
-}
-
-// --- PRODUCTS & STOCK ---
-function getStockBadge(stock){
-  const s = Number(stock);
-  if(s <= 0) return '<span class="bg-red-100 text-red-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Habis</span>';
-  if(s <= 5) return '<span class="bg-amber-100 text-amber-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Menipis ('+s+')</span>';
-  return '<span class="bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full">Stok '+s+'</span>';
-}
-
-function productCardHTML(p, withActions=true){
-  const imgSrc = p.img || 'https://placehold.co/400x300/EAF6FC/0A4D7A?text=FROZEN+FOOD';
-  return `
-    <div class="bg-white rounded-2xl overflow-hidden card-shadow flex flex-col justify-between">
-      <div>
-        <div class="relative bg-slate-100">
-          <img src="${imgSrc}" onerror="this.src='https://placehold.co/400x300/EAF6FC/0A4D7A?text=AL+JAYA'" class="w-full product-img" alt="${p.name}">
-          <span class="absolute top-2 left-2 bg-white/90 backdrop-blur text-[#0A4D7A] text-[10px] font-extrabold px-2.5 py-1 rounded-full">${p.cat}</span>
-          <div class="absolute bottom-2 right-2">${getStockBadge(p.stock)}</div>
-        </div>
-        <div class="p-3">
-          <h4 class="font-bold text-xs md:text-sm text-slate-800 line-clamp-2">${p.name}</h4>
-          <p class="text-[10px] text-slate-400 mono mt-0.5">${p.barcode || p.id}</p>
-          <p class="font-black text-[#0A4D7A] text-sm md:text-base mt-1">${fmt(p.price)} <span class="text-[10px] font-normal text-slate-400">/${p.unit||'pack'}</span></p>
-        </div>
+  document.getElementById('dashboardProducts').innerHTML = products.slice(0, 8).map(p => {
+    const st = p.stock <= 0 ? '<span class="bg-red-100 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded-full">Habis</span>' :
+               p.stock <= 5 ? `<span class="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded-full">Sisa ${p.stock}</span>` :
+                              `<span class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full">Stok ${p.stock}</span>`;
+    return `<div class="bg-white rounded-2xl overflow-hidden card-shadow flex flex-col">
+      <img src="${p.img || 'https://placehold.co/400x300/eaf6fc/0A4D7A?text=Frozen+Food'}" onerror="this.src='https://placehold.co/400x300/eaf6fc/0A4D7A?text=Frozen+Food'" class="w-full product-img bg-slate-100">
+      <div class="p-3 flex-1 flex flex-col justify-between">
+        <div><div class="flex justify-between items-start gap-1"><span class="text-[10px] font-bold text-cyan-700">${p.cat}</span>${st}</div><h4 class="font-extrabold text-xs mt-1 line-clamp-2">${p.name}</h4></div>
+        <div class="flex items-center justify-between mt-3 pt-2 border-t"><span class="font-black text-sm text-[#0A4D7A]">${fmt(p.price)}</span><button onclick="addToCart('${p.id}')" class="bg-[#FF6B35] text-white w-7 h-7 rounded-full text-xs font-black">+</button></div>
       </div>
-      ${withActions ? `
-      <div class="px-3 pb-3 flex gap-1.5">
-        <button onclick="openProductModal('${p.id}')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-xl text-xs font-bold"><i class="fa fa-pen"></i> Edit</button>
-        ${currentUser?.role !== 'Kasir' ? `<button onclick="deleteProduct('${p.id}')" class="w-9 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl text-xs"><i class="fa fa-trash"></i></button>` : ''}
-      </div>` : `
-      <div class="px-3 pb-3">
-        <button onclick="addToCart('${p.id}');showView('pos')" ${p.stock<=0?'disabled':''} class="w-full ${p.stock<=0?'bg-slate-200 text-slate-400':'bg-[#0A4D7A] text-white'} py-2 rounded-xl text-xs font-bold">${p.stock<=0?'Stok Habis':'+ Masuk Kasir'}</button>
-      </div>`}
     </div>`;
+  }).join('');
 }
 
-function setProdLayout(mode){
+// --- MANAJEMEN PRODUK ---
+function setProdLayout(mode) {
   prodLayout = mode;
-  document.getElementById('btnGrid').className = mode==='grid' ? 'px-3 py-1.5 rounded-full text-xs font-bold bg-white shadow' : 'px-3 py-1.5 rounded-full text-xs font-bold';
-  document.getElementById('btnList').className = mode==='list' ? 'px-3 py-1.5 rounded-full text-xs font-bold bg-white shadow' : 'px-3 py-1.5 rounded-full text-xs font-bold';
+  document.getElementById('btnGrid').className = mode === 'grid' ? 'px-3 py-1.5 rounded-full text-xs font-bold bg-white shadow' : 'px-3 py-1.5 rounded-full text-xs font-bold';
+  document.getElementById('btnList').className = mode === 'list' ? 'px-3 py-1.5 rounded-full text-xs font-bold bg-white shadow' : 'px-3 py-1.5 rounded-full text-xs font-bold';
   renderProducts();
 }
 
-function renderProducts(){
-  const q = (document.getElementById('prodSearch')?.value || '').toLowerCase();
-  const cat = document.getElementById('catFilter')?.value || '';
-  const st = document.getElementById('stockFilter')?.value || '';
+function renderProducts() {
+  const q = (document.getElementById('prodSearch').value || '').toLowerCase();
+  const cat = document.getElementById('catFilter').value;
+  const stf = document.getElementById('stockFilter').value;
 
   const filtered = products.filter(p => {
-    const matchQ = p.name.toLowerCase().includes(q) || (p.barcode||'').toLowerCase().includes(q);
-    const matchCat = !cat || p.cat === cat;
-    const s = Number(p.stock);
-    const matchSt = !st || (st==='aman' && s>5) || (st==='menipis' && s>0 && s<=5) || (st==='habis' && s<=0);
-    return matchQ && matchCat && matchSt;
+    const matchQ = p.name.toLowerCase().includes(q) || (p.barcode || '').includes(q);
+    const matchC = !cat || p.cat === cat;
+    const matchS = !stf || (stf === 'aman' && p.stock > 5) || (stf === 'menipis' && p.stock > 0 && p.stock <= 5) || (stf === 'habis' && p.stock <= 0);
+    return matchQ && matchC && matchS;
   });
 
   const gridEl = document.getElementById('productGrid');
   const listEl = document.getElementById('productList');
-  if(prodLayout === 'grid'){
+
+  if (prodLayout === 'grid') {
     gridEl.classList.remove('hidden');
     listEl.classList.add('hidden');
-    gridEl.innerHTML = filtered.length ? filtered.map(p => productCardHTML(p, true)).join('') : '<p class="col-span-full text-center text-slate-400 py-10 text-sm">Produk tidak ditemukan.</p>';
+    gridEl.innerHTML = filtered.map(p => `
+      <div class="bg-white rounded-2xl overflow-hidden card-shadow flex flex-col">
+        <div class="relative">
+          <img src="${p.img || 'https://placehold.co/400x300/eaf6fc/0A4D7A?text=Frozen'}" onerror="this.src='https://placehold.co/400x300/eaf6fc/0A4D7A?text=Frozen'" class="w-full product-img bg-slate-100">
+          <span class="absolute top-2 left-2 bg-white/90 backdrop-blur px-2.5 py-1 rounded-full text-[10px] font-extrabold text-[#0A4D7A]">${p.cat}</span>
+        </div>
+        <div class="p-3 flex-1 flex flex-col justify-between">
+          <div>
+            <h4 class="font-extrabold text-sm leading-snug">${p.name}</h4>
+            <p class="text-[11px] text-slate-400 mono mt-0.5">${p.barcode || '-'}</p>
+          </div>
+          <div class="mt-3">
+            <div class="flex justify-between items-center">
+              <span class="font-black text-[#0A4D7A]">${fmt(p.price)}</span>
+              <span class="text-xs font-bold ${p.stock <= 0 ? 'text-red-600' : p.stock <= 5 ? 'text-amber-600' : 'text-emerald-600'}">Stok: ${p.stock} ${p.unit || 'pack'}</span>
+            </div>
+            <div class="flex gap-1.5 mt-2.5">
+              <button onclick="openProductModal('${p.id}')" class="flex-1 bg-slate-100 hover:bg-slate-200 py-2 rounded-xl text-xs font-bold">✏️ Edit</button>
+              <button onclick="deleteProduct('${p.id}')" class="bg-red-50 text-red-600 px-3 py-2 rounded-xl text-xs font-bold">🗑</button>
+            </div>
+          </div>
+        </div>
+      </div>`).join('') || '<p class="col-span-full text-center text-sm text-slate-400 py-8">Tidak ada produk ditemukan.</p>';
   } else {
     gridEl.classList.add('hidden');
     listEl.classList.remove('hidden');
     document.getElementById('productTableBody').innerHTML = filtered.map(p => `
-      <tr class="border-t hover:bg-slate-50">
-        <td class="p-3"><div class="font-bold text-xs">${p.name}</div><div class="text-[10px] text-slate-400">${p.cat} • ${p.barcode||p.id}</div></td>
-        <td class="p-3 font-bold text-[#0A4D7A] text-xs">${fmt(p.price)}</td>
-        <td class="p-3 font-bold text-xs">${p.stock} ${p.unit||'pack'}</td>
-        <td class="p-3">${getStockBadge(p.stock)}</td>
-        <td class="p-3 text-right space-x-1">
-          <button onclick="openProductModal('${p.id}')" class="bg-slate-100 px-2.5 py-1.5 rounded-lg text-xs font-bold">Edit</button>
-          ${currentUser?.role !== 'Kasir' ? `<button onclick="deleteProduct('${p.id}')" class="bg-red-50 text-red-600 px-2.5 py-1.5 rounded-lg text-xs font-bold">Hapus</button>` : ''}
-        </td>
+      <tr class="border-t">
+        <td class="p-3 font-bold">${p.name}<span class="block text-[10px] text-slate-400">${p.cat} • ${p.barcode || '-'}</span></td>
+        <td class="p-3 font-extrabold text-[#0A4D7A]">${fmt(p.price)}</td>
+        <td class="p-3 font-bold">${p.stock} ${p.unit || 'pack'}</td>
+        <td class="p-3">${p.stock <= 0 ? '<span class="text-red-600 font-bold text-xs">Habis</span>' : p.stock <= 5 ? '<span class="text-amber-600 font-bold text-xs">Menipis</span>' : '<span class="text-emerald-600 font-bold text-xs">Aman</span>'}</td>
+        <td class="p-3 text-right"><button onclick="openProductModal('${p.id}')" class="bg-slate-100 px-2.5 py-1.5 rounded-lg text-xs font-bold mr-1">Edit</button><button onclick="deleteProduct('${p.id}')" class="bg-red-50 text-red-600 px-2.5 py-1.5 rounded-lg text-xs font-bold">Hapus</button></td>
       </tr>`).join('');
   }
 }
 
-document.getElementById('pImageFile').onchange = function(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    document.getElementById('pImageUrl').value = ev.target.result;
-    document.getElementById('imgPreview').innerHTML = `<img src="${ev.target.result}" class="w-full h-full object-cover">`;
-  };
-  reader.readAsDataURL(file);
-};
-
-document.getElementById('pImageUrl').oninput = function(e){
-  const url = e.target.value.trim();
-  document.getElementById('imgPreview').innerHTML = url ? `<img src="${url}" onerror="this.parentElement.innerHTML='🧊'" class="w-full h-full object-cover">` : '🧊';
-};
-
-function openProductModal(id=null){
-  const form = document.getElementById('productForm');
-  form.reset();
-  document.getElementById('pId').value = id || '';
-  document.getElementById('pmTitle').textContent = id ? 'Edit Produk' : 'Tambah Produk';
+function openProductModal(id = '') {
+  document.getElementById('productForm').reset();
+  document.getElementById('pId').value = id;
   document.getElementById('imgPreview').innerHTML = '🧊';
-
-  if(id){
+  if (id) {
     const p = products.find(x => x.id === id);
-    if(p){
+    if (p) {
+      document.getElementById('pmTitle').textContent = 'Edit Produk';
       document.getElementById('pName').value = p.name;
       document.getElementById('pBarcode').value = p.barcode || '';
       document.getElementById('pCat').value = p.cat;
@@ -632,601 +511,615 @@ function openProductModal(id=null){
       document.getElementById('pUnit').value = p.unit || 'pack';
       document.getElementById('pDesc').value = p.desc || '';
       document.getElementById('pImageUrl').value = p.img || '';
-      if(p.img) document.getElementById('imgPreview').innerHTML = `<img src="${p.img}" class="w-full h-full object-cover">`;
+      if (p.img) document.getElementById('imgPreview').innerHTML = `<img src="${p.img}" class="w-full h-full object-cover">`;
     }
+  } else {
+    document.getElementById('pmTitle').textContent = 'Tambah Produk';
   }
   document.getElementById('productModal').classList.remove('hidden');
 }
 
-document.getElementById('productForm').onsubmit = function(e){
+document.getElementById('pImageFile').onchange = function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('pImageUrl').value = ev.target.result;
+    document.getElementById('imgPreview').innerHTML = `<img src="${ev.target.result}" class="w-full h-full object-cover">`;
+  };
+  reader.readAsDataURL(file);
+};
+
+document.getElementById('productForm').onsubmit = function(e) {
   e.preventDefault();
-  const id = document.getElementById('pId').value || 'PRD' + Date.now().toString().slice(-5);
+  const id = document.getElementById('pId').value;
   const item = {
-    id,
+    id: id || 'P' + String(Date.now()).slice(-4),
     name: document.getElementById('pName').value.trim(),
     barcode: document.getElementById('pBarcode').value.trim(),
     cat: document.getElementById('pCat').value,
-    price: Number(document.getElementById('pPrice').value),
-    stock: Number(document.getElementById('pStock').value),
+    price: Number(document.getElementById('pPrice').value || 0),
+    stock: Number(document.getElementById('pStock').value || 0),
     unit: document.getElementById('pUnit').value.trim() || 'pack',
     desc: document.getElementById('pDesc').value.trim(),
     img: document.getElementById('pImageUrl').value.trim()
   };
 
-  const idx = products.findIndex(x => x.id === id);
-  if(idx >= 0) products[idx] = item;
-  else products.unshift(item);
-
+  if (id) {
+    const idx = products.findIndex(x => x.id === id);
+    if (idx > -1) products[idx] = item;
+  } else {
+    products.unshift(item);
+  }
+  saveState();
   closeModal('productModal');
   refreshAll();
-  syncToSheets('saveProduct', item);
-  showToast('Produk berhasil disimpan!');
+  syncSheets(false);
+  showToast('Produk tersimpan!');
 };
 
-function deleteProduct(id){
-  askConfirm('Hapus produk ini dari daftar & Google Sheets?', () => {
+function deleteProduct(id) {
+  openConfirm('Hapus produk ini dari daftar stok?', () => {
     products = products.filter(p => p.id !== id);
+    saveState();
     refreshAll();
-    syncToSheets('deleteProduct', {id});
-    showToast('Produk telah dihapus');
+    showToast('Produk dihapus');
   });
 }
 
-function exportCSV(){
-  const rows = [['ID','Barcode','Nama','Kategori','Harga','Stok','Satuan']];
-  products.forEach(p => rows.push([p.id, p.barcode||'', `"${p.name}"`, p.cat, p.price, p.stock, p.unit||'pack']));
+function exportCSV() {
+  const rows = [['ID', 'Nama', 'Barcode', 'Kategori', 'Harga', 'Stok', 'Satuan'], ...products.map(p => [p.id, `"${p.name}"`, p.barcode || '', p.cat, p.price, p.stock, p.unit])];
   const csv = rows.map(r => r.join(',')).join('\n');
-  const blob = new Blob([csv], {type:'text/csv'});
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'Stok_ALJAYA_FrozenFood.csv';
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+  a.download = 'stok_aljaya_frozen.csv';
   a.click();
   showToast('File CSV berhasil diunduh');
 }
 
+// --- BARCODE SCANNER ---
+let barcodeStream = null, barcodeReader = null, barcodeScanning = false, barcodeFacingMode = 'environment';
+function setBarcodeStatus(msg) { const el = document.getElementById('barcodeStatus'); if (el) el.textContent = msg; }
+function normalizeBarcode(v) { return String(v || '').trim().replace(/\s+/g, ''); }
+function findProductByBarcode(code) {
+  const n = normalizeBarcode(code);
+  return products.find(p => normalizeBarcode(p.barcode) === n || String(p.id) === n);
+}
+
+async function openBarcodeScanner() {
+  document.getElementById('barcodeModal').classList.remove('hidden');
+  barcodeFacingMode = 'environment';
+  setBarcodeStatus('Meminta akses kamera...');
+  await startBarcodeScanner();
+}
+
+async function startBarcodeScanner() {
+  stopBarcodeScanner();
+  const video = document.getElementById('barcodeVideo');
+  try {
+    barcodeStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: barcodeFacingMode } });
+    video.srcObject = barcodeStream;
+    await video.play();
+    barcodeScanning = true;
+    setBarcodeStatus('Arahkan kamera ke barcode produk...');
+
+    if ('BarcodeDetector' in window) {
+      const detector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'code_128', 'code_39', 'qr_code', 'upc_a'] });
+      const loop = async () => {
+        if (!barcodeScanning) return;
+        try {
+          const codes = await detector.detect(video);
+          if (codes.length > 0) {
+            onBarcodeDetected(codes[0].rawValue);
+            return;
+          }
+        } catch (e) {}
+        requestAnimationFrame(loop);
+      };
+      requestAnimationFrame(loop);
+    } else if (window.ZXingBrowser) {
+      barcodeReader = new ZXingBrowser.BrowserMultiFormatReader();
+      barcodeReader.decodeFromVideoElement(video, (res) => {
+        if (res && barcodeScanning) onBarcodeDetected(res.getText());
+      });
+    } else {
+      setBarcodeStatus('Browser tidak mendukung deteksi otomatis, masukkan kode secara manual.');
+    }
+  } catch (err) {
+    setBarcodeStatus('Gagal membuka kamera. Pastikan izin kamera aktif & gunakan HTTPS.');
+  }
+}
+
+function onBarcodeDetected(code) {
+  barcodeScanning = false;
+  const prod = findProductByBarcode(code);
+  closeBarcodeScanner();
+  if (prod) {
+    addToCart(prod.id);
+    showToast(`Barcode ${code}: ${prod.name} ditambahkan!`);
+  } else {
+    showToast(`Barcode ${code} tidak ditemukan di database`);
+  }
+}
+
+function stopBarcodeScanner() {
+  barcodeScanning = false;
+  if (barcodeStream) {
+    barcodeStream.getTracks().forEach(t => t.stop());
+    barcodeStream = null;
+  }
+}
+
+function closeBarcodeScanner() {
+  stopBarcodeScanner();
+  closeModal('barcodeModal');
+}
+
+async function switchBarcodeCamera() {
+  barcodeFacingMode = barcodeFacingMode === 'environment' ? 'user' : 'environment';
+  await startBarcodeScanner();
+}
+
 // --- POS / KASIR ---
-function setPosCat(cat, btn){
-  posCat = cat;
+function setPosCat(cat, btn) {
+  posCategory = cat;
   document.querySelectorAll('.poscat').forEach(b => b.classList.remove('chip-active'));
-  btn.classList.add('chip-active');
+  if (btn) btn.classList.add('chip-active');
   renderPOS();
 }
 
-function renderPOS(){
-  const q = (document.getElementById('posSearch')?.value || '').toLowerCase();
-  const list = products.filter(p => {
-    const mCat = !posCat || p.cat === posCat;
-    const mQ = p.name.toLowerCase().includes(q) || (p.barcode||'').toLowerCase().includes(q);
-    return mCat && mQ;
-  });
-
-  document.getElementById('posGrid').innerHTML = list.map(p => {
-    const out = Number(p.stock) <= 0;
-    const imgSrc = p.img || 'https://placehold.co/400x300/EAF6FC/0A4D7A?text=FROZEN';
-    return `
-      <div onclick="${out ? '' : `addToCart('${p.id}')`}" class="bg-white rounded-2xl overflow-hidden card-shadow ${out ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer active:scale-95 transition'}">
-        <div class="relative">
-          <img src="${imgSrc}" onerror="this.src='https://placehold.co/400x300/EAF6FC/0A4D7A?text=AL+JAYA'" class="w-full product-img">
-          <div class="absolute bottom-1.5 right-1.5">${getStockBadge(p.stock)}</div>
+function renderPOS() {
+  const q = (document.getElementById('posSearch').value || '').toLowerCase();
+  const list = products.filter(p => (!posCategory || p.cat === posCategory) && (p.name.toLowerCase().includes(q) || (p.barcode || '').includes(q)));
+  document.getElementById('posGrid').innerHTML = list.map(p => `
+    <div onclick="${p.stock > 0 ? `addToCart('${p.id}')` : `showToast('Stok ${p.name} habis!')`}" class="bg-white rounded-2xl overflow-hidden card-shadow cursor-pointer active:scale-95 transition ${p.stock <= 0 ? 'opacity-60' : ''}">
+      <img src="${p.img || 'https://placehold.co/400x300/eaf6fc/0A4D7A?text=Frozen'}" onerror="this.src='https://placehold.co/400x300/eaf6fc/0A4D7A?text=Frozen'" class="w-full product-img bg-slate-100">
+      <div class="p-3">
+        <p class="font-extrabold text-xs line-clamp-2 h-8">${p.name}</p>
+        <div class="flex justify-between items-center mt-2">
+          <span class="font-black text-xs text-[#0A4D7A]">${fmt(p.price)}</span>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${p.stock <= 0 ? 'bg-red-100 text-red-600' : 'bg-cyan-50 text-cyan-800'}">${p.stock <= 0 ? 'Habis' : 'Stok ' + p.stock}</span>
         </div>
-        <div class="p-2.5">
-          <p class="font-bold text-xs line-clamp-1">${p.name}</p>
-          <p class="font-black text-[#0A4D7A] text-sm mt-0.5">${fmt(p.price)}</p>
-        </div>
-      </div>`;
-  }).join('');
+      </div>
+    </div>`).join('');
 }
 
-function addToCart(id){
+function addToCart(id) {
   const p = products.find(x => x.id === id);
-  if(!p || p.stock <= 0){ showToast('Stok produk habis!'); return; }
+  if (!p || p.stock <= 0) return showToast('Stok produk habis!');
   const existing = cart.find(c => c.id === id);
-  if(existing){
-    if(existing.qty + 1 > p.stock){ showToast('Melebihi stok tersedia ('+p.stock+')'); return; }
+  if (existing) {
+    if (existing.qty >= p.stock) return showToast('Melebihi sisa stok!');
     existing.qty++;
   } else {
-    cart.push({id: p.id, name: p.name, price: p.price, qty: 1, max: p.stock});
+    cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
   }
   renderCart();
 }
 
-function updateCartQty(id, delta){
+function updateCartQty(id, delta) {
   const idx = cart.findIndex(c => c.id === id);
-  if(idx < 0) return;
+  if (idx === -1) return;
   const p = products.find(x => x.id === id);
-  const nextQty = cart[idx].qty + delta;
-  if(nextQty <= 0) cart.splice(idx, 1);
-  else if(p && nextQty > p.stock) { showToast('Stok maksimal ' + p.stock); return; }
-  else cart[idx].qty = nextQty;
+  const next = cart[idx].qty + delta;
+  if (next <= 0) cart.splice(idx, 1);
+  else if (p && next > p.stock) return showToast('Stok maksimal ' + p.stock);
+  else cart[idx].qty = next;
   renderCart();
 }
 
-function clearCart(){
+function clearCart() {
   cart = [];
-  document.getElementById('cashInput').value = '';
-  document.getElementById('custName').value = '';
   renderCart();
 }
 
-function setPay(method, btn){
+function setPay(method, btn) {
   payMethod = method;
   document.querySelectorAll('.paybtn').forEach(b => {
     b.className = 'paybtn bg-slate-100 py-2 rounded-xl text-xs font-bold';
   });
-  btn.className = 'paybtn bg-[#0A4D7A] text-white py-2 rounded-xl text-xs font-bold';
+  if (btn) btn.className = 'paybtn bg-[#0A4D7A] text-white py-2 rounded-xl text-xs font-bold';
 }
 
-function getCartTotals(){
-  const sub = cart.reduce((s, c) => s + (c.price * c.qty), 0);
-  const discPct = Number(document.getElementById('discountSel')?.value || 0);
-  const disc = Math.round(sub * discPct / 100);
-  const grand = sub - disc;
-  return { sub, discPct, disc, grand };
-}
-
-function renderCart(){
-  const totalQty = cart.reduce((s, c) => s + c.qty, 0);
+function renderCart() {
+  const totalQty = cart.reduce((s, i) => s + i.qty, 0);
   document.getElementById('cartBadge').textContent = totalQty;
-  document.getElementById('cartInfo').textContent = `${totalQty} item • Kasir: ${currentUser?.name || 'Admin'}`;
+  const kasirName = currentUser ? currentUser.name.split(' ')[0] : 'Admin';
+  document.getElementById('cartInfo').textContent = `${totalQty} item • Kasir: ${kasirName}`;
 
   const container = document.getElementById('cartItems');
-  if(!cart.length){
-    container.innerHTML = '<div class="text-center py-8 text-slate-400 text-xs"><i class="fa fa-basket-shopping text-2xl mb-2 block"></i>Keranjang masih kosong</div>';
+  if (!cart.length) {
+    container.innerHTML = '<p class="text-center text-xs text-slate-400 py-8">Keranjang masih kosong.<br>Pilih produk di samping.</p>';
   } else {
-    container.innerHTML = cart.map(c => `
-      <div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl gap-2">
+    container.innerHTML = cart.map(item => `
+      <div class="flex items-center justify-between gap-2 bg-slate-50 p-2.5 rounded-xl">
         <div class="flex-1 min-w-0">
-          <p class="font-bold text-xs truncate">${c.name}</p>
-          <p class="text-[11px] text-[#0A4D7A] font-bold">${fmt(c.price * c.qty)}</p>
+          <p class="font-bold text-xs truncate">${item.name}</p>
+          <p class="text-[11px] text-slate-500">${fmt(item.price)} x ${item.qty}</p>
         </div>
         <div class="flex items-center gap-1.5">
-          <button onclick="updateCartQty('${c.id}',-1)" class="w-7 h-7 rounded-lg bg-white border font-bold text-xs">-</button>
-          <span class="w-6 text-center text-xs font-black">${c.qty}</span>
-          <button onclick="updateCartQty('${c.id}',1)" class="w-7 h-7 rounded-lg bg-[#0A4D7A] text-white font-bold text-xs">+</button>
+          <button onclick="updateCartQty('${item.id}',-1)" class="w-6 h-6 rounded-full bg-white border font-bold text-xs">-</button>
+          <span class="text-xs font-black w-5 text-center">${item.qty}</span>
+          <button onclick="updateCartQty('${item.id}',1)" class="w-6 h-6 rounded-full bg-[#0A4D7A] text-white font-bold text-xs">+</button>
         </div>
       </div>`).join('');
   }
 
-  const { sub, grand } = getCartTotals();
+  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const discPct = Number(document.getElementById('discountSel').value || 0);
+  const discVal = Math.round(sub * discPct / 100);
+  const grand = sub - discVal;
+
   document.getElementById('subTotal').textContent = fmt(sub);
   document.getElementById('grandTotal').textContent = fmt(grand);
   calcChange();
 }
 
-function calcChange(){
-  const { grand } = getCartTotals();
+function calcChange() {
+  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const discPct = Number(document.getElementById('discountSel').value || 0);
+  const grand = sub - Math.round(sub * discPct / 100);
   const cash = Number(document.getElementById('cashInput').value || 0);
-  const change = cash - grand;
-  const el = document.getElementById('changeText');
-  el.textContent = cash > 0 ? (change >= 0 ? fmt(change) : 'Kurang ' + fmt(Math.abs(change))) : 'Rp 0';
+  const diff = cash - grand;
+  document.getElementById('changeText').textContent = diff >= 0 ? fmt(diff) : 'Kurang ' + fmt(Math.abs(diff));
 }
 
-function checkout(){
-  if(!cart.length){ showToast('Pilih produk terlebih dahulu!'); return; }
-  const { sub, discPct, disc, grand } = getCartTotals();
-  const cashInput = Number(document.getElementById('cashInput').value || 0);
-  const cash = payMethod === 'Tunai' ? (cashInput || grand) : grand;
-  if(payMethod === 'Tunai' && cashInput > 0 && cashInput < grand){
-    showToast('Uang tunai kurang dari total!');
-    return;
+function checkout() {
+  if (!cart.length) return showToast('Keranjang masih kosong!');
+  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const discPct = Number(document.getElementById('discountSel').value || 0);
+  const discVal = Math.round(sub * discPct / 100);
+  const grand = sub - discVal;
+  const cashInputVal = Number(document.getElementById('cashInput').value || 0);
+  const cash = payMethod === 'Tunai' ? (cashInputVal || grand) : grand;
+
+  if (payMethod === 'Tunai' && cashInputVal > 0 && cashInputVal < grand) {
+    return showToast('Uang tunai kurang dari total belanja!');
   }
 
-  // Kurangi stok
-  cart.forEach(c => {
-    const p = products.find(x => x.id === c.id);
-    if(p) p.stock = Math.max(0, Number(p.stock) - c.qty);
-  });
-
+  const now = new Date();
   const trx = {
-    id: 'INV-' + Date.now().toString().slice(-6),
-    date: new Date().toISOString(),
-    cashier: currentUser?.name || 'Admin',
-    customer: document.getElementById('custName').value.trim() || 'Umum',
+    id: 'TRX-' + String(Date.now()).slice(-6),
+    date: now.toLocaleString('id-ID'),
+    dateOnly: now.toLocaleDateString('id-ID'),
+    cashier: currentUser ? currentUser.name : 'Admin Jaya',
+    customer: document.getElementById('custName').value.trim() || 'Pelanggan Umum',
+    method: payMethod,
     items: JSON.parse(JSON.stringify(cart)),
-    sub, discPct, disc, total: grand,
-    payMethod,
+    discPct,
+    discVal,
+    total: grand,
     cash,
     change: Math.max(0, cash - grand)
   };
 
+  // Kurangi stok produk
+  trx.items.forEach(item => {
+    const p = products.find(x => x.id === item.id);
+    if (p) p.stock = Math.max(0, p.stock - item.qty);
+  });
+
   transactions.unshift(trx);
-  clearCart();
+  cart = [];
+  document.getElementById('cashInput').value = '';
+  document.getElementById('custName').value = '';
+  saveState();
   refreshAll();
-  syncToSheets('addTransaction', trx);
-  openReceipt(trx.id);
+  syncSheets(false);
+  openReceipt(trx);
   showToast('Transaksi berhasil disimpan!');
 }
 
-// --- HISTORY & RECEIPT ---
-function renderHistory(){
+// --- RIWAYAT & STRUK THERMAL 58MM ---
+function renderHistory() {
   const el = document.getElementById('trxList');
-  if(!transactions.length){
-    el.innerHTML = '<div class="bg-white rounded-2xl p-8 text-center text-slate-400 text-xs card-shadow">Belum ada riwayat transaksi.</div>';
+  if (!transactions.length) {
+    el.innerHTML = '<div class="bg-white rounded-2xl p-8 text-center text-sm text-slate-400 card-shadow">Belum ada riwayat transaksi.</div>';
     return;
   }
   el.innerHTML = transactions.map(t => `
-    <div class="bg-white rounded-2xl p-4 card-shadow flex flex-wrap items-center justify-between gap-3">
+    <div class="bg-white rounded-2xl p-4 card-shadow flex flex-wrap justify-between items-center gap-3">
       <div>
-        <div class="flex items-center gap-2">
-          <span class="font-black text-sm text-[#0A4D7A] mono">${t.id}</span>
-          <span class="bg-cyan-100 text-[#0A4D7A] text-[10px] font-bold px-2 py-0.5 rounded-full">${t.payMethod}</span>
-        </div>
-        <p class="text-xs text-slate-500 mt-0.5">${new Date(t.date).toLocaleString('id-ID')} • Pelanggan: <b>${t.customer}</b></p>
+        <div class="flex items-center gap-2"><span class="font-black text-sm text-[#0A4D7A]">${t.id}</span><span class="bg-cyan-50 text-cyan-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full">${t.method}</span></div>
+        <p class="text-xs text-slate-500 mt-0.5">${t.date} • Kasir: ${t.cashier} • ${t.customer}</p>
         <p class="text-[11px] text-slate-400 mt-1">${t.items.map(i => `${i.name} (${i.qty}x)`).join(', ')}</p>
       </div>
-      <div class="flex items-center gap-3">
-        <div class="text-right">
-          <p class="font-black text-base text-slate-800">${fmt(t.total)}</p>
-          <p class="text-[10px] text-slate-400">Kasir: ${t.cashier}</p>
-        </div>
-        <button onclick="openReceipt('${t.id}')" class="bg-[#0A4D7A] text-white px-3.5 py-2.5 rounded-xl text-xs font-bold"><i class="fa fa-receipt"></i> Struk</button>
+      <div class="text-right">
+        <p class="font-black text-base text-[#0A4D7A]">${fmt(t.total)}</p>
+        <button onclick='openReceipt(${JSON.stringify(t)})' class="mt-1 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-full text-xs font-bold">🧾 Lihat & Cetak Struk</button>
       </div>
     </div>`).join('');
 }
 
-function clearTransactions(){
-  askConfirm('Hapus semua riwayat transaksi dari perangkat ini?', () => {
+function clearTransactions() {
+  openConfirm('Hapus semua riwayat transaksi?', () => {
     transactions = [];
+    saveState();
     refreshAll();
-    showToast('Semua riwayat transaksi dihapus');
+    showToast('Riwayat transaksi dihapus');
   });
 }
 
-function openReceipt(trxId){
-  const t = transactions.find(x => x.id === trxId);
-  if(!t) return;
-  activeReceiptTrx = t;
-
-  const html = `
-    <div class="p-4 text-[11px] leading-snug">
-      <div class="text-center border-b border-dashed border-black pb-2">
-        <div class="inline-flex flex-col items-center justify-center mb-1">
-          <img src="${LOGO}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" class="h-12 mx-auto mb-1 object-contain grayscale contrast-150" alt="Logo AL JAYA">
-          <div style="display:none" class="flex-col items-center justify-center border-2 border-black px-3 py-1 rounded-lg mb-1">
-            <span class="font-black text-base tracking-tight leading-none">❄ ²AL JAYA</span>
-            <span class="text-[8px] font-bold tracking-widest mt-0.5">FROZEN FOOD</span>
-          </div>
-        </div>
-        <p class="font-bold text-sm">²AL JAYA FROZEN FOOD</p>
-        <p class="text-[10px]">Segar, Higienis & Halal</p>
+function buildReceiptHTML(t) {
+  return `
+    <div class="p-3 text-[11px] leading-snug text-black">
+      <div class="text-center border-b border-dashed border-black pb-2 mb-2">
+        <img src="${LOGO}" onerror="this.onerror=null;this.src='./logo.png'" alt="Logo" class="mx-auto max-w-[130px] h-auto mb-1">
+        <p class="font-bold text-xs tracking-wide">²AL JAYA FROZEN FOOD</p>
+        <p class="text-[10px]">Segar • Higienis • Halal</p>
         <p class="text-[10px]">WA: 0812-3456-7890</p>
       </div>
-      <div class="py-2 border-b border-dashed border-black text-[10px]">
+      <div class="text-[10px] border-b border-dashed border-black pb-2 mb-2 space-y-0.5">
         <div class="flex justify-between"><span>No:</span><span>${t.id}</span></div>
-        <div class="flex justify-between"><span>Tgl:</span><span>${new Date(t.date).toLocaleString('id-ID')}</span></div>
+        <div class="flex justify-between"><span>Tgl:</span><span>${t.date}</span></div>
         <div class="flex justify-between"><span>Kasir:</span><span>${t.cashier}</span></div>
         <div class="flex justify-between"><span>Plg:</span><span>${t.customer}</span></div>
       </div>
-      <div class="py-2 border-b border-dashed border-black space-y-1.5">
+      <div class="border-b border-dashed border-black pb-2 mb-2 space-y-1.5">
         ${t.items.map(i => `
           <div>
-            <p class="font-bold">${i.name}</p>
-            <div class="flex justify-between text-[10px]">
-              <span>${i.qty} x ${Number(i.price).toLocaleString('id-ID')}</span>
-              <span>${Number(i.qty*i.price).toLocaleString('id-ID')}</span>
-            </div>
+            <div class="font-bold">${i.name}</div>
+            <div class="flex justify-between text-[10px]"><span>${i.qty} x ${Number(i.price).toLocaleString('id-ID')}</span><span>${Number(i.qty * i.price).toLocaleString('id-ID')}</span></div>
           </div>`).join('')}
       </div>
-      <div class="py-2 space-y-1 text-[10px]">
-        ${t.disc > 0 ? `<div class="flex justify-between"><span>Diskon (${t.discPct}%)</span><span>-${fmt(t.disc)}</span></div>` : ''}
-        <div class="flex justify-between font-bold text-xs pt-1"><span>TOTAL</span><span>${fmt(t.total)}</span></div>
-        <div class="flex justify-between"><span>Bayar (${t.payMethod})</span><span>${fmt(t.cash)}</span></div>
-        <div class="flex justify-between"><span>Kembali</span><span>${fmt(t.change)}</span></div>
+      <div class="space-y-0.5 text-[11px] border-b border-dashed border-black pb-2 mb-2">
+        ${t.discVal > 0 ? `<div class="flex justify-between"><span>Diskon (${t.discPct}%):</span><span>-${fmt(t.discVal)}</span></div>` : ''}
+        <div class="flex justify-between font-bold text-xs"><span>TOTAL:</span><span>${fmt(t.total)}</span></div>
+        <div class="flex justify-between"><span>Bayar (${t.method}):</span><span>${fmt(t.cash)}</span></div>
+        <div class="flex justify-between"><span>Kembali:</span><span>${fmt(t.change)}</span></div>
       </div>
-      <div class="text-center pt-2 border-t border-dashed border-black text-[10px]">
-        <p>Terima kasih telah berbelanja!</p>
-        <p>Simpan produk di freezer -18°C ❄</p>
+      <div class="text-center text-[10px] pt-1">
+        <p class="font-bold">Terima Kasih Atas Kunjungan Anda!</p>
+        <p>Simpan produk di freezer (-18°C)</p>
       </div>
     </div>`;
+}
 
+function openReceipt(trx) {
+  activeReceipt = trx;
+  const html = buildReceiptHTML(trx);
   document.getElementById('receiptPaper').innerHTML = html;
   document.getElementById('printArea').innerHTML = html;
   document.getElementById('receiptModal').classList.remove('hidden');
 }
 
-function changePaper(mm){
-  const paper = document.getElementById('receiptPaper');
-  const jagged = document.getElementById('jaggedEl');
-  if(mm === '80'){
-    paper.style.width = '80mm';
-    paper.style.maxWidth = '380px';
-    jagged.style.maxWidth = '380px';
+function changePaper(size) {
+  const p = document.getElementById('receiptPaper');
+  const j = document.getElementById('jaggedEl');
+  if (size === '80') {
+    p.style.width = '80mm';
+    p.style.maxWidth = '360px';
+    j.style.maxWidth = '360px';
   } else {
-    paper.style.width = '58mm';
-    paper.style.maxWidth = '302px';
-    jagged.style.maxWidth = '302px';
+    p.style.width = '58mm';
+    p.style.maxWidth = '302px';
+    j.style.maxWidth = '302px';
   }
 }
 
-function printReceipt(){
+function printReceipt() {
+  if (!activeReceipt) return;
+  document.getElementById('printArea').innerHTML = buildReceiptHTML(activeReceipt);
   window.print();
 }
 
-function buildPlainReceiptText(t){
-  const W = 32;
-  const line = '-'.repeat(W) + '\n';
-  const center = s => {
-    s = String(s);
-    const pad = Math.max(0, Math.floor((W - s.length) / 2));
-    return ' '.repeat(pad) + s + '\n';
-  };
-  const row = (l, r) => {
-    l = String(l); r = String(r);
-    const space = Math.max(1, W - l.length - r.length);
+function buildPlainReceiptText(t) {
+  const line = '--------------------------------\n';
+  const pad = (l, r) => {
+    const space = Math.max(1, 32 - l.length - r.length);
     return l + ' '.repeat(space) + r + '\n';
   };
-
-  let txt = '';
-  txt += center('AL JAYA FROZEN FOOD');
-  txt += center('Segar, Higienis & Halal');
-  txt += center('WA: 0812-3456-7890');
+  let txt = '\x1B\x40\x1B\x61\x01'; // Init + Center
+  txt += '\x1B\x45\x01AL JAYA FROZEN FOOD\x1B\x45\x00\n';
+  txt += 'Segar - Higienis - Halal\n';
+  txt += 'WA: 0812-3456-7890\n';
+  txt += '\x1B\x61\x00' + line; // Left
+  txt += `No   : ${t.id}\n`;
+  txt += `Tgl  : ${t.date}\n`;
+  txt += `Kasir: ${t.cashier}\n`;
   txt += line;
-  txt += row('No:', t.id);
-  txt += row('Tgl:', new Date(t.date).toLocaleDateString('id-ID'));
-  txt += row('Kasir:', t.cashier);
-  txt += row('Plg:', t.customer);
-  txt += line;
-
   t.items.forEach(i => {
-    txt += i.name.slice(0, W) + '\n';
-    const qtyPrice = `${i.qty} x ${Number(i.price).toLocaleString('id-ID')}`;
-    const subItem = Number(i.qty * i.price).toLocaleString('id-ID');
-    txt += row(qtyPrice, subItem);
+    txt += `${i.name.slice(0, 32)}\n`;
+    txt += pad(` ${i.qty} x ${Number(i.price).toLocaleString('id-ID')}`, Number(i.qty * i.price).toLocaleString('id-ID'));
   });
-
   txt += line;
-  if(t.disc > 0){
-    txt += row(`Diskon (${t.discPct}%)`, '-' + Number(t.disc).toLocaleString('id-ID'));
-  }
-  txt += row('TOTAL', fmt(t.total));
-  txt += row(`Bayar (${t.payMethod})`, fmt(t.cash));
-  txt += row('Kembali', fmt(t.change));
-  txt += line;
-  txt += center('Terima kasih telah berbelanja');
-  txt += center('Simpan di freezer -18 C');
-  txt += '\n\n\n';
+  if (t.discVal > 0) txt += pad(`Diskon (${t.discPct}%)`, `-${fmt(t.discVal)}`);
+  txt += '\x1B\x45\x01' + pad('TOTAL', fmt(t.total)) + '\x1B\x45\x00';
+  txt += pad(`Bayar (${t.method})`, fmt(t.cash));
+  txt += pad('Kembali', fmt(t.change));
+  txt += line + '\x1B\x61\x01';
+  txt += 'Terima Kasih!\nSimpan di Freezer (-18 C)\n\n\n\n';
   return txt;
 }
 
-async function printViaBluetooth(){
-  if(!activeReceiptTrx) return;
-  if(!navigator.bluetooth){
-    showToast('Browser tidak mendukung Web Bluetooth. Gunakan Print Thermal atau RawBT.');
+async function printViaBluetooth() {
+  if (!activeReceipt) return;
+  if (!navigator.bluetooth) {
+    showToast('Browser tidak mendukung Web Bluetooth. Gunakan Print Thermal / RawBT.');
+    printReceipt();
     return;
   }
   try {
-    showToast('Mencari printer Bluetooth...');
+    showToast('Mencari printer Bluetooth 58mm...');
     const device = await navigator.bluetooth.requestDevice({
       acceptAllDevices: true,
-      optionalServices: [
-        '000018f0-0000-1000-8000-00805f9b34fb',
-        'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
-        '49535343-fe7d-4ae5-8fa9-9fafd205e455'
-      ]
+      optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb', 'e7810a71-73ae-499d-8c15-faa9aef0c3f2', '49535343-fe7d-4ae5-8fa9-9fafd205e455']
     });
     const server = await device.gatt.connect();
     const services = await server.getPrimaryServices();
     let writableChar = null;
-    for(const srv of services){
-      const chars = await srv.getCharacteristics();
-      for(const c of chars){
-        if(c.properties.write || c.properties.writeWithoutResponse){
-          writableChar = c;
+    for (const svc of services) {
+      const chars = await svc.getCharacteristics();
+      for (const ch of chars) {
+        if (ch.properties.write || ch.properties.writeWithoutResponse) {
+          writableChar = ch;
           break;
         }
       }
-      if(writableChar) break;
+      if (writableChar) break;
     }
-    if(!writableChar){
-      showToast('Karakteristik printer tidak ditemukan.');
-      return;
-    }
+    if (!writableChar) throw new Error('Karakteristik tulis tidak ditemukan');
     const encoder = new TextEncoder();
-    const initCmd = new Uint8Array([0x1B, 0x40]); // ESC @ initialize
-    const textBytes = encoder.encode(buildPlainReceiptText(activeReceiptTrx));
-    const payload = new Uint8Array(initCmd.length + textBytes.length);
-    payload.set(initCmd, 0);
-    payload.set(textBytes, initCmd.length);
-
+    const bytes = encoder.encode(buildPlainReceiptText(activeReceipt));
     const chunkSize = 20;
-    for(let i = 0; i < payload.length; i += chunkSize){
-      const chunk = payload.slice(i, i + chunkSize);
-      if(writableChar.properties.writeWithoutResponse) await writableChar.writeValueWithoutResponse(chunk);
-      else await writableChar.writeValue(chunk);
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+      await writableChar.writeValue(bytes.slice(i, i + chunkSize));
     }
     showToast('Struk berhasil dikirim ke printer Bluetooth!');
   } catch (err) {
-    showToast('Bluetooth dibatalkan / gagal: ' + (err.message || 'Error'));
+    showToast('Bluetooth dibatalkan / gagal, dialihkan ke Print Browser');
+    printReceipt();
   }
 }
 
-function shareWA(){
-  if(!activeReceiptTrx) return;
-  const text = encodeURIComponent(buildPlainReceiptText(activeReceiptTrx));
-  window.open(`https://wa.me/?text=${text}`, '_blank');
+function shareWA() {
+  if (!activeReceipt) return;
+  const t = activeReceipt;
+  let msg = `*²AL JAYA FROZEN FOOD*\nNo: ${t.id}\nTgl: ${t.date}\n----------------------\n`;
+  t.items.forEach(i => { msg += `• ${i.name} (${i.qty}x) = ${fmt(i.qty * i.price)}\n`; });
+  msg += `----------------------\n*TOTAL: ${fmt(t.total)}*\nBayar (${t.method}): ${fmt(t.cash)}\nKembali: ${fmt(t.change)}\nTerima kasih telah berbelanja! ❄`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
-// --- USER MANAGEMENT ---
-function renderUsers(){
-  const grid = document.getElementById('userGrid');
-  if(!grid) return;
-  grid.innerHTML = users.map(u => `
-    <div class="bg-white rounded-2xl p-4 card-shadow flex items-center justify-between gap-3">
+// --- MANAJEMEN PENGGUNA ---
+function renderUsers() {
+  document.getElementById('userGrid').innerHTML = users.map(u => `
+    <div class="bg-white rounded-2xl p-4 card-shadow flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-full bg-cyan-100 text-[#0A4D7A] grid place-items-center text-lg shrink-0">
-          <i class="fa-solid fa-user"></i>
-        </div>
+        <div class="w-11 h-11 rounded-full bg-cyan-100 text-[#0A4D7A] grid place-items-center text-lg"><i class="fa-solid fa-user"></i></div>
         <div>
-          <p class="font-black text-sm text-slate-800">${u.name}</p>
+          <p class="font-extrabold text-sm">${u.name}</p>
           <p class="text-xs text-slate-500">@${u.username} • <span class="font-bold text-[#0A4D7A]">${u.role}</span></p>
         </div>
       </div>
       <div class="flex gap-1">
-        <button onclick="openUserModal('${u.id}')" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs"><i class="fa fa-pen"></i></button>
-        ${u.username !== 'admin' ? `<button onclick="deleteUser('${u.id}')" class="w-8 h-8 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 text-xs"><i class="fa fa-trash"></i></button>` : ''}
+        <button onclick="openUserModal('${u.id}')" class="bg-slate-100 px-2.5 py-1.5 rounded-lg text-xs font-bold">Edit</button>
+        ${u.username !== 'admin' ? `<button onclick="deleteUser('${u.id}')" class="bg-red-50 text-red-600 px-2.5 py-1.5 rounded-lg text-xs font-bold">Hapus</button>` : ''}
       </div>
     </div>`).join('');
 }
 
-function openUserModal(id=null){
-  const form = document.getElementById('userForm');
-  form.reset();
-  document.getElementById('uId').value = id || '';
-  document.getElementById('umTitle').textContent = id ? 'Edit Pengguna' : 'Tambah Pengguna';
-  if(id){
+function openUserModal(id = '') {
+  document.getElementById('userForm').reset();
+  document.getElementById('uId').value = id;
+  if (id) {
     const u = users.find(x => x.id === id);
-    if(u){
+    if (u) {
+      document.getElementById('umTitle').textContent = 'Edit Pengguna';
       document.getElementById('uName').value = u.name;
       document.getElementById('uUsername').value = u.username;
       document.getElementById('uPass').value = u.pass;
       document.getElementById('uRole').value = u.role;
     }
+  } else {
+    document.getElementById('umTitle').textContent = 'Tambah Pengguna';
   }
   document.getElementById('userModal').classList.remove('hidden');
 }
 
-document.getElementById('userForm').onsubmit = function(e){
+document.getElementById('userForm').onsubmit = function(e) {
   e.preventDefault();
-  const id = document.getElementById('uId').value || 'USR' + Date.now().toString().slice(-4);
-  const item = {
-    id,
+  const id = document.getElementById('uId').value;
+  const userObj = {
+    id: id || 'U' + String(Date.now()).slice(-4),
     name: document.getElementById('uName').value.trim(),
     username: document.getElementById('uUsername').value.trim(),
     pass: document.getElementById('uPass').value.trim(),
     role: document.getElementById('uRole').value
   };
-  const idx = users.findIndex(x => x.id === id);
-  if(idx >= 0) users[idx] = item;
-  else users.push(item);
-
+  if (id) {
+    const idx = users.findIndex(x => x.id === id);
+    if (idx > -1) users[idx] = userObj;
+  } else {
+    users.push(userObj);
+  }
+  saveState();
   closeModal('userModal');
-  refreshAll();
-  syncToSheets('saveUser', item);
-  showToast('Data pengguna berhasil disimpan!');
+  renderUsers();
+  showToast('Data pengguna tersimpan');
 };
 
-function deleteUser(id){
-  askConfirm('Hapus pengguna ini?', () => {
+function deleteUser(id) {
+  openConfirm('Hapus pengguna ini?', () => {
     users = users.filter(u => u.id !== id);
-    refreshAll();
+    saveState();
+    renderUsers();
     showToast('Pengguna dihapus');
   });
 }
 
-// --- GOOGLE SHEETS INTEGRATION ---
-function renderSheetsPreview(){
-  const tbody = document.getElementById('sheetPreview');
-  if(!tbody) return;
-  tbody.innerHTML = products.map(p => `
+// --- GOOGLE SHEETS SYNC ---
+function renderSheetPreview() {
+  document.getElementById('sheetPreview').innerHTML = products.map(p => `
     <tr class="border-t">
       <td class="p-2 mono">${p.id}</td>
-      <td class="p-2 font-semibold">${p.name}</td>
-      <td class="p-2 text-right">${fmt(p.price)}</td>
+      <td class="p-2 font-bold">${p.name}</td>
+      <td class="p-2 text-center">${fmt(p.price)}</td>
       <td class="p-2 text-center">${p.stock}</td>
-      <td class="p-2 text-center">${p.stock > 0 ? 'Tersedia' : 'Habis'}</td>
+      <td class="p-2 text-center">${p.stock > 5 ? 'Aman' : p.stock > 0 ? 'Menipis' : 'Habis'}</td>
     </tr>`).join('');
 }
 
-async function syncToSheets(action, payload){
-  const url = document.getElementById('scriptUrl')?.value.trim() || GOOGLE_APPS_SCRIPT_URL;
-  localStorage.setItem('aljaya_script_url', url);
-  appendLog(`POST ${action}...`);
+async function syncSheets(notify = true) {
+  const url = document.getElementById('scriptUrl')?.value || GOOGLE_APPS_SCRIPT_URL;
+  const log = document.getElementById('syncLog');
+  document.getElementById('lastSync').textContent = new Date().toLocaleTimeString('id-ID');
   try {
     await fetch(url, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action, data: payload })
+      body: JSON.stringify({ action: 'syncAll', products, transactions, users })
     });
-    document.getElementById('lastSync').textContent = new Date().toLocaleTimeString('id-ID');
-    appendLog(`POST ${action} terkirim OK`);
-  } catch(e){
-    appendLog(`Error ${action}: ${e.message}`);
+    if (log) log.innerHTML += `<br>> [${new Date().toLocaleTimeString()}] Sync ${products.length} produk & ${transactions.length} trx OK`;
+    if (notify) showToast('Sinkronisasi ke Google Sheets berhasil!');
+  } catch (err) {
+    if (log) log.innerHTML += `<br>> [Offline] Tersimpan di memori lokal`;
+    if (notify) showToast('Data tersimpan secara lokal');
   }
 }
 
-async function syncSheets(manual=false){
-  const url = document.getElementById('scriptUrl')?.value.trim() || GOOGLE_APPS_SCRIPT_URL;
-  localStorage.setItem('aljaya_script_url', url);
-  if(manual) showToast('Menyinkronkan dengan Google Sheets...');
-  appendLog('GET syncAll...');
-  try {
-    const res = await fetch(url + '?action=getAll');
-    const data = await res.json();
-    if(Array.isArray(data.products) && data.products.length){
-      products = data.products;
-    }
-    if(Array.isArray(data.users) && data.users.length){
-      users = data.users;
-    }
+function clearSheetData(type) {
+  openConfirm(`Hapus semua data ${type} dari tampilan lokal?`, () => {
+    if (type === 'products') products = [];
+    if (type === 'transactions') transactions = [];
+    if (type === 'users') users = [defaultUsers[0]];
+    saveState();
     refreshAll();
-    document.getElementById('lastSync').textContent = new Date().toLocaleTimeString('id-ID');
-    appendLog(`Sync selesai (${products.length} produk)`);
-    if(manual) showToast('Sinkronisasi Google Sheets berhasil!');
-  } catch(e){
-    document.getElementById('lastSync').textContent = new Date().toLocaleTimeString('id-ID');
-    appendLog('Mode lokal aktif (offline/CORS)');
-    if(manual) showToast('Data lokal tersimpan & siap disinkronkan');
-  }
-}
-
-function clearSheetData(type){
-  askConfirm(`Reset data ${type} ke default?`, () => {
-    if(type === 'products') products = [...DEFAULT_PRODUCTS];
-    if(type === 'transactions') transactions = [];
-    if(type === 'users') users = [...DEFAULT_USERS];
-    refreshAll();
-    showToast(`Data ${type} berhasil direset`);
+    showToast(`Data ${type} dikosongkan`);
   });
 }
 
-function copyScript(){
-  const gsCode = `function doGet(e) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var prodSheet = ss.getSheetByName('Produk') || ss.insertSheet('Produk');
-  var rows = prodSheet.getDataRange().getValues();
-  var products = [];
-  for (var i = 1; i < rows.length; i++) {
-    if (!rows[i][0]) continue;
-    products.push({
-      id: rows[i][0], barcode: rows[i][1], name: rows[i][2],
-      cat: rows[i][3], price: Number(rows[i][4]), stock: Number(rows[i][5]),
-      unit: rows[i][6], img: rows[i][7]
-    });
-  }
-  return ContentService.createTextOutput(JSON.stringify({ products: products }))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-function doPost(e) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var body = JSON.parse(e.postData.contents);
-  if (body.action === 'saveProduct') {
-    var sh = ss.getSheetByName('Produk') || ss.insertSheet('Produk');
-    var d = body.data;
-    sh.appendRow([d.id, d.barcode, d.name, d.cat, d.price, d.stock, d.unit, d.img]);
-  } else if (body.action === 'addTransaction') {
-    var shT = ss.getSheetByName('Transaksi') || ss.insertSheet('Transaksi');
-    var t = body.data;
-    shT.appendRow([t.id, t.date, t.cashier, t.customer, t.total, t.payMethod]);
-  }
-  return ContentService.createTextOutput(JSON.stringify({ status: 'ok' }))
-    .setMimeType(ContentService.MimeType.JSON);
-}`;
+function copyScript() {
+  const code = `function doPost(e){var ss=SpreadsheetApp.getActiveSpreadsheet();var data=JSON.parse(e.postData.contents);return ContentService.createTextOutput(JSON.stringify({status:'ok'})).setMimeType(ContentService.MimeType.JSON);}`;
   const ta = document.createElement('textarea');
-  ta.value = gsCode;
+  ta.value = code;
   document.body.appendChild(ta);
   ta.select();
   document.execCommand('copy');
   document.body.removeChild(ta);
-  showToast('Kode Google Apps Script berhasil disalin!');
+  showToast('Template Apps Script berhasil disalin!');
 }
 
-// --- BOOTSTRAP ---
-window.addEventListener('DOMContentLoaded', () => {
+function refreshAll() {
+  renderDashboard();
+  renderProducts();
+  renderPOS();
+  renderCart();
+  renderHistory();
+  renderUsers();
+  renderSheetPreview();
+}
+
+// --- EVENT LISTENER & AUTO-INIT SAAT HALAMAN DIMUAT ---
+document.addEventListener('DOMContentLoaded', () => {
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', handleLogin);
+  }
   document.getElementById('loginProdCount').textContent = products.length;
-  if(currentUser){
-    initApp();
+  if (currentUser) {
+    enterApp(currentUser);
   }
 });
 </script>

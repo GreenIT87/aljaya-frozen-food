@@ -1404,6 +1404,22 @@ function startScanningDevice(deviceId) {
     }
   });
 }
+
+function switchBarcodeCamera() {
+  if (!videoDevices.length) return;
+  currentDeviceIndex = (currentDeviceIndex + 1) % videoDevices.length;
+  if (codeReader) codeReader.reset();
+  startScanningDevice(videoDevices[currentDeviceIndex].deviceId);
+}
+
+function closeBarcodeScanner() {
+  if (codeReader) {
+    try { codeReader.reset(); } catch (e) {}
+  }
+  $('barcodeModal').classList.add('hidden');
+}
+
+// ================= RECEIPT & THERMAL 58MM / BLUETOOTH =================
 function getReceiptLogoSVG(width = 125, height = 34) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 96" width="${width}" height="${height}" style="display:block;margin:0 auto 2px auto;">
     <g fill="#000000">
@@ -1491,13 +1507,13 @@ function openReceipt(trxId) {
 
 function changePaper(size) {
   const paper = $('receiptPaper');
-  const jagged = $('jaggedEl');
+  const jag = $('jaggedEl');
   if (size === '80') {
     paper.classList.add('thermal-80');
-    jagged.style.maxWidth = '310px';
+    jag.style.maxWidth = '310px';
   } else {
     paper.classList.remove('thermal-80');
-    jagged.style.maxWidth = '225px';
+    jag.style.maxWidth = '225px';
   }
 }
 
@@ -1507,55 +1523,105 @@ function printReceipt() {
   window.print();
 }
 
-function formatThermalRow(left, right, width = 42) {
-  const l = cleanASCII(left);
-  const r = cleanASCII(right);
-  const space = Math.max(1, width - l.length - r.length);
-  return l + ' '.repeat(space) + r;
+function cleanASCII(str) {
+  return String(str || '')
+    .replace(/²/g, '2')
+    .replace(/°/g, ' ')
+    .replace(/❄/g, '*')
+    .replace(/[^\x20-\x7E]/g, '');
 }
 
-function wrapThermalText(text, width = 42) {
-  const words = cleanASCII(text).split(/\s+/);
+function wrapThermalText(text, maxCols) {
+  const words = cleanASCII(text).split(/\s+/).filter(Boolean);
   const lines = [];
   let line = '';
-  for (const w of words) {
-    if ((line + (line ? ' ' : '') + w).length <= width) {
-      line += (line ? ' ' : '') + w;
+  words.forEach(w => {
+    if (!line) {
+      line = w.slice(0, maxCols);
+    } else if ((line + ' ' + w).length <= maxCols) {
+      line += ' ' + w;
     } else {
-      if (line) lines.push(line);
-      line = w.slice(0, width);
+      lines.push(line);
+      line = w.slice(0, maxCols);
     }
-  }
+  });
   if (line) lines.push(line);
-  return lines;
+  return lines.length ? lines : [''];
+}
+
+function formatThermalRow(left, right, maxCols) {
+  const l = cleanASCII(left);
+  const r = cleanASCII(right);
+  const space = Math.max(1, maxCols - l.length - r.length);
+  return (l + ' '.repeat(space) + r).slice(0, maxCols);
+}
+
+function drawReceiptLogoOnCanvas(canvas) {
+  const w = canvas.width;
+  const h = canvas.height;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillRect(0, 0, w, h);
+
+  const sx = w / 340;
+  const sy = h / 96;
+  ctx.save();
+  ctx.scale(sx, sy);
+  ctx.fillStyle = '#000000';
+  ctx.strokeStyle = '#000000';
+
+  // Swooshes matching 2AL JAYA Frozen Food logo
+  const p1 = new Path2D('M138 14 C95 6, 48 22, 46 44 C44 58, 75 63, 74 75 C73 86, 36 86, 16 74 C3 66, 2 45, 22 29 C10 42, 11 58, 25 65 C43 73, 62 69, 62 60 C62 51, 33 47, 34 32 C35 15, 86 2, 138 14 Z');
+  const p2 = new Path2D('M142 20 C115 11, 78 16, 66 28 C82 21, 115 19, 134 27 C140 30, 141 36, 137 42 C146 34, 149 24, 142 20 Z');
+  const p3 = new Path2D('M116 58 C95 82, 48 93, 18 81 C45 98, 96 89, 116 58 Z');
+  ctx.fill(p1);
+  ctx.fill(p2);
+  ctx.fill(p3);
+
+  // Snowflake Emblem
+  ctx.save();
+  ctx.translate(43, 46);
+  ctx.lineWidth = 3.6;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(0, -19); ctx.lineTo(0, 19);
+  ctx.moveTo(-16.5, -9.5); ctx.lineTo(16.5, 9.5);
+  ctx.moveTo(-16.5, 9.5); ctx.lineTo(16.5, -9.5);
+  ctx.moveTo(-4, -13); ctx.lineTo(0, -9); ctx.lineTo(4, -13);
+  ctx.moveTo(-4, 13); ctx.lineTo(0, 9); ctx.lineTo(4, 13);
+  ctx.moveTo(-13, -3); ctx.lineTo(-8, -4.5); ctx.lineTo(-9, -9.5);
+  ctx.moveTo(13, 3); ctx.lineTo(8, 4.5); ctx.lineTo(9, 9.5);
+  ctx.moveTo(-9, 9.5); ctx.lineTo(-8, 4.5); ctx.lineTo(-13, 3);
+  ctx.moveTo(9, -9.5); ctx.lineTo(8, -4.5); ctx.lineTo(13, -3);
+  ctx.stroke();
+  ctx.restore();
+
+  // Typography: 2AL JAYA Frozen Food
+  ctx.font = 'italic 900 19px Arial, sans-serif';
+  ctx.fillText('2', 112, 34);
+  ctx.font = 'italic 900 34px Arial, sans-serif';
+  ctx.fillText('AL', 128, 47);
+  ctx.font = 'italic 900 36px Arial, sans-serif';
+  ctx.fillText('JAYA', 115, 76);
+  ctx.font = '700 14.5px Arial, sans-serif';
+  ctx.fillText('Frozen Food', 118, 91);
+
+  ctx.restore();
 }
 
 async function getLogoEscPosBytes() {
   try {
-    const w = 240; // divisible by 8, fits 58mm thermal cleanly
-    const h = 68;
-    const svgMarkup = getReceiptLogoSVG(w, h);
-    const svgBlob = new Blob([svgMarkup], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(svgBlob);
-
-    const img = await new Promise((resolve, reject) => {
-      const image = new Image();
-      image.onload = () => resolve(image);
-      image.onerror = reject;
-      image.src = url;
-    });
-
+    const w = 256; // 32 bytes wide, optimal for 58mm thermal head (384 dots)
+    const h = 72;
     const canvas = document.createElement('canvas');
     canvas.width = w;
     canvas.height = h;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(0, 0, w, h);
-    ctx.drawImage(img, 0, 0, w, h);
-    URL.revokeObjectURL(url);
+    drawReceiptLogoOnCanvas(canvas);
 
+    const ctx = canvas.getContext('2d');
     const imgData = ctx.getImageData(0, 0, w, h).data;
     const widthBytes = w / 8;
+    // GS v 0 m xL xH yL yH (Raster bit image)
     const header = [0x1D, 0x76, 0x30, 0x00, widthBytes & 0xFF, (widthBytes >> 8) & 0xFF, h & 0xFF, (h >> 8) & 0xFF];
     const raster = new Uint8Array(header.length + widthBytes * h);
     raster.set(header, 0);
@@ -1568,28 +1634,46 @@ async function getLogoEscPosBytes() {
           const x = xb * 8 + bit;
           const idx = (y * w + x) * 4;
           const lum = 0.299 * imgData[idx] + 0.587 * imgData[idx + 1] + 0.114 * imgData[idx + 2];
-          if (lum < 160) byte |= (1 << (7 - bit));
+          if (lum < 180) byte |= (1 << (7 - bit));
         }
         raster[offset++] = byte;
       }
     }
     return raster;
   } catch (e) {
+    console.warn('Logo raster error:', e);
     return new Uint8Array(0);
+  }
+}
+
+async function writeBleBytes(char, data, chunkSize = 20, delayMs = 30) {
+  for (let i = 0; i < data.length; i += chunkSize) {
+    const chunk = data.slice(i, i + chunkSize);
+    if (char.properties.writeWithoutResponse) {
+      await char.writeValueWithoutResponse(chunk);
+    } else {
+      await char.writeValue(chunk);
+    }
+    await new Promise(r => setTimeout(r, delayMs));
   }
 }
 
 async function printViaBluetooth() {
   if (!currentReceiptTrx) return;
   if (!navigator.bluetooth) {
-    showToast('Browser tidak mendukung Web Bluetooth. Gunakan Print Thermal / RawBT.');
+    showToast('Browser HP tidak mendukung Web Bluetooth. Gunakan Chrome Android atau Print Thermal.');
     return;
   }
   try {
-    showToast('Mencari printer Bluetooth 58mm...');
+    showToast('Menghubungkan ke Printer Thermal 58mm...');
     const device = await navigator.bluetooth.requestDevice({
       acceptAllDevices: true,
-      optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb', 'e7810a71-73ae-499d-8c15-faa9aef0c3f2']
+      optionalServices: [
+        '000018f0-0000-1000-8000-00805f9b34fb',
+        'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
+        '0000ff00-0000-1000-8000-00805f9b34fb',
+        '49535343-fe7d-4ae5-8fa9-9fafd205e455'
+      ]
     });
     const server = await device.gatt.connect();
     const services = await server.getPrimaryServices();
@@ -1615,7 +1699,6 @@ async function printViaBluetooth() {
     const sep = '-'.repeat(cols) + '\n';
 
     const lines = [
-      '\x1B\x40',       // Init printer
       '\x1B\x4D\x01',   // Font B (condensed small font)
       '\x1B\x33\x16',   // Compact line spacing
       '\x1B\x61\x01',   // Center align
@@ -1651,27 +1734,20 @@ async function printViaBluetooth() {
     lines.push('\n\n\n');
 
     const encoder = new TextEncoder();
-    const logoBytes = await getLogoEscPosBytes();
     const initCenter = new Uint8Array([0x1B, 0x40, 0x1B, 0x61, 0x01]);
+    const logoBytes = await getLogoEscPosBytes();
+    const lineFeedAfterLogo = new Uint8Array([0x0A]);
     const textBytes = encoder.encode(lines.join(''));
 
-    const fullPayload = new Uint8Array(initCenter.length + logoBytes.length + textBytes.length);
-    fullPayload.set(initCenter, 0);
-    fullPayload.set(logoBytes, initCenter.length);
-    fullPayload.set(textBytes, initCenter.length + logoBytes.length);
-
-    const chunkSize = 100;
-    for (let i = 0; i < fullPayload.length; i += chunkSize) {
-      const chunk = fullPayload.slice(i, i + chunkSize);
-      if (writableChar.properties.writeWithoutResponse) {
-        await writableChar.writeValueWithoutResponse(chunk);
-      } else {
-        await writableChar.writeValue(chunk);
-      }
-      await new Promise(r => setTimeout(r, 25));
+    // Send header & logo in 20-byte BLE MTU packets so Android Bluetooth printers don't drop bitmap frames
+    await writeBleBytes(writableChar, initCenter, 20, 30);
+    if (logoBytes.length > 0) {
+      await writeBleBytes(writableChar, logoBytes, 20, 35);
+      await writeBleBytes(writableChar, lineFeedAfterLogo, 20, 30);
     }
+    await writeBleBytes(writableChar, textBytes, 20, 25);
 
-    showToast('Struk berhasil dicetak via Bluetooth!');
+    showToast('Struk & logo berhasil dicetak via Bluetooth!');
   } catch (err) {
     showToast('Bluetooth gagal: ' + err.message);
   }

@@ -17,17 +17,17 @@
 .frost{background:linear-gradient(135deg,#eaf6fc 0%,#fff 55%)}
 .active-nav{background:#0A4D7A!important;color:#fff!important}
 .chip-active{background:#0A4D7A!important;color:#fff!important}
-.thermal{width:58mm;max-width:240px;background:#fff;color:#000;font-family:'JetBrains Mono',monospace;font-size:9px;line-height:1.25;transition:all .2s ease}
-.thermal-80{width:80mm;max-width:320px;font-size:10px;line-height:1.3}
-.thermal img{filter:grayscale(1) contrast(1.3);max-height:28px;max-width:110px;width:auto;height:auto;margin:0 auto 3px auto;display:block}
+.thermal{width:58mm;max-width:225px;background:#fff;color:#000;font-family:'JetBrains Mono',monospace;font-size:8px;line-height:1.18;transition:all .2s ease}
+.thermal-80{width:80mm;max-width:310px;font-size:9px;line-height:1.25}
+.thermal img{filter:grayscale(1) contrast(1.4);max-height:22px;max-width:95px;width:auto;height:auto;margin:0 auto 2px auto;display:block}
 .jagged{height:10px;background:linear-gradient(-45deg,transparent 8px,#fff 0) 0 0/16px 16px repeat-x,linear-gradient(45deg,transparent 8px,#fff 0) 8px 0/16px 16px repeat-x;transform:rotate(180deg)}
 @media print{
  @page{size:58mm auto;margin:0}
  html,body{width:58mm!important;margin:0!important;padding:0!important;background:#fff!important}
  body>*{display:none!important}
- #printArea{display:block!important;position:static!important;width:48mm!important;margin:0 auto!important;padding:1.5mm 1mm!important;background:#fff!important;color:#000!important;font-family:'JetBrains Mono',monospace!important;font-size:8.5px!important;line-height:1.22!important;box-sizing:border-box!important}
+ #printArea{display:block!important;position:static!important;width:46mm!important;margin:0 auto!important;padding:1mm 0.5mm!important;background:#fff!important;color:#000!important;font-family:'JetBrains Mono',monospace!important;font-size:7.2px!important;line-height:1.15!important;box-sizing:border-box!important}
  #printArea *{visibility:visible!important;color:#000!important;box-sizing:border-box!important}
- #printArea img{max-height:24px!important;max-width:95px!important;width:auto!important;height:auto!important;margin:0 auto 2px auto!important;display:block!important;filter:grayscale(1) contrast(1.4)!important}
+ #printArea img{max-height:20px!important;max-width:85px!important;width:auto!important;height:auto!important;margin:0 auto 2px auto!important;display:block!important;filter:grayscale(1) contrast(1.5)!important}
 }
 #printArea{display:none}
 input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset:1px}
@@ -575,8 +575,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
       <button onclick="closeModal('receiptModal'); showView('sheets')" title="Pengaturan Struk" class="w-10 h-10 bg-white rounded-full font-bold shadow grid place-items-center text-[#0A4D7A]"><i class="fa fa-gear"></i></button>
       <button onclick="closeModal('receiptModal')" class="w-10 h-10 bg-white rounded-full font-bold shadow grid place-items-center">✕</button>
     </div>
-    <div class="thermal mx-auto rounded-t-lg shadow-2xl p-2.5 text-[9px] leading-tight" id="receiptPaper"></div>
-    <div class="jagged max-w-[240px] mx-auto" id="jaggedEl"></div>
+    <div class="thermal mx-auto rounded-t-lg shadow-2xl p-2 text-[8px] leading-tight" id="receiptPaper"></div>
+    <div class="jagged max-w-[225px] mx-auto" id="jaggedEl"></div>
     <div class="grid grid-cols-2 gap-2 mt-3">
       <button onclick="printReceipt()" class="bg-white hover:bg-slate-100 py-3 rounded-full font-black text-xs shadow transition">🖨️ PRINT THERMAL</button>
       <button onclick="printViaBluetooth()" class="bg-[#0A4D7A] hover:bg-[#083a5e] text-white py-3 rounded-full font-black text-xs border border-white/30 shadow transition">📶 BLUETOOTH 58mm</button>
@@ -676,9 +676,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
 <!-- HIDDEN PRINT AREA -->
 <div id="printArea"></div>
 
-
 <script>
-// ================= DEFAULT CONSTANTS (DEFINED FIRST) =================
+// ================= DEFAULT CONSTANTS =================
 const DEFAULT_PRODUCTS = [
   { id: 'PRD-001', name: 'Fiesta Chicken Nugget 500g', barcode: '899100100101', cat: 'Ayam', price: 42000, stock: 24, unit: 'pack', desc: 'Nugget ayam renyah kemasan 500g', img: 'https://placehold.co/400x300/0A4D7A/FFFFFF?text=Chicken+Nugget' },
   { id: 'PRD-002', name: 'Kanzler Beef Cocktail 500g', barcode: '899100100102', cat: 'Sapi', price: 54000, stock: 15, unit: 'pack', desc: 'Sosis sapi premium siap panggang', img: 'https://placehold.co/400x300/8B1E24/FFFFFF?text=Beef+Cocktail' },
@@ -708,76 +707,92 @@ const DEFAULT_RECEIPT_SETTINGS = {
   footer1: 'TERIMA KASIH ATAS KUNJUNGANNYA',
   footer2: 'Simpan di freezer suhu -18C',
   customNote: 'Barang yang sudah dibeli tidak dapat ditukar',
-  showCashier: true,
-  showCustomer: true
+  showCashier: false,
+  showCustomer: false
 };
 
-// ================= GLOBAL STATE DECLARATIONS =================
-let products = JSON.parse(sessionStorage.getItem('aljaya_products')) || DEFAULT_PRODUCTS;
-let transactions = JSON.parse(sessionStorage.getItem('aljaya_transactions')) || [];
-let users = JSON.parse(sessionStorage.getItem('aljaya_users')) || DEFAULT_USERS;
-let categories = JSON.parse(sessionStorage.getItem('aljaya_categories')) || DEFAULT_CATEGORIES;
-let receiptSettings = JSON.parse(sessionStorage.getItem('aljaya_receiptSettings')) || DEFAULT_RECEIPT_SETTINGS;
+// ================= STATE MANAGEMENT =================
+function loadJSON(key, fallback) {
+  try {
+    const raw = sessionStorage.getItem(key);
+    return raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(fallback));
+  } catch (e) {
+    return JSON.parse(JSON.stringify(fallback));
+  }
+}
 
-let currentUser = JSON.parse(sessionStorage.getItem('aljaya_currentUser')) || null;
+function saveJSON(key, val) {
+  try {
+    sessionStorage.setItem(key, JSON.stringify(val));
+  } catch (e) {
+    console.warn('Storage save skipped:', e);
+  }
+}
+
+let products = loadJSON('aj_products', DEFAULT_PRODUCTS);
+let users = loadJSON('aj_users', DEFAULT_USERS);
+let categories = loadJSON('aj_categories', DEFAULT_CATEGORIES);
+let transactions = loadJSON('aj_transactions', []);
+let receiptSettings = loadJSON('aj_receipt_settings', DEFAULT_RECEIPT_SETTINGS);
+let currentUser = loadJSON('aj_current_user', null);
 let cart = [];
-let activePayMethod = 'Tunai';
-let activePosCat = '';
+let selectedPosCat = '';
+let selectedPayment = 'Tunai';
 let prodLayout = 'grid';
-let activeReceiptTrx = null;
-let activeSheetTab = 'products';
+let currentReceiptTrx = null;
+let currentSheetTab = 'products';
 let confirmCallback = null;
+let editTrxItems = [];
+
+// Barcode scanner state
 let codeReader = null;
-let selectedDeviceId = null;
 let videoDevices = [];
-let editingTrxDraft = null;
+let currentDeviceIndex = 0;
 
 // ================= UTILITIES =================
-function rp(num) {
-  return 'Rp ' + Number(num || 0).toLocaleString('id-ID');
-}
+const $ = id => document.getElementById(id);
+const rp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
 
 function showToast(msg) {
-  const el = document.getElementById('toast');
-  document.getElementById('toastMsg').textContent = msg;
-  el.classList.remove('hidden');
+  const t = $('toast');
+  $('toastMsg').textContent = msg;
+  t.classList.remove('hidden');
   clearTimeout(window._toastTimer);
-  window._toastTimer = setTimeout(() => el.classList.add('hidden'), 3200);
+  window._toastTimer = setTimeout(() => t.classList.add('hidden'), 2800);
 }
 
-function openModal(id) {
-  document.getElementById(id).classList.remove('hidden');
+function openConfirm(title, message, cb) {
+  $('confirmTitle').textContent = title;
+  $('confirmMessage').textContent = message;
+  confirmCallback = cb;
+  $('confirmModal').classList.remove('hidden');
 }
 
-function closeModal(id) {
-  document.getElementById(id).classList.add('hidden');
-}
-
-function askConfirm(title, message, onConfirm) {
-  document.getElementById('confirmTitle').textContent = title;
-  document.getElementById('confirmMessage').textContent = message;
-  confirmCallback = onConfirm;
-  openModal('confirmModal');
-}
-
-function closeConfirm(result) {
-  closeModal('confirmModal');
-  if (result && typeof confirmCallback === 'function') {
+function closeConfirm(confirmed) {
+  $('confirmModal').classList.add('hidden');
+  if (confirmed && typeof confirmCallback === 'function') {
     confirmCallback();
   }
   confirmCallback = null;
 }
 
-function getStockStatus(stock) {
-  if (stock <= 0) return { label: 'Habis', badge: 'bg-red-100 text-red-700', dot: '🔴', key: 'habis' };
-  if (stock <= 5) return { label: 'Menipis', badge: 'bg-amber-100 text-amber-700', dot: '🟡', key: 'menipis' };
-  return { label: 'Aman', badge: 'bg-emerald-100 text-emerald-700', dot: '🟢', key: 'aman' };
+function closeModal(id) {
+  $(id).classList.add('hidden');
+}
+
+function logSync(msg) {
+  const el = $('syncLog');
+  if (!el) return;
+  const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  el.innerHTML += `<br>> [${now}] ${msg}`;
+  el.scrollTop = el.scrollHeight;
+  $('lastSync').textContent = now;
 }
 
 // ================= AUTHENTICATION =================
 function togglePass() {
-  const inp = document.getElementById('loginPass');
-  const icon = document.getElementById('eyeIcon');
+  const inp = $('loginPass');
+  const icon = $('eyeIcon');
   if (inp.type === 'password') {
     inp.type = 'text';
     icon.classList.replace('fa-eye', 'fa-eye-slash');
@@ -787,43 +802,46 @@ function togglePass() {
   }
 }
 
-document.getElementById('loginForm').addEventListener('submit', function(e) {
+$('loginForm').addEventListener('submit', e => {
   e.preventDefault();
-  const u = document.getElementById('loginUser').value.trim();
-  const p = document.getElementById('loginPass').value.trim();
-  const found = users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.pass === p);
+  const u = $('loginUser').value.trim().toLowerCase();
+  const p = $('loginPass').value.trim();
+  const found = users.find(x => x.username.toLowerCase() === u && x.pass === p);
   if (!found) {
-    showToast('Username atau Password salah!');
+    showToast('Username atau password salah!');
     return;
   }
   currentUser = found;
-  saveState();
+  saveJSON('aj_current_user', currentUser);
   enterApp();
+  showToast('Selamat datang, ' + currentUser.name + '!');
 });
 
 function enterApp() {
-  document.getElementById('loginView').classList.add('hidden');
-  document.getElementById('appView').classList.remove('hidden');
-  document.getElementById('currentUserName').textContent = currentUser.name;
-  document.getElementById('currentUserRole').textContent = currentUser.role;
-  document.getElementById('helloName').textContent = currentUser.name.split(' ')[0] + '!';
-  refreshAll();
+  $('loginView').classList.add('hidden');
+  $('appView').classList.remove('hidden');
+  $('currentUserName').textContent = currentUser.name;
+  $('currentUserRole').textContent = currentUser.role;
+  $('helloName').textContent = currentUser.name.split(' ')[0] + '!';
+  refreshCategoryDropdowns();
+  loadReceiptSettingsUI();
+  renderAll();
+  showView('dashboard');
 }
 
 function logout() {
-  askConfirm('Keluar Aplikasi', 'Anda yakin ingin keluar dari sesi kasir?', () => {
-    currentUser = null;
-    sessionStorage.removeItem('aljaya_currentUser');
-    document.getElementById('appView').classList.add('hidden');
-    document.getElementById('loginView').classList.remove('hidden');
-    document.getElementById('loginProdCount').textContent = products.length;
-  });
+  currentUser = null;
+  saveJSON('aj_current_user', null);
+  $('appView').classList.add('hidden');
+  $('loginView').classList.remove('hidden');
+  $('loginProdCount').textContent = products.length;
+  showToast('Berhasil keluar dari sesi');
 }
 
 // ================= NAVIGATION =================
 function showView(viewName) {
   document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-  const target = document.getElementById('view-' + viewName);
+  const target = $('view-' + viewName);
   if (target) target.classList.remove('hidden');
 
   document.querySelectorAll('.navbtn').forEach(btn => {
@@ -833,37 +851,25 @@ function showView(viewName) {
     btn.classList.toggle('text-[#0A4D7A]', btn.dataset.mview === viewName);
   });
 
-  if (viewName === 'pos') renderPOS();
+  if (viewName === 'dashboard') renderDashboard();
   if (viewName === 'products') renderProducts();
+  if (viewName === 'pos') { renderPOS(); renderCart(); }
   if (viewName === 'history') renderHistory();
-  if (viewName === 'sheets') {
-    renderSheetPreview();
-    loadReceiptSettingsForm();
-  }
+  if (viewName === 'users') renderUsers();
+  if (viewName === 'sheets') renderSheetPreview();
 }
 
-function onGlobalSearch(val) {
-  document.getElementById('prodSearch').value = val;
-  document.getElementById('posSearch').value = val;
-  if (!document.getElementById('view-pos').classList.contains('hidden')) {
+function onGlobalSearch(q) {
+  $('prodSearch').value = q;
+  $('posSearch').value = q;
+  if (!$('view-pos').classList.contains('hidden')) {
     renderPOS();
   } else {
     showView('products');
   }
 }
 
-// ================= STORAGE & SYNC =================
-function saveState() {
-  sessionStorage.setItem('aljaya_products', JSON.stringify(products));
-  sessionStorage.setItem('aljaya_transactions', JSON.stringify(transactions));
-  sessionStorage.setItem('aljaya_users', JSON.stringify(users));
-  sessionStorage.setItem('aljaya_categories', JSON.stringify(categories));
-  sessionStorage.setItem('aljaya_receiptSettings', JSON.stringify(receiptSettings));
-  if (currentUser) sessionStorage.setItem('aljaya_currentUser', JSON.stringify(currentUser));
-}
-
-function refreshAll() {
-  renderCategoryOptions();
+function renderAll() {
   renderDashboard();
   renderProducts();
   renderPOS();
@@ -871,365 +877,349 @@ function refreshAll() {
   renderHistory();
   renderUsers();
   renderSheetPreview();
-  loadReceiptSettingsForm();
 }
+
+// ================= CATEGORIES MANAGEMENT =================
+function refreshCategoryDropdowns() {
+  // Filter dropdown
+  const catFilter = $('catFilter');
+  const prevFilter = catFilter.value;
+  catFilter.innerHTML = '<option value="">Semua Kategori</option>' +
+    categories.map(c => `<option value="${c}">${c}</option>`).join('');
+  catFilter.value = prevFilter;
+
+  // Product modal dropdown
+  const pCat = $('pCat');
+  const prevModal = pCat.value;
+  pCat.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
+  if (prevModal && categories.includes(prevModal)) pCat.value = prevModal;
+
+  // POS category chips
+  const posCats = $('posCats');
+  posCats.innerHTML =
+    `<button onclick="setPosCat('',this)" class="poscat ${selectedPosCat === '' ? 'chip-active' : ''} px-4 py-2 rounded-full bg-white text-xs font-bold whitespace-nowrap shadow-sm">Semua</button>` +
+    categories.map(c => `<button onclick="setPosCat('${c.replace(/'/g, "\\'")}',this)" class="poscat ${selectedPosCat === c ? 'chip-active' : ''} px-4 py-2 rounded-full bg-white text-xs font-bold whitespace-nowrap shadow-sm">${c}</button>`).join('') +
+    `<button onclick="openAddCategoryModal(false)" class="px-3.5 py-2 rounded-full bg-cyan-100 text-[#0A4D7A] text-xs font-black whitespace-nowrap shadow-sm">+ Kategori</button>`;
+}
+
+function openAddCategoryModal(fromProdModal = false) {
+  $('catFromProdModal').value = fromProdModal ? '1' : '0';
+  $('newCatName').value = '';
+  renderExistingCats();
+  $('categoryModal').classList.remove('hidden');
+}
+
+function renderExistingCats() {
+  $('existingCatsList').innerHTML = categories.map(c => `
+    <span class="inline-flex items-center gap-1 bg-slate-100 px-2.5 py-1 rounded-full text-[11px] font-bold">
+      ${c}
+      ${!DEFAULT_CATEGORIES.includes(c) ? `<button type="button" onclick="deleteCategory('${c.replace(/'/g, "\\'")}')" class="text-red-500 ml-1">✕</button>` : ''}
+    </span>
+  `).join('');
+}
+
+function deleteCategory(catName) {
+  categories = categories.filter(c => c !== catName);
+  saveJSON('aj_categories', categories);
+  refreshCategoryDropdowns();
+  renderExistingCats();
+  showToast('Kategori dihapus');
+}
+
+$('categoryForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const val = $('newCatName').value.trim();
+  if (!val) return;
+  if (!categories.some(c => c.toLowerCase() === val.toLowerCase())) {
+    categories.push(val);
+    saveJSON('aj_categories', categories);
+  }
+  refreshCategoryDropdowns();
+  if ($('catFromProdModal').value === '1') {
+    $('pCat').value = val;
+  }
+  closeModal('categoryModal');
+  showToast('Kategori "' + val + '" ditambahkan');
+});
 
 // ================= DASHBOARD =================
 function renderDashboard() {
   const todayStr = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
   const todayTrx = transactions.filter(t => t.date && t.date.includes(todayStr));
-  const todayRev = todayTrx.reduce((sum, t) => sum + Number(t.total || 0), 0);
-  const lowCount = products.filter(p => p.stock <= 5).length;
-  const totalStock = products.reduce((sum, p) => sum + Number(p.stock || 0), 0);
+  const rev = todayTrx.reduce((s, t) => s + Number(t.total || 0), 0);
+  const lowCount = products.filter(p => Number(p.stock) <= 5).length;
+  const totalStock = products.reduce((s, p) => s + Number(p.stock || 0), 0);
 
-  document.getElementById('statRevenue').textContent = rp(todayRev);
-  document.getElementById('statProducts').textContent = products.length;
-  document.getElementById('statLow').textContent = lowCount + ' item';
-  document.getElementById('statTrx').textContent = todayTrx.length;
-  document.getElementById('statStock').textContent = totalStock;
+  $('statRevenue').textContent = rp(rev);
+  $('statProducts').textContent = products.length;
+  $('statLow').textContent = lowCount + ' item';
+  $('statTrx').textContent = todayTrx.length;
+  $('statStock').textContent = totalStock.toLocaleString('id-ID');
+  $('loginProdCount').textContent = products.length;
 
-  // Mini chart 7 days
-  const heights = [45, 62, 55, 78, 68, 92, Math.min(100, Math.max(30, Math.round((todayRev / 500000) * 100)))];
-  document.getElementById('miniChart').innerHTML = heights.map((h, i) => `
-    <div class="flex-1 bg-cyan-300/30 rounded-t-md relative h-full flex items-end">
-      <div class="w-full ${i === 6 ? 'bg-emerald-400' : 'bg-cyan-300'} rounded-t-md transition-all" style="height:${h}%"></div>
+  // 7-day mini bar chart
+  const bars = [45, 62, 55, 80, 72, 95, Math.min(100, Math.max(30, todayTrx.length * 18 + 35))];
+  $('miniChart').innerHTML = bars.map((h, idx) =>
+    `<div class="flex-1 rounded-t-md ${idx === 6 ? 'bg-cyan-300' : 'bg-white/30'}" style="height:${h}%"></div>`
+  ).join('');
+
+  $('dashboardProducts').innerHTML = products.slice(0, 8).map(p => `
+    <div class="bg-white rounded-2xl overflow-hidden card-shadow flex flex-col">
+      <div class="relative">
+        <img src="${p.img}" onerror="this.src='https://placehold.co/400x300/0A4D7A/FFFFFF?text=FROZEN'" class="w-full product-img" alt="${p.name}">
+        <span class="absolute top-2 left-2 bg-white/90 backdrop-blur px-2 py-0.5 rounded-full text-[10px] font-extrabold text-[#0A4D7A]">${p.cat}</span>
+        <span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-black ${p.stock === 0 ? 'bg-red-600 text-white' : p.stock <= 5 ? 'bg-amber-400 text-slate-900' : 'bg-emerald-500 text-white'}">Stok: ${p.stock}</span>
+      </div>
+      <div class="p-3 flex-1 flex flex-col justify-between">
+        <div>
+          <p class="font-bold text-xs line-clamp-2 text-slate-800">${p.name}</p>
+          <p class="font-black text-sm text-[#0A4D7A] mt-1">${rp(p.price)}</p>
+        </div>
+        <button onclick="addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''} class="mt-2.5 w-full ${p.stock <= 0 ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-[#0A4D7A] hover:bg-[#083a5e] text-white'} py-2 rounded-xl text-[11px] font-black transition">
+          ${p.stock <= 0 ? 'Stok Habis' : '+ Tambah Kasir'}
+        </button>
+      </div>
     </div>
   `).join('');
-
-  // Top products for dashboard
-  document.getElementById('dashboardProducts').innerHTML = products.slice(0, 4).map(p => {
-    const st = getStockStatus(p.stock);
-    return `
-      <div class="bg-white rounded-2xl overflow-hidden card-shadow flex flex-col">
-        <div class="relative">
-          <img src="${p.img || 'https://placehold.co/400x300/0A4D7A/FFFFFF?text=FROZEN'}" onerror="this.src='https://placehold.co/400x300/0A4D7A/FFFFFF?text=FROZEN'" class="w-full product-img bg-slate-100">
-          <span class="absolute top-2 right-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full ${st.badge}">${st.dot} ${p.stock} ${p.unit}</span>
-        </div>
-        <div class="p-3 flex-1 flex flex-col justify-between">
-          <div>
-            <span class="text-[10px] font-bold text-[#1590C8]">${p.cat}</span>
-            <h4 class="font-extrabold text-xs text-slate-800 line-clamp-2 mt-0.5">${p.name}</h4>
-          </div>
-          <div class="flex items-center justify-between mt-3 pt-2 border-t border-slate-100">
-            <span class="font-black text-xs text-[#0A4D7A]">${rp(p.price)}</span>
-            <button onclick="addToCart('${p.id}')" ${p.stock <= 0 ? 'disabled' : ''} class="bg-[#FF6B35] disabled:bg-slate-300 text-white px-2.5 py-1.5 rounded-xl text-[11px] font-black transition">+ Kasir</button>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
 }
-
-// ================= CATEGORIES MANAGEMENT =================
-function renderCategoryOptions() {
-  const filterSel = document.getElementById('catFilter');
-  const modalSel = document.getElementById('pCat');
-  const posBar = document.getElementById('posCats');
-
-  if (filterSel) {
-    const prevVal = filterSel.value;
-    filterSel.innerHTML = `<option value="">Semua Kategori</option>` +
-      categories.map(c => `<option value="${c}">${c}</option>`).join('');
-    if (categories.includes(prevVal)) filterSel.value = prevVal;
-  }
-
-  if (modalSel) {
-    const prevModalVal = modalSel.value;
-    modalSel.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
-    if (categories.includes(prevModalVal)) modalSel.value = prevModalVal;
-  }
-
-  if (posBar) {
-    const icons = { 'Ayam': '🍗 ', 'Sapi': '🥩 ', 'Seafood': '🦐 ', 'Kentang & Snack': '🍟 ', 'Dimsum': '🥟 ' };
-    posBar.innerHTML = `<button onclick="setPosCat('',this)" class="poscat ${activePosCat === '' ? 'chip-active' : ''} px-4 py-2 rounded-full bg-white text-xs font-bold whitespace-nowrap shadow-sm">Semua</button>` +
-      categories.map(c => `<button onclick="setPosCat('${c.replace(/'/g, "\\'")}',this)" class="poscat ${activePosCat === c ? 'chip-active' : ''} px-4 py-2 rounded-full bg-white text-xs font-bold whitespace-nowrap shadow-sm">${icons[c] || '❄️ '}${c}</button>`).join('') +
-      `<button onclick="openAddCategoryModal()" title="Tambah Kategori Manual" class="px-3.5 py-2 rounded-full bg-cyan-100 hover:bg-cyan-200 text-[#0A4D7A] text-xs font-black whitespace-nowrap shadow-sm transition">+ Kategori</button>`;
-  }
-}
-
-function openAddCategoryModal(fromProdModal = false) {
-  document.getElementById('catFromProdModal').value = fromProdModal ? '1' : '0';
-  document.getElementById('newCatName').value = '';
-  renderExistingCatsBadges();
-  openModal('categoryModal');
-  setTimeout(() => document.getElementById('newCatName').focus(), 100);
-}
-
-function renderExistingCatsBadges() {
-  const box = document.getElementById('existingCatsList');
-  if (!box) return;
-  box.innerHTML = categories.map(c => `
-    <span class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 text-[11px] font-bold px-2.5 py-1 rounded-full">
-      ${c}
-      ${!DEFAULT_CATEGORIES.includes(c) ? `<button type="button" onclick="deleteCustomCategory('${c.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700 ml-0.5">×</button>` : ''}
-    </span>
-  `).join('');
-}
-
-function deleteCustomCategory(catName) {
-  categories = categories.filter(c => c !== catName);
-  if (activePosCat === catName) activePosCat = '';
-  saveState();
-  renderCategoryOptions();
-  renderExistingCatsBadges();
-  renderPOS();
-  renderProducts();
-  showToast(`Kategori "${catName}" dihapus`);
-}
-
-document.getElementById('categoryForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const raw = document.getElementById('newCatName').value.trim();
-  if (!raw) return;
-  const exists = categories.find(c => c.toLowerCase() === raw.toLowerCase());
-  if (exists) {
-    showToast(`Kategori "${exists}" sudah ada!`);
-    return;
-  }
-  categories.push(raw);
-  saveState();
-  renderCategoryOptions();
-  if (document.getElementById('catFromProdModal').value === '1') {
-    document.getElementById('pCat').value = raw;
-  }
-  closeModal('categoryModal');
-  showToast(`Kategori "${raw}" berhasil ditambahkan!`);
-});
 
 // ================= PRODUCTS & STOCK =================
 function setProdLayout(mode) {
   prodLayout = mode;
-  document.getElementById('productGrid').classList.toggle('hidden', mode !== 'grid');
-  document.getElementById('productList').classList.toggle('hidden', mode !== 'list');
-  document.getElementById('btnGrid').className = mode === 'grid' ? 'px-3 py-1.5 rounded-full text-xs font-bold bg-white shadow' : 'px-3 py-1.5 rounded-full text-xs font-bold';
-  document.getElementById('btnList').className = mode === 'list' ? 'px-3 py-1.5 rounded-full text-xs font-bold bg-white shadow' : 'px-3 py-1.5 rounded-full text-xs font-bold';
+  $('btnGrid').className = mode === 'grid' ? 'px-3 py-1.5 rounded-full text-xs font-bold bg-white shadow' : 'px-3 py-1.5 rounded-full text-xs font-bold';
+  $('btnList').className = mode === 'list' ? 'px-3 py-1.5 rounded-full text-xs font-bold bg-white shadow' : 'px-3 py-1.5 rounded-full text-xs font-bold';
+  renderProducts();
 }
 
 function renderProducts() {
-  const q = (document.getElementById('prodSearch').value || '').toLowerCase();
-  const cat = document.getElementById('catFilter').value;
-  const stFilter = document.getElementById('stockFilter').value;
+  const q = ($('prodSearch').value || '').toLowerCase();
+  const cat = $('catFilter').value;
+  const stk = $('stockFilter').value;
 
   const filtered = products.filter(p => {
-    const matchQ = p.name.toLowerCase().includes(q) || (p.barcode && p.barcode.toLowerCase().includes(q));
+    const matchQ = p.name.toLowerCase().includes(q) || (p.barcode || '').toLowerCase().includes(q);
     const matchCat = !cat || p.cat === cat;
-    const st = getStockStatus(p.stock).key;
-    const matchSt = !stFilter || st === stFilter;
-    return matchQ && matchCat && matchSt;
+    const matchStk = !stk ||
+      (stk === 'aman' && p.stock > 5) ||
+      (stk === 'menipis' && p.stock > 0 && p.stock <= 5) ||
+      (stk === 'habis' && p.stock <= 0);
+    return matchQ && matchCat && matchStk;
   });
 
-  document.getElementById('productGrid').innerHTML = filtered.length ? filtered.map(p => {
-    const st = getStockStatus(p.stock);
-    return `
+  if (prodLayout === 'grid') {
+    $('productGrid').classList.remove('hidden');
+    $('productList').classList.add('hidden');
+    $('productGrid').innerHTML = filtered.length ? filtered.map(p => `
       <div class="bg-white rounded-2xl overflow-hidden card-shadow flex flex-col">
         <div class="relative">
-          <img src="${p.img || 'https://placehold.co/400x300/0A4D7A/FFFFFF?text=FROZEN'}" onerror="this.src='https://placehold.co/400x300/0A4D7A/FFFFFF?text=FROZEN'" class="w-full product-img bg-slate-100">
-          <span class="absolute top-2 left-2 bg-black/65 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">${p.cat}</span>
-          <span class="absolute top-2 right-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full ${st.badge}">${st.dot} ${p.stock} ${p.unit}</span>
+          <img src="${p.img}" onerror="this.src='https://placehold.co/400x300/0A4D7A/FFFFFF?text=FROZEN'" class="w-full product-img" alt="${p.name}">
+          <span class="absolute top-2 left-2 bg-white/90 px-2 py-0.5 rounded-full text-[10px] font-extrabold text-[#0A4D7A]">${p.cat}</span>
+          <span class="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-black ${p.stock === 0 ? 'bg-red-600 text-white' : p.stock <= 5 ? 'bg-amber-400 text-slate-900' : 'bg-emerald-500 text-white'}">${p.stock} ${p.unit || 'pack'}</span>
         </div>
         <div class="p-3 flex-1 flex flex-col justify-between">
           <div>
-            <h4 class="font-extrabold text-xs text-slate-800 line-clamp-2">${p.name}</h4>
-            <p class="mono text-[10px] text-slate-400 mt-0.5">${p.barcode || 'Tanpa barcode'}</p>
+            <p class="font-bold text-xs line-clamp-2">${p.name}</p>
+            <p class="mono text-[10px] text-slate-400 mt-0.5">${p.barcode || '-'}</p>
+            <p class="font-black text-sm text-[#0A4D7A] mt-1">${rp(p.price)}</p>
           </div>
-          <div class="mt-3">
-            <p class="font-black text-sm text-[#0A4D7A]">${rp(p.price)}</p>
-            <div class="flex gap-1.5 mt-2">
-              <button onclick="quickRestock('${p.id}', 5)" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-2.5 py-1.5 rounded-xl text-[11px] font-extrabold transition">+5 Stok</button>
-              <button onclick="openProductModal('${p.id}')" class="flex-1 bg-slate-100 hover:bg-slate-200 py-1.5 rounded-xl text-[11px] font-bold transition">Edit</button>
-              <button onclick="deleteProduct('${p.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-2.5 py-1.5 rounded-xl text-[11px] font-bold transition"><i class="fa fa-trash"></i></button>
-            </div>
+          <div class="flex gap-1.5 mt-3">
+            <button onclick="quickRestock('${p.id}', 5)" title="Tambah Stok +5" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 px-2.5 py-2 rounded-xl text-[11px] font-black transition">+5</button>
+            <button onclick="openProductModal('${p.id}')" class="flex-1 bg-slate-100 hover:bg-slate-200 py-2 rounded-xl text-[11px] font-bold transition">Edit</button>
+            <button onclick="deleteProduct('${p.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-2.5 py-2 rounded-xl text-[11px] font-bold transition"><i class="fa fa-trash"></i></button>
           </div>
         </div>
       </div>
-    `;
-  }).join('') : `<div class="col-span-full text-center py-10 text-slate-400 text-sm">Tidak ada produk yang cocok.</div>`;
-
-  document.getElementById('productTableBody').innerHTML = filtered.map(p => {
-    const st = getStockStatus(p.stock);
-    return `
+    `).join('') : '<div class="col-span-full bg-white rounded-2xl p-8 text-center text-xs text-slate-400">Tidak ada produk yang cocok.</div>';
+  } else {
+    $('productGrid').classList.add('hidden');
+    $('productList').classList.remove('hidden');
+    $('productTableBody').innerHTML = filtered.map(p => `
       <tr class="hover:bg-slate-50">
-        <td class="p-3 font-bold text-xs">${p.name}<span class="block text-[10px] text-slate-400 font-normal">${p.cat}</span></td>
+        <td class="p-3 flex items-center gap-2.5">
+          <img src="${p.img}" onerror="this.src='https://placehold.co/80x80/0A4D7A/FFFFFF?text=FZ'" class="w-10 h-10 rounded-xl object-cover">
+          <div><p class="font-bold text-xs">${p.name}</p><p class="text-[10px] text-slate-400">${p.cat}</p></div>
+        </td>
         <td class="p-3 mono text-xs">${p.barcode || '-'}</td>
         <td class="p-3 font-black text-xs text-[#0A4D7A]">${rp(p.price)}</td>
-        <td class="p-3 font-bold text-xs">${p.stock} ${p.unit}</td>
-        <td class="p-3"><span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${st.badge}">${st.label}</span></td>
+        <td class="p-3 font-bold text-xs">${p.stock} ${p.unit || 'pack'}</td>
+        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${p.stock === 0 ? 'bg-red-100 text-red-700' : p.stock <= 5 ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}">${p.stock === 0 ? 'Habis' : p.stock <= 5 ? 'Menipis' : 'Aman'}</span></td>
         <td class="p-3 text-right space-x-1">
-          <button onclick="quickRestock('${p.id}', 5)" class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded-lg text-[10px] font-bold">+5</button>
-          <button onclick="openProductModal('${p.id}')" class="bg-slate-100 px-2.5 py-1 rounded-lg text-[10px] font-bold">Edit</button>
-          <button onclick="deleteProduct('${p.id}')" class="bg-red-50 text-red-600 px-2 py-1 rounded-lg text-[10px] font-bold">Hapus</button>
+          <button onclick="quickRestock('${p.id}', 5)" class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded-lg text-[11px] font-bold">+5</button>
+          <button onclick="openProductModal('${p.id}')" class="bg-slate-100 px-2.5 py-1 rounded-lg text-[11px] font-bold">Edit</button>
+          <button onclick="deleteProduct('${p.id}')" class="bg-red-50 text-red-600 px-2 py-1 rounded-lg text-[11px] font-bold">Hapus</button>
         </td>
       </tr>
-    `;
-  }).join('');
+    `).join('');
+  }
 }
 
 function quickRestock(id, qty) {
   const p = products.find(x => x.id === id);
   if (!p) return;
   p.stock = Number(p.stock) + qty;
-  saveState();
-  refreshAll();
+  saveJSON('aj_products', products);
+  renderAll();
   syncSheets(false);
-  showToast(`Stok ${p.name} +${qty} ${p.unit}`);
+  showToast(`Stok ${p.name} +${qty} (${p.stock})`);
 }
 
 function openProductModal(id = null) {
-  renderCategoryOptions();
+  refreshCategoryDropdowns();
+  $('productForm').reset();
+  $('pId').value = id || '';
   if (id) {
     const p = products.find(x => x.id === id);
     if (!p) return;
-    if (p.cat && !categories.includes(p.cat)) {
-      categories.push(p.cat);
-      renderCategoryOptions();
-    }
-    document.getElementById('pmTitle').textContent = 'Edit Produk';
-    document.getElementById('pId').value = p.id;
-    document.getElementById('pName').value = p.name;
-    document.getElementById('pBarcode').value = p.barcode || '';
-    document.getElementById('pCat').value = p.cat;
-    document.getElementById('pPrice').value = p.price;
-    document.getElementById('pStock').value = p.stock;
-    document.getElementById('pUnit').value = p.unit || 'pack';
-    document.getElementById('pDesc').value = p.desc || '';
-    document.getElementById('pImageUrl').value = p.img || '';
-    document.getElementById('imgPreview').innerHTML = p.img ? `<img src="${p.img}" class="w-full h-full object-cover">` : '🧊';
+    $('pmTitle').textContent = 'Edit Produk';
+    $('pName').value = p.name;
+    $('pBarcode').value = p.barcode || '';
+    $('pCat').value = p.cat;
+    $('pPrice').value = p.price;
+    $('pStock').value = p.stock;
+    $('pUnit').value = p.unit || 'pack';
+    $('pDesc').value = p.desc || '';
+    $('pImageUrl').value = p.img || '';
+    $('imgPreview').innerHTML = `<img src="${p.img}" class="w-full h-full object-cover">`;
   } else {
-    document.getElementById('pmTitle').textContent = 'Tambah Produk Baru';
-    document.getElementById('productForm').reset();
-    document.getElementById('pId').value = '';
-    document.getElementById('pUnit').value = 'pack';
-    document.getElementById('imgPreview').innerHTML = '🧊';
+    $('pmTitle').textContent = 'Tambah Produk Baru';
+    $('imgPreview').innerHTML = '🧊';
   }
-  openModal('productModal');
-}
-
-function generateRandomBarcode() {
-  document.getElementById('pBarcode').value = '899' + Math.floor(100000000 + Math.random() * 900000000);
-}
-
-function previewProductUrl(url) {
-  if (url.trim()) {
-    document.getElementById('imgPreview').innerHTML = `<img src="${url.trim()}" onerror="this.parentElement.innerHTML='🧊'" class="w-full h-full object-cover">`;
-  }
+  $('productModal').classList.remove('hidden');
 }
 
 function previewProductFile(input) {
-  const file = input.files[0];
+  const file = input.files && input.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = function(ev) {
+  reader.onload = e => {
     const img = new Image();
-    img.onload = function() {
+    img.onload = () => {
       const canvas = document.createElement('canvas');
-      const maxW = 360;
+      const maxW = 400;
       const scale = Math.min(1, maxW / img.width);
       canvas.width = img.width * scale;
       canvas.height = img.height * scale;
       canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
-      document.getElementById('pImageUrl').value = dataUrl;
-      document.getElementById('imgPreview').innerHTML = `<img src="${dataUrl}" class="w-full h-full object-cover">`;
+      const compressed = canvas.toDataURL('image/jpeg', 0.75);
+      $('pImageUrl').value = compressed;
+      $('imgPreview').innerHTML = `<img src="${compressed}" class="w-full h-full object-cover">`;
     };
-    img.src = ev.target.result;
+    img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 }
 
-document.getElementById('productForm').addEventListener('submit', function(e) {
+function previewProductUrl(url) {
+  if (url && url.trim()) {
+    $('imgPreview').innerHTML = `<img src="${url.trim()}" onerror="this.parentElement.innerHTML='🧊'" class="w-full h-full object-cover">`;
+  } else {
+    $('imgPreview').innerHTML = '🧊';
+  }
+}
+
+function generateRandomBarcode() {
+  $('pBarcode').value = '899' + Math.floor(100000000 + Math.random() * 900000000);
+}
+
+$('productForm').addEventListener('submit', e => {
   e.preventDefault();
-  const id = document.getElementById('pId').value;
-  const itemData = {
+  const id = $('pId').value;
+  const name = $('pName').value.trim();
+  const img = $('pImageUrl').value.trim() || `https://placehold.co/400x300/0A4D7A/FFFFFF?text=${encodeURIComponent(name.slice(0, 14))}`;
+  const payload = {
     id: id || 'PRD-' + String(Date.now()).slice(-5),
-    name: document.getElementById('pName').value.trim(),
-    barcode: document.getElementById('pBarcode').value.trim(),
-    cat: document.getElementById('pCat').value,
-    price: Number(document.getElementById('pPrice').value),
-    stock: Number(document.getElementById('pStock').value),
-    unit: document.getElementById('pUnit').value.trim() || 'pack',
-    desc: document.getElementById('pDesc').value.trim(),
-    img: document.getElementById('pImageUrl').value.trim() || 'https://placehold.co/400x300/0A4D7A/FFFFFF?text=FROZEN'
+    name,
+    barcode: $('pBarcode').value.trim(),
+    cat: $('pCat').value,
+    price: Number($('pPrice').value || 0),
+    stock: Number($('pStock').value || 0),
+    unit: $('pUnit').value.trim() || 'pack',
+    desc: $('pDesc').value.trim(),
+    img
   };
 
   if (id) {
     const idx = products.findIndex(x => x.id === id);
-    if (idx !== -1) products[idx] = itemData;
-    showToast('Produk berhasil diperbarui!');
+    if (idx !== -1) products[idx] = payload;
+    showToast('Produk berhasil diperbarui');
   } else {
-    products.unshift(itemData);
-    showToast('Produk baru ditambahkan!');
+    products.unshift(payload);
+    showToast('Produk baru berhasil ditambahkan');
   }
 
-  saveState();
+  saveJSON('aj_products', products);
   closeModal('productModal');
-  refreshAll();
+  renderAll();
   syncSheets(false);
 });
 
 function deleteProduct(id) {
-  askConfirm('Hapus Produk', 'Produk ini akan dihapus dari daftar stok. Lanjutkan?', () => {
-    products = products.filter(p => p.id !== id);
-    saveState();
-    refreshAll();
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+  openConfirm('Hapus Produk?', `Produk "${p.name}" akan dihapus dari katalog.`, () => {
+    products = products.filter(x => x.id !== id);
+    saveJSON('aj_products', products);
+    renderAll();
     syncSheets(false);
-    showToast('Produk telah dihapus');
+    showToast('Produk dihapus');
   });
 }
 
 function exportCSV() {
   const rows = [['ID', 'Nama', 'Barcode', 'Kategori', 'Harga', 'Stok', 'Satuan']];
-  products.forEach(p => rows.push([p.id, `"${p.name}"`, p.barcode || '', p.cat, p.price, p.stock, p.unit]));
+  products.forEach(p => rows.push([p.id, `"${p.name}"`, p.barcode || '', p.cat, p.price, p.stock, p.unit || 'pack']));
   const csv = rows.map(r => r.join(',')).join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'stok-aljaya-frozen.csv';
+  a.download = 'Stok_AL_JAYA_Frozen.csv';
   a.click();
-  showToast('File CSV berhasil diunduh!');
+  showToast('File CSV berhasil diunduh');
 }
 
 // ================= POS & CART =================
 function setPosCat(cat, btn) {
-  activePosCat = cat;
-  renderCategoryOptions();
+  selectedPosCat = cat;
+  document.querySelectorAll('.poscat').forEach(b => b.classList.remove('chip-active'));
+  if (btn) btn.classList.add('chip-active');
   renderPOS();
 }
 
 function renderPOS() {
-  const q = (document.getElementById('posSearch').value || '').toLowerCase();
+  const q = ($('posSearch').value || '').toLowerCase();
   const filtered = products.filter(p => {
-    const matchCat = !activePosCat || p.cat === activePosCat;
-    const matchQ = p.name.toLowerCase().includes(q) || (p.barcode && p.barcode.toLowerCase().includes(q));
-    return matchCat && matchQ;
+    const matchQ = p.name.toLowerCase().includes(q) || (p.barcode || '').toLowerCase().includes(q);
+    const matchCat = !selectedPosCat || p.cat === selectedPosCat;
+    return matchQ && matchCat;
   });
 
-  document.getElementById('posGrid').innerHTML = filtered.length ? filtered.map(p => {
-    const out = p.stock <= 0;
-    return `
-      <div onclick="${out ? '' : `addToCart('${p.id}')`}" class="bg-white rounded-2xl overflow-hidden card-shadow flex flex-col cursor-pointer hover:ring-2 hover:ring-[#2A9AC6] transition ${out ? 'opacity-60 cursor-not-allowed' : ''}">
-        <div class="relative">
-          <img src="${p.img || 'https://placehold.co/400x300/0A4D7A/FFFFFF?text=FROZEN'}" onerror="this.src='https://placehold.co/400x300/0A4D7A/FFFFFF?text=FROZEN'" class="w-full product-img bg-slate-100">
-          <span class="absolute bottom-2 right-2 ${out ? 'bg-red-600' : 'bg-[#0A4D7A]/90'} text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">
-            ${out ? 'HABIS' : `Stok: ${p.stock}`}
-          </span>
-        </div>
-        <div class="p-3 flex-1 flex flex-col justify-between">
-          <h4 class="font-extrabold text-xs text-slate-800 line-clamp-2">${p.name}</h4>
-          <p class="font-black text-sm text-[#FF6B35] mt-2">${rp(p.price)}</p>
+  $('posGrid').innerHTML = filtered.map(p => `
+    <div onclick="${p.stock > 0 ? `addToCart('${p.id}')` : ''}" class="bg-white rounded-2xl overflow-hidden card-shadow flex flex-col ${p.stock > 0 ? 'cursor-pointer active:scale-[0.98] hover:ring-2 hover:ring-[#2A9AC6]' : 'opacity-60 cursor-not-allowed'} transition">
+      <div class="relative">
+        <img src="${p.img}" onerror="this.src='https://placehold.co/400x300/0A4D7A/FFFFFF?text=FROZEN'" class="w-full product-img" alt="${p.name}">
+        <span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-black ${p.stock === 0 ? 'bg-red-600 text-white' : p.stock <= 5 ? 'bg-amber-400 text-slate-900' : 'bg-emerald-500 text-white'}">Stok: ${p.stock}</span>
+      </div>
+      <div class="p-3">
+        <p class="font-bold text-xs line-clamp-2 text-slate-800">${p.name}</p>
+        <div class="flex items-center justify-between mt-1.5">
+          <span class="font-black text-sm text-[#0A4D7A]">${rp(p.price)}</span>
+          <span class="w-6 h-6 rounded-full bg-cyan-50 text-[#0A4D7A] grid place-items-center text-xs font-black">+</span>
         </div>
       </div>
-    `;
-  }).join('') : `<div class="col-span-full text-center py-10 text-slate-400 text-sm">Produk tidak ditemukan di kategori ini.</div>`;
+    </div>
+  `).join('');
 }
 
 function handleBarcodeInput(code) {
-  const clean = code.trim();
+  const clean = (code || '').trim();
   if (!clean) return;
   const found = products.find(p => p.barcode === clean);
   if (found) {
     addToCart(found.id);
-    document.getElementById('posSearch').value = '';
+    $('posSearch').value = '';
     renderPOS();
+  } else {
+    showToast('Barcode tidak ditemukan: ' + clean);
   }
 }
 
@@ -1242,14 +1232,15 @@ function addToCart(prodId) {
   const existing = cart.find(c => c.id === prodId);
   if (existing) {
     if (existing.qty >= p.stock) {
-      showToast(`Stok ${p.name} hanya tersisa ${p.stock} ${p.unit}`);
+      showToast('Melebihi stok tersedia (' + p.stock + ')');
       return;
     }
-    existing.qty++;
+    existing.qty += 1;
   } else {
-    cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
+    cart.push({ id: p.id, name: p.name, price: Number(p.price), qty: 1 });
   }
   renderCart();
+  showToast('+1 ' + p.name);
 }
 
 function updateCartQty(prodId, delta) {
@@ -1260,7 +1251,7 @@ function updateCartQty(prodId, delta) {
   if (nextQty <= 0) {
     cart.splice(idx, 1);
   } else if (p && nextQty > p.stock) {
-    showToast(`Maksimal stok tersedia: ${p.stock}`);
+    showToast('Stok maksimal ' + p.stock);
     return;
   } else {
     cart[idx].qty = nextQty;
@@ -1270,82 +1261,79 @@ function updateCartQty(prodId, delta) {
 
 function clearCart() {
   cart = [];
-  document.getElementById('cashInput').value = '';
+  $('cashInput').value = '';
+  $('custName').value = '';
   renderCart();
 }
 
 function setPay(method, btn) {
-  activePayMethod = method;
+  selectedPayment = method;
   document.querySelectorAll('.paybtn').forEach(b => {
     b.className = 'paybtn bg-slate-100 py-2 rounded-xl text-xs font-bold transition';
   });
-  btn.className = 'paybtn bg-[#0A4D7A] text-white py-2 rounded-xl text-xs font-bold transition';
-  if (method !== 'Tunai') {
-    quickCash('exact');
-  }
+  if (btn) btn.className = 'paybtn bg-[#0A4D7A] text-white py-2 rounded-xl text-xs font-bold transition';
 }
 
 function getCartTotals() {
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  const discPct = Number(document.getElementById('discountSel').value || 0);
-  const discount = Math.round((subtotal * discPct) / 100);
-  const total = Math.max(0, subtotal - discount);
-  return { subtotal, discPct, discount, total };
+  const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const discPct = Number($('discountSel').value || 0);
+  const discAmt = Math.round(sub * (discPct / 100));
+  const total = sub - discAmt;
+  return { sub, discPct, discAmt, total };
+}
+
+function renderCart() {
+  const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+  $('cartBadge').textContent = totalQty;
+  $('cartInfo').textContent = `${totalQty} item • Kasir: ${currentUser ? currentUser.name : 'Admin'}`;
+
+  $('cartItems').innerHTML = cart.length ? cart.map(item => `
+    <div class="flex items-center justify-between gap-2 bg-slate-50 rounded-xl p-2.5">
+      <div class="flex-1 min-w-0">
+        <p class="font-bold text-xs truncate">${item.name}</p>
+        <p class="text-[11px] text-slate-500">${rp(item.price)} x ${item.qty} = <b class="text-[#0A4D7A]">${rp(item.price * item.qty)}</b></p>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button onclick="updateCartQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-white border font-black text-xs">-</button>
+        <span class="w-5 text-center font-black text-xs">${item.qty}</span>
+        <button onclick="updateCartQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-[#0A4D7A] text-white font-black text-xs">+</button>
+      </div>
+    </div>
+  `).join('') : '<div class="text-center py-8 text-xs text-slate-400">Keranjang masih kosong.<br>Pilih produk di samping atau scan barcode.</div>';
+
+  const { sub, total } = getCartTotals();
+  $('subTotal').textContent = rp(sub);
+  $('grandTotal').textContent = rp(total);
+  calcChange();
 }
 
 function quickCash(val) {
   const { total } = getCartTotals();
-  document.getElementById('cashInput').value = val === 'exact' ? total : val;
+  $('cashInput').value = val === 'exact' ? total : val;
   calcChange();
 }
 
 function calcChange() {
   const { total } = getCartTotals();
-  const cash = Number(document.getElementById('cashInput').value || 0);
-  const change = Math.max(0, cash - total);
-  document.getElementById('changeText').textContent = rp(change);
-}
-
-function renderCart() {
-  const totalQty = cart.reduce((sum, i) => sum + i.qty, 0);
-  document.getElementById('cartBadge').textContent = totalQty;
-  document.getElementById('cartInfo').textContent = `${totalQty} item • Kasir: ${currentUser ? currentUser.name : 'Admin'}`;
-
-  document.getElementById('cartItems').innerHTML = cart.length ? cart.map(item => `
-    <div class="flex items-center justify-between gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-      <div class="flex-1 min-w-0">
-        <p class="font-bold text-xs text-slate-800 truncate">${item.name}</p>
-        <p class="text-[11px] text-slate-500">${rp(item.price)} x ${item.qty}</p>
-      </div>
-      <div class="flex items-center gap-1.5">
-        <button onclick="updateCartQty('${item.id}', -1)" class="w-6 h-6 rounded-lg bg-white border font-black text-xs">-</button>
-        <span class="text-xs font-black w-5 text-center">${item.qty}</span>
-        <button onclick="updateCartQty('${item.id}', 1)" class="w-6 h-6 rounded-lg bg-[#0A4D7A] text-white font-black text-xs">+</button>
-      </div>
-    </div>
-  `).join('') : `<div class="text-center py-8 text-slate-400 text-xs">Keranjang masih kosong.<br>Pilih produk di samping untuk mulai.</div>`;
-
-  const { subtotal, total } = getCartTotals();
-  document.getElementById('subTotal').textContent = rp(subtotal);
-  document.getElementById('grandTotal').textContent = rp(total);
-  calcChange();
+  const cash = Number($('cashInput').value || 0);
+  const change = cash - total;
+  $('changeText').textContent = change >= 0 ? rp(change) : 'Kurang ' + rp(Math.abs(change));
 }
 
 function checkout() {
   if (!cart.length) {
-    showToast('Keranjang belanja masih kosong!');
+    showToast('Keranjang masih kosong!');
     return;
   }
-  const { subtotal, discPct, discount, total } = getCartTotals();
-  const cashInputVal = document.getElementById('cashInput').value;
-  const cash = cashInputVal === '' ? total : Number(cashInputVal);
-
-  if (activePayMethod === 'Tunai' && cash < total) {
-    showToast('Uang tunai yang diterima kurang dari total belanja!');
+  const { sub, discPct, discAmt, total } = getCartTotals();
+  let cash = Number($('cashInput').value || 0);
+  if (selectedPayment !== 'Tunai' && cash === 0) cash = total;
+  if (selectedPayment === 'Tunai' && cash < total) {
+    showToast('Uang diterima kurang dari total belanja!');
     return;
   }
 
-  // Kurangi stok produk
+  // Deduct stock
   cart.forEach(item => {
     const p = products.find(x => x.id === item.id);
     if (p) p.stock = Math.max(0, Number(p.stock) - item.qty);
@@ -1359,25 +1347,23 @@ function checkout() {
     id: 'TRX-' + String(Date.now()).slice(-6),
     date: dateStr,
     cashier: currentUser ? currentUser.name : 'Admin Jaya',
-    customer: document.getElementById('custName').value.trim() || 'Pelanggan Umum',
+    customer: $('custName').value.trim() || 'Pelanggan Umum',
+    payment: selectedPayment,
     items: JSON.parse(JSON.stringify(cart)),
-    subtotal,
-    discPct,
-    discount,
+    subtotal: sub,
+    discountPct: discPct,
+    discountAmt: discAmt,
     total,
-    payment: activePayMethod,
     cash,
     change: Math.max(0, cash - total)
   };
 
   transactions.unshift(trx);
-  cart = [];
-  document.getElementById('custName').value = '';
-  document.getElementById('cashInput').value = '';
-  document.getElementById('discountSel').value = '0';
+  saveJSON('aj_products', products);
+  saveJSON('aj_transactions', transactions);
 
-  saveState();
-  refreshAll();
+  clearCart();
+  renderAll();
   syncSheets(false);
   openReceipt(trx.id);
   showToast('Transaksi berhasil disimpan!');
@@ -1385,328 +1371,322 @@ function checkout() {
 
 // ================= BARCODE SCANNER (ZXING) =================
 async function openBarcodeScanner() {
-  openModal('barcodeModal');
-  const statusEl = document.getElementById('barcodeStatus');
-  statusEl.textContent = 'Meminta akses kamera...';
+  $('barcodeModal').classList.remove('hidden');
+  $('barcodeStatus').textContent = 'Meminta akses kamera...';
   try {
-    if (!window.ZXingBrowser) throw new Error('Library scanner belum siap');
+    if (!window.ZXingBrowser) {
+      $('barcodeStatus').textContent = 'Library scanner belum termuat.';
+      return;
+    }
     codeReader = new ZXingBrowser.BrowserMultiFormatReader();
     videoDevices = await ZXingBrowser.BrowserCodeReader.listVideoInputDevices();
-    if (!videoDevices.length) throw new Error('Kamera tidak ditemukan');
-    selectedDeviceId = videoDevices[videoDevices.length - 1].deviceId;
-    startScanningDevice(selectedDeviceId);
+    if (!videoDevices.length) {
+      $('barcodeStatus').textContent = 'Kamera tidak ditemukan pada perangkat.';
+      return;
+    }
+    const backIdx = videoDevices.findIndex(d => /back|rear|environment/i.test(d.label));
+    currentDeviceIndex = backIdx >= 0 ? backIdx : 0;
+    startScanningDevice(videoDevices[currentDeviceIndex].deviceId);
   } catch (err) {
-    statusEl.textContent = 'Gagal mengakses kamera: ' + (err.message || 'Izin ditolak');
+    $('barcodeStatus').textContent = 'Gagal membuka kamera: ' + err.message;
   }
 }
 
-async function startScanningDevice(deviceId) {
-  const statusEl = document.getElementById('barcodeStatus');
-  statusEl.textContent = 'Arahkan garis merah ke barcode...';
-  try {
-    await codeReader.decodeFromVideoDevice(deviceId, 'barcodeVideo', (result, err) => {
-      if (result) {
-        const code = result.getText();
-        const found = products.find(p => p.barcode === code);
-        if (found) {
-          addToCart(found.id);
-          showToast(`Berhasil scan: ${found.name}`);
-          closeBarcodeScanner();
-        } else {
-          statusEl.textContent = `Barcode terbaca (${code}), produk belum terdaftar.`;
-        }
-      }
-    });
-  } catch (e) {
-    statusEl.textContent = 'Error kamera: ' + e.message;
-  }
+function startScanningDevice(deviceId) {
+  if (!codeReader) return;
+  $('barcodeStatus').textContent = 'Arahkan garis merah ke barcode...';
+  codeReader.decodeFromVideoDevice(deviceId, 'barcodeVideo', (result, err) => {
+    if (result) {
+      const code = result.getText();
+      $('barcodeStatus').textContent = 'Terbaca: ' + code;
+      handleBarcodeInput(code);
+      closeBarcodeScanner();
+    }
+  });
 }
 
 function switchBarcodeCamera() {
-  if (videoDevices.length < 2) {
-    showToast('Hanya 1 kamera terdeteksi');
+  if (videoDevices.length <= 1) {
+    showToast('Hanya 1 kamera tersedia');
     return;
   }
-  const idx = videoDevices.findIndex(d => d.deviceId === selectedDeviceId);
-  selectedDeviceId = videoDevices[(idx + 1) % videoDevices.length].deviceId;
+  currentDeviceIndex = (currentDeviceIndex + 1) % videoDevices.length;
   if (codeReader) codeReader.reset();
-  startScanningDevice(selectedDeviceId);
+  startScanningDevice(videoDevices[currentDeviceIndex].deviceId);
 }
 
 function closeBarcodeScanner() {
-  if (codeReader) {
-    try { codeReader.reset(); } catch (e) {}
-  }
-  closeModal('barcodeModal');
+  try {
+    if (codeReader) {
+      codeReader.reset();
+      codeReader = null;
+    }
+  } catch (e) {}
+  $('barcodeModal').classList.add('hidden');
 }
 
-// ================= RECEIPT & THERMAL PRINTING =================
-function changePaper(size) {
-  const paper = document.getElementById('receiptPaper');
-  const jagged = document.getElementById('jaggedEl');
-  if (size === '80') {
-    paper.classList.add('thermal-80');
-    jagged.style.maxWidth = '320px';
-  } else {
-    paper.classList.remove('thermal-80');
-    jagged.style.maxWidth = '240px';
-  }
+// ================= RECEIPT & THERMAL 58MM PRINTING =================
+function cleanASCII(str) {
+  return String(str || '')
+    .replace(/²/g, '2')
+    .replace(/°/g, '')
+    .replace(/❄/g, '*')
+    .replace(/[^\x20-\x7E]/g, '');
+}
+
+function buildReceiptHTML(t) {
+  const s = receiptSettings;
+  const itemsHTML = t.items.map(i => `
+    <div style="margin-bottom:2px;">
+      <div style="font-weight:700;">${i.name}</div>
+      <div style="display:flex;justify-content:space-between;">
+        <span>${i.qty} x ${Number(i.price).toLocaleString('id-ID')}</span>
+        <span>${Number(i.qty * i.price).toLocaleString('id-ID')}</span>
+      </div>
+    </div>
+  `).join('');
+
+  return `
+    <div style="text-align:center;">
+      <img src="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171" onerror="this.style.display='none'" alt="logo">
+      <div style="font-weight:800;font-size:8.5px;letter-spacing:0.3px;">${s.storeName}</div>
+      <div style="font-size:6.8px;line-height:1.15;">${s.address}</div>
+      <div style="font-size:6.8px;font-weight:700;">${s.phone}</div>
+    </div>
+    <div style="border-top:1px dashed #000;margin:3px 0;"></div>
+    <div style="font-size:7.2px;line-height:1.18;">
+      <div style="display:flex;justify-content:space-between;"><span>No :</span><span>${t.id}</span></div>
+      <div style="display:flex;justify-content:space-between;"><span>Tgl:</span><span>${t.date}</span></div>
+    </div>
+    <div style="border-top:1px dashed #000;margin:3px 0;"></div>
+    <div style="font-size:7.2px;line-height:1.18;">
+      ${itemsHTML}
+    </div>
+    <div style="border-top:1px dashed #000;margin:3px 0;"></div>
+    <div style="font-size:7.2px;line-height:1.2;">
+      <div style="display:flex;justify-content:space-between;"><span>Subtotal</span><span>${rp(t.subtotal)}</span></div>
+      ${t.discountAmt > 0 ? `<div style="display:flex;justify-content:space-between;"><span>Diskon (${t.discountPct}%)</span><span>-${rp(t.discountAmt)}</span></div>` : ''}
+      <div style="display:flex;justify-content:space-between;font-weight:800;font-size:8px;margin-top:1px;"><span>TOTAL</span><span>${rp(t.total)}</span></div>
+      <div style="display:flex;justify-content:space-between;"><span>Bayar (${t.payment})</span><span>${rp(t.cash)}</span></div>
+      <div style="display:flex;justify-content:space-between;font-weight:700;"><span>Kembali</span><span>${rp(t.change)}</span></div>
+    </div>
+    <div style="border-top:1px dashed #000;margin:3px 0;"></div>
+    <div style="text-align:center;font-size:6.6px;line-height:1.15;">
+      ${s.customNote ? `<div>${s.customNote}</div>` : ''}
+      <div style="font-weight:700;margin-top:1px;">${s.footer1}</div>
+      <div>${s.footer2}</div>
+    </div>
+  `;
 }
 
 function openReceipt(trxId) {
   const t = transactions.find(x => x.id === trxId);
   if (!t) return;
-  activeReceiptTrx = t;
-  const s = receiptSettings;
+  currentReceiptTrx = t;
+  const html = buildReceiptHTML(t);
+  $('receiptPaper').innerHTML = html;
+  $('printArea').innerHTML = html;
+  $('receiptModal').classList.remove('hidden');
+}
 
-  const html = `
-    <div style="text-align:center;margin-bottom:4px;">
-      <img src="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171" onerror="this.style.display='none'" alt="logo">
-      <div style="font-weight:700;font-size:10px;letter-spacing:0.3px;">${s.storeName}</div>
-      <div style="font-size:8px;line-height:1.2;">${s.address}</div>
-      ${s.phone ? `<div style="font-size:8px;">${s.phone}</div>` : ''}
-    </div>
-    <div style="border-top:1px dashed #000;margin:4px 0;"></div>
-    <div style="font-size:8.5px;line-height:1.25;">
-      <div style="display:flex;justify-content:space-between;"><span>No :</span><span>${t.id}</span></div>
-      <div style="display:flex;justify-content:space-between;"><span>Tgl:</span><span>${t.date}</span></div>
-      ${s.showCashier ? `<div style="display:flex;justify-content:space-between;"><span>Ksr:</span><span>${t.cashier}</span></div>` : ''}
-      ${s.showCustomer ? `<div style="display:flex;justify-content:space-between;"><span>Plg:</span><span>${t.customer}</span></div>` : ''}
-    </div>
-    <div style="border-top:1px dashed #000;margin:4px 0;"></div>
-    <div style="font-size:8.5px;line-height:1.25;">
-      ${t.items.map(i => `
-        <div style="margin-bottom:3px;">
-          <div style="font-weight:600;">${i.name}</div>
-          <div style="display:flex;justify-content:space-between;padding-left:4px;">
-            <span>${i.qty}x @${i.price.toLocaleString('id-ID')}</span>
-            <span>${(i.qty * i.price).toLocaleString('id-ID')}</span>
-          </div>
-        </div>
-      `).join('')}
-    </div>
-    <div style="border-top:1px dashed #000;margin:4px 0;"></div>
-    <div style="font-size:8.5px;line-height:1.3;">
-      <div style="display:flex;justify-content:space-between;"><span>Subtotal</span><span>${rp(t.subtotal)}</span></div>
-      ${t.discount > 0 ? `<div style="display:flex;justify-content:space-between;"><span>Diskon (${t.discPct}%)</span><span>-${rp(t.discount)}</span></div>` : ''}
-      <div style="display:flex;justify-content:space-between;font-weight:700;font-size:9.5px;margin-top:2px;"><span>TOTAL</span><span>${rp(t.total)}</span></div>
-      <div style="display:flex;justify-content:space-between;"><span>Bayar (${t.payment})</span><span>${rp(t.cash)}</span></div>
-      <div style="display:flex;justify-content:space-between;"><span>Kembali</span><span>${rp(t.change)}</span></div>
-    </div>
-    <div style="border-top:1px dashed #000;margin:5px 0;"></div>
-    <div style="text-align:center;font-size:8px;line-height:1.25;">
-      ${s.customNote ? `<div>${s.customNote}</div>` : ''}
-      ${s.footer1 ? `<div style="font-weight:700;margin-top:2px;">${s.footer1}</div>` : ''}
-      ${s.footer2 ? `<div>${s.footer2}</div>` : ''}
-    </div>
-  `;
-
-  document.getElementById('receiptPaper').innerHTML = html;
-  document.getElementById('printArea').innerHTML = html;
-  openModal('receiptModal');
+function changePaper(size) {
+  const paper = $('receiptPaper');
+  const jagged = $('jaggedEl');
+  if (size === '80') {
+    paper.classList.add('thermal-80');
+    jagged.style.maxWidth = '310px';
+  } else {
+    paper.classList.remove('thermal-80');
+    jagged.style.maxWidth = '225px';
+  }
 }
 
 function printReceipt() {
+  if (!currentReceiptTrx) return;
+  $('printArea').innerHTML = buildReceiptHTML(currentReceiptTrx);
   window.print();
 }
 
-// Konversi karakter non-ASCII agar tidak tercetak aneh pada printer thermal 58mm
-function sanitizeThermalText(str) {
-  return String(str || '')
-    .replace(/²/g, '2')
-    .replace(/°/g, ' ')
-    .replace(/❄/g, '*')
-    .replace(/•/g, '-')
-    .replace(/[^\x20-\x7E\n]/g, '');
+function formatThermalRow(left, right, width = 42) {
+  const l = cleanASCII(left);
+  const r = cleanASCII(right);
+  const space = Math.max(1, width - l.length - r.length);
+  return l + ' '.repeat(space) + r;
 }
 
-// Bungkus teks panjang sesuai lebar 32 karakter kertas 58mm tanpa memotong tengah kata
-function wrapThermalLines(text, maxLen = 32) {
-  const clean = sanitizeThermalText(text).trim();
-  if (!clean) return [];
-  const words = clean.split(/\s+/);
+function wrapThermalText(text, width = 42) {
+  const words = cleanASCII(text).split(/\s+/);
   const lines = [];
-  let current = '';
+  let line = '';
   for (const w of words) {
-    if (!current) {
-      current = w.length > maxLen ? w.slice(0, maxLen) : w;
-    } else if (current.length + 1 + w.length <= maxLen) {
-      current += ' ' + w;
+    if ((line + (line ? ' ' : '') + w).length <= width) {
+      line += (line ? ' ' : '') + w;
     } else {
-      lines.push(current);
-      current = w.length > maxLen ? w.slice(0, maxLen) : w;
+      if (line) lines.push(line);
+      line = w.slice(0, width);
     }
   }
-  if (current) lines.push(current);
+  if (line) lines.push(line);
   return lines;
 }
 
-// Format baris rata kiri-kanan persis 32 karakter (standar font A 58mm)
-function formatThermalRow(left, right, width = 32) {
-  const l = sanitizeThermalText(left);
-  const r = sanitizeThermalText(right);
-  const space = Math.max(1, width - l.length - r.length);
-  return l.slice(0, Math.max(1, width - r.length - 1)) + ' '.repeat(space) + r;
-}
+async function getLogoEscPosBytes() {
+  try {
+    const canvas = document.createElement('canvas');
+    const w = 192; // divisible by 8
+    const h = 44;
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, w, h);
 
-// Rasterisasi logo ke bitmap monochrome ESC/POS (GS v 0) agar logo ikut tercetak rapi
-async function getLogoEscPosBytes(url) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      try {
-        const targetW = 192;
-        const scale = targetW / img.width;
-        const targetH = Math.max(16, Math.round(img.height * scale));
-        const canvas = document.createElement('canvas');
-        canvas.width = targetW;
-        canvas.height = targetH;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillRect(0, 0, targetW, targetH);
-        ctx.drawImage(img, 0, 0, targetW, targetH);
-        const imgData = ctx.getImageData(0, 0, targetW, targetH).data;
-        const widthBytes = targetW / 8;
-        const header = [0x1D, 0x76, 0x30, 0x00, widthBytes & 0xff, (widthBytes >> 8) & 0xff, targetH & 0xff, (targetH >> 8) & 0xff];
-        const bitmap = new Uint8Array(header.length + widthBytes * targetH);
-        bitmap.set(header, 0);
-        let offset = header.length;
-        for (let y = 0; y < targetH; y++) {
-          for (let xb = 0; xb < widthBytes; xb++) {
-            let byte = 0;
-            for (let bit = 0; bit < 8; bit++) {
-              const x = xb * 8 + bit;
-              const idx = (y * targetW + x) * 4;
-              const lum = 0.299 * imgData[idx] + 0.587 * imgData[idx + 1] + 0.114 * imgData[idx + 2];
-              if (imgData[idx + 3] > 128 && lum < 175) {
-                byte |= (1 << (7 - bit));
-              }
-            }
-            bitmap[offset++] = byte;
-          }
+    // Draw crisp emblem fallback first, then try external logo if CORS permits
+    ctx.fillStyle = '#000000';
+    ctx.font = 'bold 16px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('2AL JAYA', w / 2, 20);
+    ctx.font = 'bold 10px sans-serif';
+    ctx.fillText('FROZEN FOOD', w / 2, 35);
+
+    const imgData = ctx.getImageData(0, 0, w, h).data;
+    const widthBytes = w / 8;
+    const header = [0x1D, 0x76, 0x30, 0x00, widthBytes & 0xFF, (widthBytes >> 8) & 0xFF, h & 0xFF, (h >> 8) & 0xFF];
+    const raster = new Uint8Array(header.length + widthBytes * h);
+    raster.set(header, 0);
+
+    let offset = header.length;
+    for (let y = 0; y < h; y++) {
+      for (let xb = 0; xb < widthBytes; xb++) {
+        let byte = 0;
+        for (let bit = 0; bit < 8; bit++) {
+          const x = xb * 8 + bit;
+          const idx = (y * w + x) * 4;
+          const lum = 0.299 * imgData[idx] + 0.587 * imgData[idx + 1] + 0.114 * imgData[idx + 2];
+          if (lum < 140) byte |= (1 << (7 - bit));
         }
-        resolve(bitmap);
-      } catch (e) {
-        resolve(null);
+        raster[offset++] = byte;
       }
-    };
-    img.onerror = () => resolve(null);
-    img.src = url;
-  });
+    }
+    return raster;
+  } catch (e) {
+    return new Uint8Array(0);
+  }
 }
 
 async function printViaBluetooth() {
-  if (!activeReceiptTrx) return;
+  if (!currentReceiptTrx) return;
   if (!navigator.bluetooth) {
-    showToast('Browser tidak mendukung Web Bluetooth. Gunakan Chrome Android atau tombol Print Thermal.');
+    showToast('Browser tidak mendukung Web Bluetooth. Gunakan Print Thermal / RawBT.');
     return;
   }
   try {
-    showToast('Mencari printer thermal Bluetooth...');
+    showToast('Mencari printer Bluetooth 58mm...');
     const device = await navigator.bluetooth.requestDevice({
       acceptAllDevices: true,
-      optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb', 'e7810a71-73ae-499d-8c15-faa9aef0c3f2', '49535343-fe7d-4ae5-8fa9-9fafd205e455']
+      optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb', 'e7810a71-73ae-499d-8c15-faa9aef0c3f2']
     });
     const server = await device.gatt.connect();
     const services = await server.getPrimaryServices();
-    let characteristic = null;
-    for (const service of services) {
-      const chars = await service.getCharacteristics();
-      for (const c of chars) {
-        if (c.properties.write || c.properties.writeWithoutResponse) {
-          characteristic = c;
+    let writableChar = null;
+    for (const svc of services) {
+      const chars = await svc.getCharacteristics();
+      for (const ch of chars) {
+        if (ch.properties.write || ch.properties.writeWithoutResponse) {
+          writableChar = ch;
           break;
         }
       }
-      if (characteristic) break;
+      if (writableChar) break;
     }
-    if (!characteristic) throw new Error('Karakteristik printer tidak ditemukan');
+    if (!writableChar) {
+      showToast('Karakteristik printer tidak ditemukan');
+      return;
+    }
 
-    const t = activeReceiptTrx;
+    const t = currentReceiptTrx;
     const s = receiptSettings;
-    const sep = '--------------------------------\n';
-    const encoder = new TextEncoder();
+    const cols = 42; // Font B condensed width for 58mm
+    const sep = '-'.repeat(cols) + '\n';
 
-    const writeChunked = async (bytes) => {
-      for (let i = 0; i < bytes.length; i += 20) {
-        await characteristic.writeValue(bytes.slice(i, i + 20));
-      }
-    };
-
-    await writeChunked(new Uint8Array([0x1B, 0x40, 0x1B, 0x61, 0x01]));
-
-    const logoBytes = await getLogoEscPosBytes('https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171');
-    if (logoBytes) {
-      await writeChunked(logoBytes);
-      await writeChunked(encoder.encode('\n'));
-    }
-
-    const headerLines = [
-      '\x1B\x61\x01',
-      '\x1B\x45\x01',
-      ...wrapThermalLines(s.storeName, 32).map(l => l + '\n'),
-      '\x1B\x45\x00',
-      ...wrapThermalLines(s.address, 32).map(l => l + '\n'),
-      ...(s.phone ? wrapThermalLines(s.phone, 32).map(l => l + '\n') : []),
+    const lines = [
+      '\x1B\x40',       // Init printer
+      '\x1B\x4D\x01',   // Font B (condensed small font)
+      '\x1B\x33\x16',   // Compact line spacing
+      '\x1B\x61\x01',   // Center align
+      '\x1B\x45\x01' + cleanASCII(s.storeName) + '\x1B\x45\x00\n',
+      ...wrapThermalText(s.address, cols).map(l => l + '\n'),
+      cleanASCII(s.phone) + '\n',
       sep,
-      '\x1B\x61\x00',
-      formatThermalRow('No :', t.id) + '\n',
-      formatThermalRow('Tgl:', t.date) + '\n',
-      ...(s.showCashier ? [formatThermalRow('Ksr:', t.cashier) + '\n'] : []),
-      ...(s.showCustomer ? [formatThermalRow('Plg:', t.customer) + '\n'] : []),
+      '\x1B\x61\x00',   // Left align
+      formatThermalRow('No :', t.id, cols) + '\n',
+      formatThermalRow('Tgl:', t.date, cols) + '\n',
       sep
     ];
 
-    const itemLines = [];
     t.items.forEach(i => {
-      wrapThermalLines(i.name, 32).forEach(l => itemLines.push(l + '\n'));
-      const qtyPrice = ` ${i.qty}x @${i.price.toLocaleString('id-ID')}`;
-      const subItem = (i.qty * i.price).toLocaleString('id-ID');
-      itemLines.push(formatThermalRow(qtyPrice, subItem) + '\n');
+      wrapThermalText(i.name, cols).forEach(l => lines.push(l + '\n'));
+      const qtyLine = `${i.qty} x ${Number(i.price).toLocaleString('id-ID')}`;
+      const subLine = Number(i.qty * i.price).toLocaleString('id-ID');
+      lines.push(formatThermalRow(qtyLine, subLine, cols) + '\n');
     });
 
-    const summaryLines = [
-      sep,
-      formatThermalRow('Subtotal', rp(t.subtotal)) + '\n',
-      ...(t.discount > 0 ? [formatThermalRow(`Diskon (${t.discPct}%)`, `-${rp(t.discount)}`) + '\n'] : []),
-      '\x1B\x45\x01',
-      formatThermalRow('TOTAL', rp(t.total)) + '\n',
-      '\x1B\x45\x00',
-      formatThermalRow(`Bayar (${t.payment})`, rp(t.cash)) + '\n',
-      formatThermalRow('Kembali', rp(t.change)) + '\n',
-      sep,
-      '\x1B\x61\x01',
-      ...(s.customNote ? wrapThermalLines(s.customNote, 32).map(l => l + '\n') : []),
-      ...(s.footer1 ? ['\x1B\x45\x01', ...wrapThermalLines(s.footer1, 32).map(l => l + '\n'), '\x1B\x45\x00'] : []),
-      ...(s.footer2 ? wrapThermalLines(s.footer2, 32).map(l => l + '\n') : []),
-      '\n\n\n'
-    ];
+    lines.push(sep);
+    lines.push(formatThermalRow('Subtotal', rp(t.subtotal), cols) + '\n');
+    if (t.discountAmt > 0) {
+      lines.push(formatThermalRow(`Diskon (${t.discountPct}%)`, '-' + rp(t.discountAmt), cols) + '\n');
+    }
+    lines.push('\x1B\x45\x01' + formatThermalRow('TOTAL', rp(t.total), cols) + '\x1B\x45\x00\n');
+    lines.push(formatThermalRow(`Bayar (${t.payment})`, rp(t.cash), cols) + '\n');
+    lines.push(formatThermalRow('Kembali', rp(t.change), cols) + '\n');
+    lines.push(sep);
+    lines.push('\x1B\x61\x01');
+    if (s.customNote) wrapThermalText(s.customNote, cols).forEach(l => lines.push(l + '\n'));
+    wrapThermalText(s.footer1, cols).forEach(l => lines.push(l + '\n'));
+    wrapThermalText(s.footer2, cols).forEach(l => lines.push(l + '\n'));
+    lines.push('\n\n\n');
 
-    await writeChunked(encoder.encode([...headerLines, ...itemLines, ...summaryLines].join('')));
-    showToast('Struk berhasil dikirim ke Printer Bluetooth 58mm!');
+    const encoder = new TextEncoder();
+    const logoBytes = await getLogoEscPosBytes();
+    const textBytes = encoder.encode(lines.join(''));
+
+    const fullPayload = new Uint8Array(logoBytes.length + textBytes.length);
+    fullPayload.set(logoBytes, 0);
+    fullPayload.set(textBytes, logoBytes.length);
+
+    const chunkSize = 100;
+    for (let i = 0; i < fullPayload.length; i += chunkSize) {
+      const chunk = fullPayload.slice(i, i + chunkSize);
+      if (writableChar.properties.writeWithoutResponse) {
+        await writableChar.writeValueWithoutResponse(chunk);
+      } else {
+        await writableChar.writeValue(chunk);
+      }
+      await new Promise(r => setTimeout(r, 25));
+    }
+
+    showToast('Struk berhasil dicetak via Bluetooth!');
   } catch (err) {
-    showToast('Gagal koneksi Bluetooth: ' + (err.message || 'Dibatalkan'));
+    showToast('Bluetooth gagal: ' + err.message);
   }
 }
 
 function shareWA() {
-  if (!activeReceiptTrx) return;
-  const t = activeReceiptTrx;
+  if (!currentReceiptTrx) return;
+  const t = currentReceiptTrx;
   const s = receiptSettings;
-  const lines = [
+  const msg = [
     `*${s.storeName}*`,
     s.address,
     s.phone,
     `--------------------------------`,
     `No: ${t.id}`,
     `Tgl: ${t.date}`,
-    `Plg: ${t.customer}`,
     `--------------------------------`,
     ...t.items.map(i => `${i.name}\n  ${i.qty} x ${rp(i.price)} = ${rp(i.qty * i.price)}`),
     `--------------------------------`,
     `Subtotal: ${rp(t.subtotal)}`,
-    t.discount > 0 ? `Diskon: -${rp(t.discount)}` : null,
+    t.discountAmt > 0 ? `Diskon (${t.discountPct}%): -${rp(t.discountAmt)}` : null,
     `*TOTAL: ${rp(t.total)}*`,
     `Bayar (${t.payment}): ${rp(t.cash)}`,
     `Kembali: ${rp(t.change)}`,
@@ -1715,276 +1695,272 @@ function shareWA() {
     s.footer2
   ].filter(Boolean).join('\n');
 
-  window.open('https://wa.me/?text=' + encodeURIComponent(lines), '_blank');
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
 }
 
-// ================= TRANSACTION HISTORY & EDIT =================
+// ================= HISTORY & EDIT TRANSACTION =================
 function renderHistory() {
-  const container = document.getElementById('trxList');
-  if (!transactions.length) {
-    container.innerHTML = `<div class="bg-white rounded-2xl p-8 text-center text-slate-400 text-sm card-shadow">Belum ada riwayat transaksi.</div>`;
-    return;
-  }
-
-  container.innerHTML = transactions.map(t => `
-    <div class="bg-white rounded-2xl p-4 card-shadow flex flex-col sm:flex-row justify-between gap-3 items-start sm:items-center">
+  $('trxList').innerHTML = transactions.length ? transactions.map(t => `
+    <div class="bg-white rounded-2xl p-4 card-shadow flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div>
         <div class="flex items-center gap-2">
-          <span class="mono font-black text-xs text-[#0A4D7A] bg-cyan-50 px-2.5 py-1 rounded-lg">${t.id}</span>
-          <span class="text-xs text-slate-400">${t.date}</span>
-          <span class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">${t.payment}</span>
+          <span class="mono font-black text-xs text-[#0A4D7A]">${t.id}</span>
+          <span class="bg-cyan-50 text-[#0A4D7A] px-2 py-0.5 rounded-full text-[10px] font-bold">${t.payment}</span>
+          <span class="text-[11px] text-slate-400">${t.date}</span>
         </div>
-        <p class="font-bold text-sm text-slate-800 mt-1">${t.customer} <span class="text-xs font-normal text-slate-400">• Kasir: ${t.cashier}</span></p>
-        <p class="text-xs text-slate-500 mt-0.5">${t.items.map(i => `${i.name} (${i.qty}x)`).join(', ')}</p>
+        <p class="text-xs text-slate-600 mt-1">${t.items.map(i => `${i.name} (${i.qty}x)`).join(', ')}</p>
+        <p class="font-black text-sm text-[#0A4D7A] mt-1">${rp(t.total)}</p>
       </div>
-      <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-0 pt-2 sm:pt-0">
-        <span class="font-black text-base text-[#0A4D7A] mr-2">${rp(t.total)}</span>
-        <button onclick="openEditTrxModal('${t.id}')" class="bg-amber-50 hover:bg-amber-100 text-amber-700 px-3 py-2 rounded-xl text-xs font-bold transition">✏️ Edit</button>
-        <button onclick="openReceipt('${t.id}')" class="bg-[#0A4D7A] hover:bg-[#083a5e] text-white px-3.5 py-2 rounded-xl text-xs font-bold transition">🧾 Struk</button>
-        <button onclick="deleteSingleTrx('${t.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-2.5 py-2 rounded-xl text-xs font-bold transition"><i class="fa fa-trash"></i></button>
+      <div class="flex flex-wrap gap-1.5">
+        <button onclick="openReceipt('${t.id}')" class="bg-[#0A4D7A] hover:bg-[#083a5e] text-white px-3 py-2 rounded-xl text-xs font-bold transition">🧾 Struk</button>
+        <button onclick="openEditTransaction('${t.id}')" class="bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-3 py-2 rounded-xl text-xs font-bold transition">✏️ Edit</button>
+        <button onclick="deleteSingleTransaction('${t.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2 rounded-xl text-xs font-bold transition"><i class="fa fa-trash"></i></button>
       </div>
     </div>
-  `).join('');
+  `).join('') : '<div class="bg-white rounded-2xl p-8 text-center text-xs text-slate-400">Belum ada riwayat transaksi.</div>';
 }
 
-function openEditTrxModal(trxId) {
-  const trx = transactions.find(t => t.id === trxId);
-  if (!trx) return;
-  editingTrxDraft = JSON.parse(JSON.stringify(trx));
-  document.getElementById('editTrxId').value = trx.id;
-  document.getElementById('editTrxTitle').textContent = 'Edit Transaksi ' + trx.id;
-  document.getElementById('editTrxCustomer').value = trx.customer;
-  document.getElementById('editTrxPayment').value = trx.payment;
-  document.getElementById('editTrxDiscPct').value = String(trx.discPct || 0);
-  document.getElementById('editTrxCash').value = trx.cash;
+function openEditTransaction(trxId) {
+  const t = transactions.find(x => x.id === trxId);
+  if (!t) return;
+  $('editTrxId').value = t.id;
+  $('editTrxTitle').textContent = 'Edit Transaksi ' + t.id;
+  $('editTrxCustomer').value = t.customer || 'Pelanggan Umum';
+  $('editTrxPayment').value = t.payment || 'Tunai';
+  $('editTrxDiscPct').value = String(t.discountPct || 0);
+  $('editTrxCash').value = t.cash || t.total;
+  editTrxItems = JSON.parse(JSON.stringify(t.items));
   renderEditTrxItems();
-  openModal('editTrxModal');
+  $('editTrxModal').classList.remove('hidden');
 }
 
 function renderEditTrxItems() {
-  if (!editingTrxDraft) return;
-  document.getElementById('editTrxItemsList').innerHTML = editingTrxDraft.items.map((item, idx) => `
-    <div class="flex items-center justify-between bg-white p-2 rounded-xl border">
-      <div class="flex-1 min-w-0 pr-2">
-        <p class="font-bold text-slate-800 truncate">${item.name}</p>
-        <p class="text-[11px] text-slate-500">${rp(item.price)}</p>
+  $('editTrxItemsList').innerHTML = editTrxItems.map((item, idx) => `
+    <div class="flex items-center justify-between gap-2 bg-white p-2 rounded-xl border">
+      <div class="flex-1 min-w-0">
+        <p class="font-bold text-xs truncate">${item.name}</p>
+        <p class="text-[10px] text-slate-500">${rp(item.price)} / item</p>
       </div>
       <div class="flex items-center gap-1.5">
-        <button type="button" onclick="changeEditTrxQty(${idx}, -1)" class="w-6 h-6 bg-slate-100 rounded-lg font-black">-</button>
+        <button type="button" onclick="changeEditItemQty(${idx}, -1)" class="w-6 h-6 rounded-lg bg-slate-100 font-black">-</button>
         <span class="w-5 text-center font-black">${item.qty}</span>
-        <button type="button" onclick="changeEditTrxQty(${idx}, 1)" class="w-6 h-6 bg-[#0A4D7A] text-white rounded-lg font-black">+</button>
+        <button type="button" onclick="changeEditItemQty(${idx}, 1)" class="w-6 h-6 rounded-lg bg-[#0A4D7A] text-white font-black">+</button>
       </div>
     </div>
   `).join('');
   recalcEditTrx();
 }
 
-function changeEditTrxQty(idx, delta) {
-  if (!editingTrxDraft) return;
-  const next = editingTrxDraft.items[idx].qty + delta;
+function changeEditItemQty(idx, delta) {
+  const next = editTrxItems[idx].qty + delta;
   if (next <= 0) {
-    if (editingTrxDraft.items.length === 1) {
+    if (editTrxItems.length === 1) {
       showToast('Minimal harus ada 1 item dalam transaksi');
       return;
     }
-    editingTrxDraft.items.splice(idx, 1);
+    editTrxItems.splice(idx, 1);
   } else {
-    editingTrxDraft.items[idx].qty = next;
+    editTrxItems[idx].qty = next;
   }
   renderEditTrxItems();
 }
 
 function recalcEditTrx() {
-  if (!editingTrxDraft) return;
-  const subtotal = editingTrxDraft.items.reduce((s, i) => s + i.price * i.qty, 0);
-  const discPct = Number(document.getElementById('editTrxDiscPct').value || 0);
-  const discount = Math.round((subtotal * discPct) / 100);
-  const total = Math.max(0, subtotal - discount);
-  const cash = Number(document.getElementById('editTrxCash').value || 0);
-  const change = Math.max(0, cash - total);
+  const sub = editTrxItems.reduce((s, i) => s + i.price * i.qty, 0);
+  const discPct = Number($('editTrxDiscPct').value || 0);
+  const discAmt = Math.round(sub * (discPct / 100));
+  const total = sub - discAmt;
+  const cash = Number($('editTrxCash').value || 0);
+  const change = cash - total;
 
-  editingTrxDraft.subtotal = subtotal;
-  editingTrxDraft.discPct = discPct;
-  editingTrxDraft.discount = discount;
-  editingTrxDraft.total = total;
-  editingTrxDraft.cash = cash;
-  editingTrxDraft.change = change;
-
-  document.getElementById('editTrxNewTotal').textContent = rp(total);
-  document.getElementById('editTrxNewChange').textContent = rp(change);
+  $('editTrxNewTotal').textContent = rp(total);
+  $('editTrxNewChange').textContent = change >= 0 ? rp(change) : 'Kurang ' + rp(Math.abs(change));
+  return { sub, discPct, discAmt, total, cash, change: Math.max(0, change) };
 }
 
 function saveEditedTransaction() {
-  if (!editingTrxDraft) return;
-  const origIdx = transactions.findIndex(t => t.id === editingTrxDraft.id);
-  if (origIdx === -1) return;
-  const origTrx = transactions[origIdx];
+  const id = $('editTrxId').value;
+  const t = transactions.find(x => x.id === id);
+  if (!t) return;
 
-  // Kembalikan stok lama lalu kurangi stok baru
-  origTrx.items.forEach(oldItem => {
+  const { sub, discPct, discAmt, total, cash, change } = recalcEditTrx();
+  if (cash < total) {
+    showToast('Uang bayar kurang dari total baru!');
+    return;
+  }
+
+  // Restore old stock then apply new stock
+  t.items.forEach(oldItem => {
     const p = products.find(x => x.id === oldItem.id);
     if (p) p.stock = Number(p.stock) + oldItem.qty;
   });
-  editingTrxDraft.items.forEach(newItem => {
+  editTrxItems.forEach(newItem => {
     const p = products.find(x => x.id === newItem.id);
     if (p) p.stock = Math.max(0, Number(p.stock) - newItem.qty);
   });
 
-  editingTrxDraft.customer = document.getElementById('editTrxCustomer').value.trim() || 'Pelanggan Umum';
-  editingTrxDraft.payment = document.getElementById('editTrxPayment').value;
-  recalcEditTrx();
+  t.customer = $('editTrxCustomer').value.trim() || 'Pelanggan Umum';
+  t.payment = $('editTrxPayment').value;
+  t.items = JSON.parse(JSON.stringify(editTrxItems));
+  t.subtotal = sub;
+  t.discountPct = discPct;
+  t.discountAmt = discAmt;
+  t.total = total;
+  t.cash = cash;
+  t.change = change;
 
-  transactions[origIdx] = editingTrxDraft;
-  editingTrxDraft = null;
-  saveState();
+  saveJSON('aj_products', products);
+  saveJSON('aj_transactions', transactions);
   closeModal('editTrxModal');
-  refreshAll();
+  renderAll();
   syncSheets(false);
-  showToast('Transaksi berhasil diperbarui & stok disesuaikan!');
+  showToast('Transaksi berhasil diperbarui!');
 }
 
-function deleteSingleTrx(trxId) {
-  askConfirm('Hapus Transaksi', 'Hapus nota ini dan kembalikan stok produk?', () => {
-    const trx = transactions.find(t => t.id === trxId);
-    if (trx) {
-      trx.items.forEach(item => {
-        const p = products.find(x => x.id === item.id);
-        if (p) p.stock = Number(p.stock) + item.qty;
+function deleteSingleTransaction(id) {
+  openConfirm('Hapus Transaksi?', `Hapus nota ${id} dan kembalikan stok produknya?`, () => {
+    const t = transactions.find(x => x.id === id);
+    if (t) {
+      t.items.forEach(i => {
+        const p = products.find(x => x.id === i.id);
+        if (p) p.stock = Number(p.stock) + i.qty;
       });
     }
-    transactions = transactions.filter(t => t.id !== trxId);
-    saveState();
-    refreshAll();
+    transactions = transactions.filter(x => x.id !== id);
+    saveJSON('aj_products', products);
+    saveJSON('aj_transactions', transactions);
+    renderAll();
     syncSheets(false);
     showToast('Transaksi dihapus & stok dikembalikan');
   });
 }
 
 function clearTransactions() {
-  askConfirm('Hapus Semua Riwayat', 'Semua riwayat transaksi akan dihapus permanen. Lanjutkan?', () => {
+  openConfirm('Hapus Semua Riwayat?', 'Seluruh data riwayat transaksi akan dihapus permanen.', () => {
     transactions = [];
-    saveState();
-    refreshAll();
+    saveJSON('aj_transactions', transactions);
+    renderAll();
+    syncSheets(false);
     showToast('Semua riwayat transaksi dihapus');
   });
 }
 
 // ================= USERS MANAGEMENT =================
 function renderUsers() {
-  document.getElementById('userGrid').innerHTML = users.map(u => `
+  $('userGrid').innerHTML = users.map(u => `
     <div class="bg-white rounded-2xl p-4 card-shadow flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-2xl bg-cyan-100 text-[#0A4D7A] font-black grid place-items-center text-base">${u.name.charAt(0).toUpperCase()}</div>
+        <div class="w-11 h-11 rounded-2xl bg-cyan-100 text-[#0A4D7A] font-black grid place-items-center">${u.name.charAt(0).toUpperCase()}</div>
         <div>
-          <p class="font-black text-sm text-slate-800">${u.name}</p>
-          <p class="text-xs text-slate-500">@${u.username} • <span class="font-bold text-[#1590C8]">${u.role}</span></p>
+          <p class="font-black text-sm">${u.name}</p>
+          <p class="text-xs text-slate-500">@${u.username} • <span class="font-bold text-[#0A4D7A]">${u.role}</span></p>
         </div>
       </div>
-      <div class="flex gap-1.5">
-        <button onclick="openUserModal('${u.id}')" class="bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-xl text-xs font-bold">Edit</button>
-        ${u.username !== 'admin' ? `<button onclick="deleteUser('${u.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-2.5 py-1.5 rounded-xl text-xs font-bold"><i class="fa fa-trash"></i></button>` : ''}
+      <div class="flex gap-1">
+        <button onclick="openUserModal('${u.id}')" class="bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-xl text-xs font-bold">Edit</button>
+        ${users.length > 1 ? `<button onclick="deleteUser('${u.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-2.5 py-1.5 rounded-xl text-xs font-bold"><i class="fa fa-trash"></i></button>` : ''}
       </div>
     </div>
   `).join('');
 }
 
 function openUserModal(id = null) {
+  $('userForm').reset();
+  $('uId').value = id || '';
   if (id) {
     const u = users.find(x => x.id === id);
     if (!u) return;
-    document.getElementById('umTitle').textContent = 'Edit Pengguna';
-    document.getElementById('uId').value = u.id;
-    document.getElementById('uName').value = u.name;
-    document.getElementById('uUsername').value = u.username;
-    document.getElementById('uPass').value = u.pass;
-    document.getElementById('uRole').value = u.role;
+    $('umTitle').textContent = 'Edit Pengguna';
+    $('uName').value = u.name;
+    $('uUsername').value = u.username;
+    $('uPass').value = u.pass;
+    $('uRole').value = u.role;
   } else {
-    document.getElementById('umTitle').textContent = 'Tambah Pengguna Baru';
-    document.getElementById('userForm').reset();
-    document.getElementById('uId').value = '';
+    $('umTitle').textContent = 'Tambah Pengguna Baru';
   }
-  openModal('userModal');
+  $('userModal').classList.remove('hidden');
 }
 
-document.getElementById('userForm').addEventListener('submit', function(e) {
+$('userForm').addEventListener('submit', e => {
   e.preventDefault();
-  const id = document.getElementById('uId').value;
-  const userData = {
+  const id = $('uId').value;
+  const payload = {
     id: id || 'USR-' + String(Date.now()).slice(-4),
-    name: document.getElementById('uName').value.trim(),
-    username: document.getElementById('uUsername').value.trim(),
-    pass: document.getElementById('uPass').value.trim(),
-    role: document.getElementById('uRole').value
+    name: $('uName').value.trim(),
+    username: $('uUsername').value.trim(),
+    pass: $('uPass').value.trim(),
+    role: $('uRole').value
   };
-
   if (id) {
     const idx = users.findIndex(x => x.id === id);
-    if (idx !== -1) users[idx] = userData;
-    showToast('Data pengguna diperbarui');
+    if (idx !== -1) users[idx] = payload;
+    showToast('Data user diperbarui');
   } else {
-    users.push(userData);
-    showToast('Pengguna baru ditambahkan');
+    users.push(payload);
+    showToast('User baru ditambahkan');
   }
-  saveState();
+  saveJSON('aj_users', users);
   closeModal('userModal');
   renderUsers();
+  renderSheetPreview();
   syncSheets(false);
 });
 
 function deleteUser(id) {
-  askConfirm('Hapus Pengguna', 'Hapus akun pengguna ini?', () => {
-    users = users.filter(u => u.id !== id);
-    saveState();
+  openConfirm('Hapus Pengguna?', 'Akun pengguna ini akan dihapus dari sistem.', () => {
+    users = users.filter(x => x.id !== id);
+    saveJSON('aj_users', users);
     renderUsers();
-    showToast('Pengguna dihapus');
+    renderSheetPreview();
+    syncSheets(false);
+    showToast('User dihapus');
   });
 }
 
-// ================= RECEIPT SETTINGS & GOOGLE SHEETS =================
-function loadReceiptSettingsForm() {
-  if (!document.getElementById('recStoreName')) return;
-  document.getElementById('recStoreName').value = receiptSettings.storeName || '';
-  document.getElementById('recPhone').value = receiptSettings.phone || '';
-  document.getElementById('recAddress').value = receiptSettings.address || '';
-  document.getElementById('recFooter1').value = receiptSettings.footer1 || '';
-  document.getElementById('recFooter2').value = receiptSettings.footer2 || '';
-  document.getElementById('recCustomNote').value = receiptSettings.customNote || '';
-  document.getElementById('recShowCashier').checked = !!receiptSettings.showCashier;
-  document.getElementById('recShowCustomer').checked = !!receiptSettings.showCustomer;
+// ================= RECEIPT SETTINGS & GOOGLE SHEETS SYNC =================
+function loadReceiptSettingsUI() {
+  $('recStoreName').value = receiptSettings.storeName || '';
+  $('recPhone').value = receiptSettings.phone || '';
+  $('recAddress').value = receiptSettings.address || '';
+  $('recFooter1').value = receiptSettings.footer1 || '';
+  $('recFooter2').value = receiptSettings.footer2 || '';
+  $('recCustomNote').value = receiptSettings.customNote || '';
+  $('recShowCashier').checked = !!receiptSettings.showCashier;
+  $('recShowCustomer').checked = !!receiptSettings.showCustomer;
 }
 
 function saveReceiptSettings() {
   receiptSettings = {
-    storeName: document.getElementById('recStoreName').value.trim() || '2AL JAYA FROZEN FOOD',
-    phone: document.getElementById('recPhone').value.trim(),
-    address: document.getElementById('recAddress').value.trim(),
-    footer1: document.getElementById('recFooter1').value.trim(),
-    footer2: document.getElementById('recFooter2').value.trim(),
-    customNote: document.getElementById('recCustomNote').value.trim(),
-    showCashier: document.getElementById('recShowCashier').checked,
-    showCustomer: document.getElementById('recShowCustomer').checked
+    storeName: $('recStoreName').value.trim() || '2AL JAYA FROZEN FOOD',
+    phone: $('recPhone').value.trim(),
+    address: $('recAddress').value.trim(),
+    footer1: $('recFooter1').value.trim(),
+    footer2: $('recFooter2').value.trim(),
+    customNote: $('recCustomNote').value.trim(),
+    showCashier: $('recShowCashier').checked,
+    showCustomer: $('recShowCustomer').checked
   };
-  saveState();
-  showToast('Pengaturan alamat & keterangan struk disimpan!');
+  saveJSON('aj_receipt_settings', receiptSettings);
+  showToast('Pengaturan struk belanja tersimpan!');
 }
 
 function switchSheetTab(tab, btn) {
-  activeSheetTab = tab;
+  currentSheetTab = tab;
   document.querySelectorAll('.sheettab').forEach(b => {
     b.className = 'sheettab bg-slate-100 px-3 py-2 rounded-full text-xs font-bold';
   });
-  btn.className = 'sheettab bg-[#0A4D7A] text-white px-3 py-2 rounded-full text-xs font-bold';
+  if (btn) btn.className = 'sheettab bg-[#0A4D7A] text-white px-3 py-2 rounded-full text-xs font-bold';
   renderSheetPreview();
 }
 
 function renderSheetPreview() {
-  const titleEl = document.getElementById('sheetPreviewTitle');
-  const headEl = document.getElementById('sheetPreviewHead');
-  const bodyEl = document.getElementById('sheetPreview');
-  if (!bodyEl) return;
+  const titleEl = $('sheetPreviewTitle');
+  const headEl = $('sheetPreviewHead');
+  const bodyEl = $('sheetPreview');
+  if (!titleEl || !headEl || !bodyEl) return;
 
-  if (activeSheetTab === 'products') {
-    titleEl.textContent = 'Preview Sheet: Produk (' + products.length + ' baris)';
+  if (currentSheetTab === 'products') {
+    titleEl.textContent = `Preview Sheet: Produk (${products.length} baris)`;
     headEl.innerHTML = '<tr><th class="p-2 text-left">ID</th><th class="p-2 text-left">Nama</th><th class="p-2">Harga</th><th class="p-2">Stok</th><th class="p-2">Status</th></tr>';
     bodyEl.innerHTML = products.map(p => `
       <tr>
@@ -1992,23 +1968,22 @@ function renderSheetPreview() {
         <td class="p-2 font-bold">${p.name}</td>
         <td class="p-2 text-center">${rp(p.price)}</td>
         <td class="p-2 text-center font-bold">${p.stock}</td>
-        <td class="p-2 text-center">${getStockStatus(p.stock).label}</td>
+        <td class="p-2 text-center">${p.stock > 5 ? 'Aman' : p.stock > 0 ? 'Menipis' : 'Habis'}</td>
       </tr>
     `).join('');
-  } else if (activeSheetTab === 'transactions') {
-    titleEl.textContent = 'Preview Sheet: Transaksi (' + transactions.length + ' baris)';
-    headEl.innerHTML = '<tr><th class="p-2 text-left">ID</th><th class="p-2 text-left">Tanggal</th><th class="p-2">Pelanggan</th><th class="p-2">Total</th><th class="p-2">Metode</th></tr>';
+  } else if (currentSheetTab === 'transactions') {
+    titleEl.textContent = `Preview Sheet: Transaksi (${transactions.length} baris)`;
+    headEl.innerHTML = '<tr><th class="p-2 text-left">No Nota</th><th class="p-2 text-left">Tanggal</th><th class="p-2">Metode</th><th class="p-2 text-right">Total</th></tr>';
     bodyEl.innerHTML = transactions.map(t => `
       <tr>
-        <td class="p-2 mono">${t.id}</td>
+        <td class="p-2 mono font-bold">${t.id}</td>
         <td class="p-2">${t.date}</td>
-        <td class="p-2 text-center">${t.customer}</td>
-        <td class="p-2 text-center font-bold">${rp(t.total)}</td>
         <td class="p-2 text-center">${t.payment}</td>
+        <td class="p-2 text-right font-bold">${rp(t.total)}</td>
       </tr>
     `).join('');
   } else {
-    titleEl.textContent = 'Preview Sheet: Users (' + users.length + ' baris)';
+    titleEl.textContent = `Preview Sheet: Users (${users.length} baris)`;
     headEl.innerHTML = '<tr><th class="p-2 text-left">ID</th><th class="p-2 text-left">Nama</th><th class="p-2">Username</th><th class="p-2">Role</th></tr>';
     bodyEl.innerHTML = users.map(u => `
       <tr>
@@ -2021,22 +1996,14 @@ function renderSheetPreview() {
   }
 }
 
-function appendSyncLog(msg) {
-  const log = document.getElementById('syncLog');
-  if (!log) return;
-  const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  log.innerHTML += `<br>> [${time}] ${msg}`;
-  log.scrollTop = log.scrollHeight;
-}
-
-async function syncSheets(notify = false) {
-  const url = document.getElementById('scriptUrl').value.trim();
-  const spin = document.getElementById('syncSpin');
+async function syncSheets(manual = false) {
+  const url = ($('scriptUrl').value || '').trim();
+  const spin = $('syncSpin');
   if (spin) spin.classList.add('fa-spin');
-  appendSyncLog('Mengirim sync ke Google Sheets...');
+  logSync('POST sync data ke Google Sheets...');
 
   try {
-    if (url && url.startsWith('https://script.google.com')) {
+    if (url.startsWith('http')) {
       await fetch(url, {
         method: 'POST',
         mode: 'no-cors',
@@ -2044,130 +2011,135 @@ async function syncSheets(notify = false) {
         body: JSON.stringify({ action: 'syncAll', products, transactions, users })
       });
     }
-    const nowStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-    document.getElementById('lastSync').textContent = nowStr;
-    document.getElementById('syncLabel').textContent = 'Sheets Terhubung';
-    appendSyncLog(`Sync OK (${products.length} produk, ${transactions.length} transaksi)`);
-    if (notify) showToast('Sinkronisasi ke Google Sheets berhasil!');
+    logSync(`Sync sukses (${products.length} produk, ${transactions.length} transaksi)`);
+    if (manual) showToast('Sinkronisasi ke Google Sheets berhasil!');
   } catch (err) {
-    appendSyncLog('Error sync: ' + err.message);
-    if (notify) showToast('Gagal sync: ' + err.message);
+    logSync('Sync gagal: ' + err.message);
+    if (manual) showToast('Gagal terhubung ke Apps Script');
   } finally {
     if (spin) setTimeout(() => spin.classList.remove('fa-spin'), 500);
   }
 }
 
 async function pullFromSheets() {
-  const url = document.getElementById('scriptUrl').value.trim();
-  if (!url) {
-    showToast('Masukkan Apps Script Web App URL terlebih dahulu');
+  const url = ($('scriptUrl').value || '').trim();
+  if (!url.startsWith('http')) {
+    showToast('Masukkan URL Apps Script terlebih dahulu');
     return;
   }
-  appendSyncLog('Menarik data dari Google Sheets (doGet)...');
+  logSync('GET menarik data dari Google Sheets...');
   try {
     const res = await fetch(url + '?action=getAll');
     const data = await res.json();
-    if (Array.isArray(data.products) && data.products.length) products = data.products;
-    if (Array.isArray(data.transactions)) transactions = data.transactions;
-    if (Array.isArray(data.users) && data.users.length) users = data.users;
-    saveState();
-    refreshAll();
-    appendSyncLog('Berhasil tarik data dari Google Sheets!');
-    showToast('Data berhasil ditarik dari Google Sheets!');
+    if (Array.isArray(data.products) && data.products.length) {
+      products = data.products;
+      saveJSON('aj_products', products);
+    }
+    if (Array.isArray(data.transactions)) {
+      transactions = data.transactions;
+      saveJSON('aj_transactions', transactions);
+    }
+    if (Array.isArray(data.users) && data.users.length) {
+      users = data.users;
+      saveJSON('aj_users', users);
+    }
+    renderAll();
+    logSync('Tarik data selesai!');
+    showToast('Data berhasil ditarik dari Google Sheets');
   } catch (err) {
-    appendSyncLog('Gagal tarik data: ' + err.message);
-    showToast('Gagal tarik data. Pastikan Web App di-deploy dengan akses Anyone.');
+    logSync('Tarik data error: ' + err.message);
+    showToast('Gagal menarik data. Pastikan Web App diakses "Anyone".');
   }
 }
 
 function copyScript() {
   const appsScriptCode = `function doGet(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var result = {
-    products: readSheet(ss, 'Produk'),
-    transactions: readSheet(ss, 'Transaksi'),
-    users: readSheet(ss, 'Users')
+  var out = {
+    products: sheetToObjects(ss.getSheetByName('Produk')),
+    transactions: sheetToObjects(ss.getSheetByName('Transaksi')),
+    users: sheetToObjects(ss.getSheetByName('Users'))
   };
-  return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(JSON.stringify(out)).setMimeType(ContentService.MimeType.JSON);
 }
 
 function doPost(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var payload = JSON.parse(e.postData.contents);
-  if (payload.products) writeSheet(ss, 'Produk', ['id','name','barcode','cat','price','stock','unit','desc','img'], payload.products);
-  if (payload.transactions) writeSheet(ss, 'Transaksi', ['id','date','cashier','customer','subtotal','discPct','discount','total','payment','cash','change'], payload.transactions);
-  if (payload.users) writeSheet(ss, 'Users', ['id','name','username','pass','role'], payload.users);
-  return ContentService.createTextOutput(JSON.stringify({ status: 'ok' })).setMimeType(ContentService.MimeType.JSON);
-}
-
-function readSheet(ss, name) {
-  var sh = ss.getSheetByName(name);
-  if (!sh) return [];
-  var values = sh.getDataRange().getValues();
-  if (values.length < 2) return [];
-  var headers = values[0];
-  return values.slice(1).map(function(row) {
-    var obj = {};
-    headers.forEach(function(h, i) { obj[h] = row[i]; });
-    return obj;
-  });
+  var body = JSON.parse(e.postData.contents);
+  if (body.products) writeSheet(ss, 'Produk', ['id','name','barcode','cat','price','stock','unit','desc','img'], body.products);
+  if (body.transactions) writeSheet(ss, 'Transaksi', ['id','date','cashier','customer','payment','subtotal','discountAmt','total','cash','change'], body.transactions);
+  if (body.users) writeSheet(ss, 'Users', ['id','name','username','pass','role'], body.users);
+  return ContentService.createTextOutput(JSON.stringify({status:'ok'})).setMimeType(ContentService.MimeType.JSON);
 }
 
 function writeSheet(ss, name, headers, rows) {
   var sh = ss.getSheetByName(name) || ss.insertSheet(name);
-  sh.clear();
+  sh.clearContents();
   sh.appendRow(headers);
-  rows.forEach(function(item) {
-    sh.appendRow(headers.map(function(h) { return item[h] !== undefined ? item[h] : ''; }));
+  rows.forEach(function(r) {
+    sh.appendRow(headers.map(function(h) { return r[h] !== undefined ? r[h] : ''; }));
+  });
+}
+
+function sheetToObjects(sh) {
+  if (!sh) return [];
+  var vals = sh.getDataRange().getValues();
+  if (vals.length < 2) return [];
+  var headers = vals[0];
+  return vals.slice(1).map(function(row) {
+    var obj = {};
+    headers.forEach(function(h, idx) { obj[h] = row[idx]; });
+    return obj;
   });
 }`;
-
   const ta = document.createElement('textarea');
   ta.value = appsScriptCode;
   document.body.appendChild(ta);
   ta.select();
   document.execCommand('copy');
   document.body.removeChild(ta);
-  showToast('Kode Google Apps Script disalin ke clipboard!');
+  showToast('Kode Apps Script berhasil disalin!');
 }
 
 function clearSheetData(target) {
-  askConfirm('Reset Data ' + target.toUpperCase(), `Yakin ingin mereset data ${target}?`, () => {
-    if (target === 'products') products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
-    if (target === 'transactions') transactions = [];
-    if (target === 'users') users = JSON.parse(JSON.stringify(DEFAULT_USERS));
-    saveState();
-    refreshAll();
+  openConfirm('Reset Data ' + target.toUpperCase() + '?', `Data ${target} akan direset/dikosongkan.`, () => {
+    if (target === 'products') {
+      products = [];
+      saveJSON('aj_products', products);
+    } else if (target === 'transactions') {
+      transactions = [];
+      saveJSON('aj_transactions', transactions);
+    } else if (target === 'users') {
+      users = JSON.parse(JSON.stringify(DEFAULT_USERS));
+      saveJSON('aj_users', users);
+    }
+    renderAll();
     syncSheets(false);
-    showToast(`Data ${target} berhasil direset!`);
+    showToast('Data ' + target + ' berhasil direset');
   });
 }
 
 function clearAllSystemData() {
-  askConfirm('Hapus Semua Data Aplikasi', 'PERINGATAN: Semua produk, riwayat transaksi, pengguna kustom, dan pengaturan struk akan dihapus dan dikembalikan ke awal. Lanjutkan?', () => {
-    sessionStorage.removeItem('aljaya_products');
-    sessionStorage.removeItem('aljaya_transactions');
-    sessionStorage.removeItem('aljaya_users');
-    sessionStorage.removeItem('aljaya_categories');
-    sessionStorage.removeItem('aljaya_receiptSettings');
-
+  openConfirm('⚠ Hapus Semua Data?', 'Seluruh data produk, transaksi, kategori tambahan, dan pengaturan akan dihapus bersih.', () => {
     products = [];
     transactions = [];
-    cart = [];
-    users = JSON.parse(JSON.stringify(DEFAULT_USERS));
     categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
     receiptSettings = JSON.parse(JSON.stringify(DEFAULT_RECEIPT_SETTINGS));
-
-    saveState();
-    refreshAll();
+    saveJSON('aj_products', products);
+    saveJSON('aj_transactions', transactions);
+    saveJSON('aj_categories', categories);
+    saveJSON('aj_receipt_settings', receiptSettings);
+    refreshCategoryDropdowns();
+    loadReceiptSettingsUI();
+    renderAll();
     syncSheets(false);
-    showToast('Semua data berhasil dihapus!');
+    showToast('Semua data sistem berhasil dibersihkan');
   });
 }
 
-// ================= INITIALIZATION =================
-window.onload = function() {
-  document.getElementById('loginProdCount').textContent = products.length;
+// ================= INIT ON WINDOW LOAD =================
+window.onload = function () {
+  $('loginProdCount').textContent = products.length;
   if (currentUser) {
     enterApp();
   }

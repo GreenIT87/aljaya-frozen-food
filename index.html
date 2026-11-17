@@ -19,7 +19,7 @@
 .chip-active{background:#0A4D7A!important;color:#fff!important}
 .thermal{width:58mm;max-width:225px;background:#fff;color:#000;font-family:'JetBrains Mono',monospace;font-size:8px;line-height:1.18;transition:all .2s ease}
 .thermal-80{width:80mm;max-width:310px;font-size:9px;line-height:1.25}
-.thermal img{filter:grayscale(1) contrast(1.4);max-height:22px;max-width:95px;width:auto;height:auto;margin:0 auto 2px auto;display:block}
+.thermal img,.thermal svg{filter:grayscale(1) contrast(1.4);max-height:36px;max-width:130px;width:auto;height:auto;margin:0 auto 3px auto;display:block}
 .jagged{height:10px;background:linear-gradient(-45deg,transparent 8px,#fff 0) 0 0/16px 16px repeat-x,linear-gradient(45deg,transparent 8px,#fff 0) 8px 0/16px 16px repeat-x;transform:rotate(180deg)}
 @media print{
  @page{size:58mm auto;margin:0}
@@ -27,7 +27,7 @@
  body>*{display:none!important}
  #printArea{display:block!important;position:static!important;width:46mm!important;margin:0 auto!important;padding:1mm 0.5mm!important;background:#fff!important;color:#000!important;font-family:'JetBrains Mono',monospace!important;font-size:7.2px!important;line-height:1.15!important;box-sizing:border-box!important}
  #printArea *{visibility:visible!important;color:#000!important;box-sizing:border-box!important}
- #printArea img{max-height:20px!important;max-width:85px!important;width:auto!important;height:auto!important;margin:0 auto 2px auto!important;display:block!important;filter:grayscale(1) contrast(1.5)!important}
+ #printArea img,#printArea svg{max-height:30px!important;max-width:110px!important;width:auto!important;height:auto!important;margin:0 auto 2px auto!important;display:block!important;filter:grayscale(1) contrast(1.5)!important}
 }
 #printArea{display:none}
 input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset:1px}
@@ -1404,34 +1404,35 @@ function startScanningDevice(deviceId) {
     }
   });
 }
-
-function switchBarcodeCamera() {
-  if (videoDevices.length <= 1) {
-    showToast('Hanya 1 kamera tersedia');
-    return;
-  }
-  currentDeviceIndex = (currentDeviceIndex + 1) % videoDevices.length;
-  if (codeReader) codeReader.reset();
-  startScanningDevice(videoDevices[currentDeviceIndex].deviceId);
-}
-
-function closeBarcodeScanner() {
-  try {
-    if (codeReader) {
-      codeReader.reset();
-      codeReader = null;
-    }
-  } catch (e) {}
-  $('barcodeModal').classList.add('hidden');
-}
-
-// ================= RECEIPT & THERMAL 58MM PRINTING =================
-function cleanASCII(str) {
-  return String(str || '')
-    .replace(/²/g, '2')
-    .replace(/°/g, '')
-    .replace(/❄/g, '*')
-    .replace(/[^\x20-\x7E]/g, '');
+function getReceiptLogoSVG(width = 125, height = 34) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 96" width="${width}" height="${height}" style="display:block;margin:0 auto 2px auto;">
+    <g fill="#000000">
+      <!-- Outer & Inner Swooshes -->
+      <path d="M138 14 C95 6, 48 22, 46 44 C44 58, 75 63, 74 75 C73 86, 36 86, 16 74 C3 66, 2 45, 22 29 C10 42, 11 58, 25 65 C43 73, 62 69, 62 60 C62 51, 33 47, 34 32 C35 15, 86 2, 138 14 Z"/>
+      <path d="M142 20 C115 11, 78 16, 66 28 C82 21, 115 19, 134 27 C140 30, 141 36, 137 42 C146 34, 149 24, 142 20 Z"/>
+      <path d="M116 58 C95 82, 48 93, 18 81 C45 98, 96 89, 116 58 Z"/>
+      <!-- Snowflake Emblem -->
+      <g transform="translate(43,46)" stroke="#000000" stroke-width="3.2" stroke-linecap="round">
+        <line x1="0" y1="-19" x2="0" y2="19"/>
+        <line x1="-16.5" y1="-9.5" x2="16.5" y2="9.5"/>
+        <line x1="-16.5" y1="9.5" x2="16.5" y2="-9.5"/>
+        <polyline points="-4,-13 0,-9 4,-13" fill="none"/>
+        <polyline points="-4,13 0,9 4,13" fill="none"/>
+        <polyline points="-13,-3 -8,-4.5 -9,-9.5" fill="none"/>
+        <polyline points="13,3 8,4.5 9,9.5" fill="none"/>
+        <polyline points="-9,9.5 -8,4.5 -13,3" fill="none"/>
+        <polyline points="9,-9.5 8,-4.5 13,-3" fill="none"/>
+      </g>
+      <!-- Superscript 2 -->
+      <text x="114" y="34" font-family="Arial Black, Impact, sans-serif" font-weight="900" font-style="italic" font-size="19">2</text>
+      <!-- AL -->
+      <text x="128" y="47" font-family="Arial Black, Impact, sans-serif" font-weight="900" font-style="italic" font-size="34" letter-spacing="1">AL</text>
+      <!-- JAYA -->
+      <text x="115" y="76" font-family="Arial Black, Impact, sans-serif" font-weight="900" font-style="italic" font-size="36" letter-spacing="1">JAYA</text>
+      <!-- Frozen Food -->
+      <text x="118" y="91" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="14.5" letter-spacing="0.4">Frozen Food</text>
+    </g>
+  </svg>`;
 }
 
 function buildReceiptHTML(t) {
@@ -1448,8 +1449,7 @@ function buildReceiptHTML(t) {
 
   return `
     <div style="text-align:center;">
-      <img src="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171" onerror="this.style.display='none'" alt="logo">
-      <div style="font-weight:800;font-size:8.5px;letter-spacing:0.3px;">${s.storeName}</div>
+      ${getReceiptLogoSVG(125, 34)}
       <div style="font-size:6.8px;line-height:1.15;">${s.address}</div>
       <div style="font-size:6.8px;font-weight:700;">${s.phone}</div>
     </div>
@@ -1532,22 +1532,27 @@ function wrapThermalText(text, width = 42) {
 
 async function getLogoEscPosBytes() {
   try {
+    const w = 240; // divisible by 8, fits 58mm thermal cleanly
+    const h = 68;
+    const svgMarkup = getReceiptLogoSVG(w, h);
+    const svgBlob = new Blob([svgMarkup], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+
+    const img = await new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = reject;
+      image.src = url;
+    });
+
     const canvas = document.createElement('canvas');
-    const w = 192; // divisible by 8
-    const h = 44;
     canvas.width = w;
     canvas.height = h;
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, w, h);
-
-    // Draw crisp emblem fallback first, then try external logo if CORS permits
-    ctx.fillStyle = '#000000';
-    ctx.font = 'bold 16px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('2AL JAYA', w / 2, 20);
-    ctx.font = 'bold 10px sans-serif';
-    ctx.fillText('FROZEN FOOD', w / 2, 35);
+    ctx.drawImage(img, 0, 0, w, h);
+    URL.revokeObjectURL(url);
 
     const imgData = ctx.getImageData(0, 0, w, h).data;
     const widthBytes = w / 8;
@@ -1563,7 +1568,7 @@ async function getLogoEscPosBytes() {
           const x = xb * 8 + bit;
           const idx = (y * w + x) * 4;
           const lum = 0.299 * imgData[idx] + 0.587 * imgData[idx + 1] + 0.114 * imgData[idx + 2];
-          if (lum < 140) byte |= (1 << (7 - bit));
+          if (lum < 160) byte |= (1 << (7 - bit));
         }
         raster[offset++] = byte;
       }
@@ -1614,7 +1619,6 @@ async function printViaBluetooth() {
       '\x1B\x4D\x01',   // Font B (condensed small font)
       '\x1B\x33\x16',   // Compact line spacing
       '\x1B\x61\x01',   // Center align
-      '\x1B\x45\x01' + cleanASCII(s.storeName) + '\x1B\x45\x00\n',
       ...wrapThermalText(s.address, cols).map(l => l + '\n'),
       cleanASCII(s.phone) + '\n',
       sep,
@@ -1648,11 +1652,13 @@ async function printViaBluetooth() {
 
     const encoder = new TextEncoder();
     const logoBytes = await getLogoEscPosBytes();
+    const initCenter = new Uint8Array([0x1B, 0x40, 0x1B, 0x61, 0x01]);
     const textBytes = encoder.encode(lines.join(''));
 
-    const fullPayload = new Uint8Array(logoBytes.length + textBytes.length);
-    fullPayload.set(logoBytes, 0);
-    fullPayload.set(textBytes, logoBytes.length);
+    const fullPayload = new Uint8Array(initCenter.length + logoBytes.length + textBytes.length);
+    fullPayload.set(initCenter, 0);
+    fullPayload.set(logoBytes, initCenter.length);
+    fullPayload.set(textBytes, initCenter.length + logoBytes.length);
 
     const chunkSize = 100;
     for (let i = 0; i < fullPayload.length; i += chunkSize) {

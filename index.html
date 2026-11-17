@@ -34,6 +34,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
 .product-img{aspect-ratio:4/3;object-fit:cover}
 .snow{position:absolute;color:#bfe6f7;animation:fall linear infinite;pointer-events:none}
 @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+@media (max-width:767px){
+  input,select,textarea{font-size:16px!important}
+  .mobile-cart-drawer{position:fixed;inset:0;z-index:85;background:rgba(10,37,64,.65);backdrop-filter:blur(4px);display:flex;flex-direction:column;justify-content:flex-end;padding:0}
+  .mobile-cart-panel{border-radius:26px 26px 0 0!important;max-height:90vh;overflow-y:auto;animation:slideUp .24s ease-out}
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 </style>
 </head>
 <body class="bg-[#F2F8FC] text-slate-800">
@@ -102,11 +108,11 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
 </div>
 
 <!-- MAIN APP VIEW -->
-<div id="appView" class="hidden pb-24 md:pb-8">
+<div id="appView" class="hidden pb-28 md:pb-8">
   <!-- HEADER -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b">
-    <div class="max-w-7xl mx-auto px-3 md:px-5 h-[68px] flex items-center gap-3">
-      <img src="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171" onerror="this.src='https://placehold.co/110x44/0A4D7A/FFFFFF?text=AL+JAYA'" class="h-11 w-[110px] object-contain object-left cursor-pointer" onclick="showView('dashboard')" alt="logo">
+    <div class="max-w-7xl mx-auto px-3 md:px-5 h-[62px] md:h-[68px] flex items-center gap-2 md:gap-3">
+      <img src="https://www.designarena.ai/u/1b8ed177-6347-4a72-a4ca-28aec7d3b171" onerror="this.src='https://placehold.co/110x44/0A4D7A/FFFFFF?text=AL+JAYA'" class="h-10 md:h-11 w-[96px] md:w-[110px] object-contain object-left cursor-pointer" onclick="showView('dashboard')" alt="logo">
       <div class="hidden sm:block leading-none">
         <p class="font-black text-[#0A4D7A] text-[15px]">²AL JAYA <span class="text-[#1590C8] font-bold text-xs block tracking-widest mt-0.5">FROZEN FOOD • POS SYSTEM</span></p>
       </div>
@@ -116,12 +122,16 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
           <input id="globalSearch" oninput="onGlobalSearch(this.value)" placeholder="Cari nugget, sosis, bakso..." class="bg-transparent w-full text-sm outline-none">
         </div>
       </div>
-      <button onclick="syncSheets(true)" class="hidden md:flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-3 py-2 rounded-full text-xs font-bold transition">
+      <div class="flex-1 md:hidden"></div>
+      <button onclick="toggleMobileSearch()" title="Cari Cepat" class="md:hidden w-9 h-9 grid place-items-center rounded-full bg-slate-100 active:scale-95 text-slate-600">
+        <i class="fa fa-search text-sm"></i>
+      </button>
+      <button onclick="syncSheets(true)" title="Sync Sheets" class="flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-2.5 md:px-3 py-2 rounded-full text-xs font-bold transition">
         <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-        <span id="syncLabel">Sheets Terhubung</span>
+        <span id="syncLabel" class="hidden md:inline">Sheets Terhubung</span>
         <i class="fa fa-rotate" id="syncSpin"></i>
       </button>
-      <button onclick="showView('pos')" class="relative bg-[#FF6B35] hover:bg-orange-600 text-white px-3.5 py-2 rounded-full text-xs font-extrabold transition shadow-sm">
+      <button onclick="openMobileCartOrPos()" class="relative bg-[#FF6B35] hover:bg-orange-600 text-white px-3 md:px-3.5 py-2 rounded-full text-xs font-extrabold transition shadow-sm">
         <i class="fa fa-cart-shopping"></i> <span class="hidden sm:inline ml-1">Kasir</span>
         <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-[#0A4D7A] text-white text-[10px] w-5 h-5 grid place-items-center rounded-full border-2 border-white">0</span>
       </button>
@@ -137,6 +147,14 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
       <button onclick="logout()" title="Keluar" class="w-9 h-9 grid place-items-center rounded-full bg-red-50 hover:bg-red-100 text-red-500 transition">
         <i class="fa fa-power-off text-sm"></i>
       </button>
+    </div>
+    <!-- MOBILE QUICK SEARCH BAR -->
+    <div id="mobileSearchBar" class="hidden md:hidden px-3 pb-2.5">
+      <div class="flex items-center bg-slate-100 rounded-full px-3.5 py-2 gap-2">
+        <i class="fa fa-search text-slate-400 text-xs"></i>
+        <input id="mobileGlobalSearch" oninput="onGlobalSearch(this.value)" placeholder="Cari produk, kategori, atau barcode..." class="bg-transparent w-full text-sm outline-none">
+        <button onclick="toggleMobileSearch(false)" class="text-slate-400 text-xs font-bold px-1">✕</button>
+      </div>
     </div>
     <nav class="max-w-7xl mx-auto px-3 md:px-5 hidden md:flex gap-1.5 pb-2.5 overflow-x-auto no-scrollbar" id="desktopNav">
       <button data-view="dashboard" onclick="showView('dashboard')" class="navbtn active-nav px-4 py-2 rounded-full text-xs font-bold bg-slate-100 whitespace-nowrap transition">🏠 Dashboard</button>
@@ -260,62 +278,80 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
           <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1 items-center" id="posCats"></div>
           <div class="flex gap-2 mt-3">
             <input id="posSearch" oninput="renderPOS()" onkeydown="if(event.key==='Enter') handleBarcodeInput(this.value)" placeholder="Cari produk atau scan barcode..." class="flex-1 bg-white rounded-full px-4 py-3 text-sm shadow-sm outline-none">
-            <button onclick="openBarcodeScanner()" class="bg-[#FF6B35] hover:bg-orange-600 text-white px-4 py-3 rounded-full text-xs font-black whitespace-nowrap shadow-sm transition">
-              <i class="fa fa-camera mr-1"></i> Scan Barcode
+            <button onclick="openBarcodeScanner()" class="bg-[#FF6B35] hover:bg-orange-600 text-white px-4 py-3 rounded-full text-xs font-black whitespace-nowrap shadow-sm transition active:scale-95">
+              <i class="fa fa-camera md:mr-1"></i> <span class="hidden sm:inline">Scan Barcode</span>
             </button>
           </div>
-          <div id="posGrid" class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3"></div>
+          <div id="posGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 md:gap-3 mt-3"></div>
         </div>
 
-        <!-- CART -->
-        <div class="bg-white rounded-[22px] card-shadow overflow-hidden sticky top-[118px]">
-          <div class="bg-[#0A4D7A] text-white p-4 flex justify-between items-center">
-            <div>
-              <p class="font-black">🧾 Keranjang Kasir</p>
-              <p class="text-[11px] text-cyan-200" id="cartInfo">0 item • Kasir: Admin</p>
+        <!-- CART (Desktop Sticky Sidebar & Mobile Slide-Up Bottom Sheet) -->
+        <div id="posCartWrapper" onclick="if(event.target===this) toggleMobileCart(false)" class="hidden lg:block">
+          <div class="bg-white rounded-[22px] card-shadow overflow-hidden lg:sticky lg:top-[118px] mobile-cart-panel w-full">
+            <div class="w-10 h-1 bg-white/40 rounded-full mx-auto mt-2 lg:hidden"></div>
+            <div class="bg-[#0A4D7A] text-white p-4 flex justify-between items-center">
+              <div>
+                <p class="font-black">🧾 Keranjang Kasir</p>
+                <p class="text-[11px] text-cyan-200" id="cartInfo">0 item • Kasir: Admin</p>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button onclick="clearCart()" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full font-bold transition">Kosongkan</button>
+                <button onclick="toggleMobileCart(false)" class="lg:hidden w-8 h-8 rounded-full bg-white/20 grid place-items-center text-sm font-black">✕</button>
+              </div>
             </div>
-            <button onclick="clearCart()" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full font-bold transition">Kosongkan</button>
-          </div>
-          <div id="cartItems" class="max-h-[280px] overflow-auto p-3 space-y-2"></div>
-          <div class="p-4 border-t space-y-2.5 text-sm">
-            <div class="flex justify-between text-slate-500"><span>Subtotal</span><b id="subTotal" class="text-slate-800">Rp 0</b></div>
-            <div class="flex justify-between items-center">
-              <span class="text-slate-500">Diskon</span>
-              <select id="discountSel" onchange="renderCart()" class="bg-slate-100 rounded-full px-3 py-1 text-xs font-bold">
-                <option value="0">0%</option>
-                <option value="5">5%</option>
-                <option value="10">10% Promo</option>
-                <option value="15">15% Grosir</option>
-              </select>
-            </div>
-            <div class="flex justify-between text-lg font-black text-[#0A4D7A] pt-1 border-t">
-              <span>TOTAL</span>
-              <span id="grandTotal">Rp 0</span>
-            </div>
-            <div class="grid grid-cols-3 gap-2 pt-1">
-              <button onclick="setPay('Tunai',this)" class="paybtn bg-[#0A4D7A] text-white py-2 rounded-xl text-xs font-bold transition">💵 Tunai</button>
-              <button onclick="setPay('QRIS',this)" class="paybtn bg-slate-100 py-2 rounded-xl text-xs font-bold transition">📱 QRIS</button>
-              <button onclick="setPay('Transfer',this)" class="paybtn bg-slate-100 py-2 rounded-xl text-xs font-bold transition">🏦 Transfer</button>
-            </div>
-            <input id="custName" placeholder="Nama pelanggan (opsional)" class="w-full bg-slate-100 rounded-xl px-3 py-2.5 text-sm outline-none">
-            <div class="flex gap-2">
-              <div class="flex-1">
-                <input id="cashInput" type="number" oninput="calcChange()" placeholder="Uang diterima (Rp)" class="w-full bg-slate-100 rounded-xl px-3 py-2.5 text-sm outline-none font-bold">
-                <div class="flex gap-1 mt-1.5">
-                  <button type="button" onclick="quickCash('exact')" class="flex-1 bg-slate-100 hover:bg-slate-200 py-1 rounded-lg text-[10px] font-bold">Uang Pas</button>
-                  <button type="button" onclick="quickCash(50000)" class="flex-1 bg-slate-100 hover:bg-slate-200 py-1 rounded-lg text-[10px] font-bold">50rb</button>
-                  <button type="button" onclick="quickCash(100000)" class="flex-1 bg-slate-100 hover:bg-slate-200 py-1 rounded-lg text-[10px] font-bold">100rb</button>
+            <div id="cartItems" class="max-h-[34vh] lg:max-h-[280px] overflow-auto p-3 space-y-2"></div>
+            <div class="p-4 border-t space-y-2.5 text-sm">
+              <div class="flex justify-between text-slate-500"><span>Subtotal</span><b id="subTotal" class="text-slate-800">Rp 0</b></div>
+              <div class="flex justify-between items-center">
+                <span class="text-slate-500">Diskon</span>
+                <select id="discountSel" onchange="renderCart()" class="bg-slate-100 rounded-full px-3 py-1.5 text-xs font-bold">
+                  <option value="0">0%</option>
+                  <option value="5">5%</option>
+                  <option value="10">10% Promo</option>
+                  <option value="15">15% Grosir</option>
+                </select>
+              </div>
+              <div class="flex justify-between text-lg font-black text-[#0A4D7A] pt-1 border-t">
+                <span>TOTAL</span>
+                <span id="grandTotal">Rp 0</span>
+              </div>
+              <div class="grid grid-cols-3 gap-2 pt-1">
+                <button onclick="setPay('Tunai',this)" class="paybtn bg-[#0A4D7A] text-white py-2.5 rounded-xl text-xs font-bold transition">💵 Tunai</button>
+                <button onclick="setPay('QRIS',this)" class="paybtn bg-slate-100 py-2.5 rounded-xl text-xs font-bold transition">📱 QRIS</button>
+                <button onclick="setPay('Transfer',this)" class="paybtn bg-slate-100 py-2.5 rounded-xl text-xs font-bold transition">🏦 Transfer</button>
+              </div>
+              <input id="custName" placeholder="Nama pelanggan (opsional)" class="w-full bg-slate-100 rounded-xl px-3 py-2.5 text-sm outline-none">
+              <div class="flex flex-col sm:flex-row gap-2">
+                <div class="flex-1">
+                  <input id="cashInput" type="number" inputmode="numeric" oninput="calcChange()" placeholder="Uang diterima (Rp)" class="w-full bg-slate-100 rounded-xl px-3 py-2.5 text-sm outline-none font-bold">
+                  <div class="flex gap-1.5 mt-1.5">
+                    <button type="button" onclick="quickCash('exact')" class="flex-1 bg-slate-100 hover:bg-slate-200 py-1.5 rounded-lg text-[11px] font-bold">Uang Pas</button>
+                    <button type="button" onclick="quickCash(50000)" class="flex-1 bg-slate-100 hover:bg-slate-200 py-1.5 rounded-lg text-[11px] font-bold">50rb</button>
+                    <button type="button" onclick="quickCash(100000)" class="flex-1 bg-slate-100 hover:bg-slate-200 py-1.5 rounded-lg text-[11px] font-bold">100rb</button>
+                  </div>
+                </div>
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2 text-xs font-bold text-emerald-700 sm:min-w-[115px] flex sm:flex-col justify-between sm:justify-center items-center sm:items-start">
+                  <span class="text-[10px] uppercase">Kembalian</span>
+                  <span id="changeText" class="text-sm font-black mt-0.5">Rp 0</span>
                 </div>
               </div>
-              <div class="bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2 text-xs font-bold text-emerald-700 min-w-[115px] flex flex-col justify-center">
-                <span class="text-[10px] uppercase">Kembalian</span>
-                <span id="changeText" class="text-sm font-black mt-0.5">Rp 0</span>
-              </div>
+              <button onclick="checkout()" class="w-full bg-[#FF6B35] hover:bg-orange-600 active:scale-[0.99] text-white py-3.5 rounded-2xl font-black text-sm shadow-lg shadow-orange-200 transition">BAYAR & CETAK STRUK →</button>
+              <p class="text-center text-[10px] text-slate-400">Support Printer Thermal Bluetooth 58mm • RawBT / BT Print</p>
             </div>
-            <button onclick="checkout()" class="w-full bg-[#FF6B35] hover:bg-orange-600 text-white py-3.5 rounded-2xl font-black text-sm shadow-lg shadow-orange-200 transition">BAYAR & CETAK STRUK →</button>
-            <p class="text-center text-[10px] text-slate-400">Support Printer Thermal Bluetooth 58mm • RawBT / BT Print</p>
           </div>
         </div>
+      </div>
+
+      <!-- FLOATING MOBILE POS CHECKOUT BAR -->
+      <div id="mobilePosBar" onclick="toggleMobileCart(true)" class="lg:hidden fixed bottom-[68px] inset-x-3 z-40 bg-[#0A4D7A] text-white rounded-2xl p-3.5 shadow-2xl border border-cyan-400/30 flex items-center justify-between cursor-pointer active:scale-[0.98] transition">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[#FF6B35] grid place-items-center font-black text-sm shadow" id="mobileBarQty">0</div>
+          <div>
+            <p class="text-[10px] text-cyan-200 font-bold uppercase tracking-wider">Total Keranjang</p>
+            <p class="font-black text-base leading-tight" id="mobileBarTotal">Rp 0</p>
+          </div>
+        </div>
+        <span class="bg-white text-[#0A4D7A] px-4 py-2 rounded-xl text-xs font-black">Lihat & Bayar →</span>
       </div>
     </section>
 
@@ -469,12 +505,13 @@ input:focus,select:focus,textarea:focus{outline:2px solid #2A9AC6;outline-offset
   </main>
 
   <!-- BOTTOM NAV MOBILE -->
-  <nav class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white border-t shadow-[0_-6px_20px_rgba(0,0,0,.08)] grid grid-cols-5 py-2 text-[10px] font-bold text-slate-500">
-    <button data-mview="dashboard" onclick="showView('dashboard')" class="mnav flex flex-col items-center gap-0.5 text-[#0A4D7A]"><i class="fa fa-home text-lg"></i>Home</button>
-    <button data-mview="products" onclick="showView('products')" class="mnav flex flex-col items-center gap-0.5"><i class="fa fa-box text-lg"></i>Produk</button>
-    <button data-mview="pos" onclick="showView('pos')" class="mnav flex flex-col items-center gap-0.5"><span class="w-11 h-11 -mt-6 bg-[#FF6B35] text-white rounded-full grid place-items-center shadow-lg"><i class="fa fa-cart-shopping"></i></span>Kasir</button>
-    <button data-mview="history" onclick="showView('history')" class="mnav flex flex-col items-center gap-0.5"><i class="fa fa-receipt text-lg"></i>Riwayat</button>
-    <button data-mview="sheets" onclick="showView('sheets')" class="mnav flex flex-col items-center gap-0.5"><i class="fa fa-table text-lg"></i>Sheets</button>
+  <nav class="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur border-t shadow-[0_-6px_20px_rgba(0,0,0,.08)] grid grid-cols-6 py-2 text-[10px] font-bold text-slate-500">
+    <button data-mview="dashboard" onclick="showView('dashboard')" class="mnav flex flex-col items-center gap-0.5 text-[#0A4D7A]"><i class="fa fa-home text-base"></i>Home</button>
+    <button data-mview="products" onclick="showView('products')" class="mnav flex flex-col items-center gap-0.5"><i class="fa fa-box text-base"></i>Produk</button>
+    <button data-mview="pos" onclick="showView('pos')" class="mnav flex flex-col items-center gap-0.5"><span class="w-10 h-10 -mt-5 bg-[#FF6B35] text-white rounded-full grid place-items-center shadow-lg"><i class="fa fa-cart-shopping"></i></span>Kasir</button>
+    <button data-mview="history" onclick="showView('history')" class="mnav flex flex-col items-center gap-0.5"><i class="fa fa-receipt text-base"></i>Riwayat</button>
+    <button data-mview="users" onclick="showView('users')" class="mnav flex flex-col items-center gap-0.5"><i class="fa fa-users text-base"></i>User</button>
+    <button data-mview="sheets" onclick="showView('sheets')" class="mnav flex flex-col items-center gap-0.5"><i class="fa fa-table text-base"></i>Sheets</button>
   </nav>
 </div>
 
@@ -860,12 +897,46 @@ function showView(viewName) {
 }
 
 function onGlobalSearch(q) {
+  if ($('globalSearch') && $('globalSearch').value !== q) $('globalSearch').value = q;
+  if ($('mobileGlobalSearch') && $('mobileGlobalSearch').value !== q) $('mobileGlobalSearch').value = q;
   $('prodSearch').value = q;
   $('posSearch').value = q;
   if (!$('view-pos').classList.contains('hidden')) {
     renderPOS();
   } else {
     showView('products');
+  }
+}
+
+function toggleMobileSearch(forceState) {
+  const bar = $('mobileSearchBar');
+  if (!bar) return;
+  const show = typeof forceState === 'boolean' ? forceState : bar.classList.contains('hidden');
+  bar.classList.toggle('hidden', !show);
+  if (show && $('mobileGlobalSearch')) {
+    $('mobileGlobalSearch').focus();
+  }
+}
+
+function toggleMobileCart(open) {
+  const wrap = $('posCartWrapper');
+  if (!wrap) return;
+  if (open) {
+    wrap.classList.remove('hidden');
+    wrap.classList.add('mobile-cart-drawer');
+  } else {
+    wrap.classList.add('hidden');
+    wrap.classList.remove('mobile-cart-drawer');
+  }
+}
+
+function openMobileCartOrPos() {
+  const isMobile = window.innerWidth < 1024;
+  if ($('view-pos').classList.contains('hidden')) {
+    showView('pos');
+    if (isMobile && cart.length > 0) toggleMobileCart(true);
+  } else if (isMobile) {
+    toggleMobileCart(true);
   }
 }
 
@@ -1294,9 +1365,9 @@ function renderCart() {
         <p class="text-[11px] text-slate-500">${rp(item.price)} x ${item.qty} = <b class="text-[#0A4D7A]">${rp(item.price * item.qty)}</b></p>
       </div>
       <div class="flex items-center gap-1.5">
-        <button onclick="updateCartQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-white border font-black text-xs">-</button>
+        <button onclick="updateCartQty('${item.id}', -1)" class="w-8 h-8 rounded-lg bg-white border font-black text-xs active:scale-95">-</button>
         <span class="w-5 text-center font-black text-xs">${item.qty}</span>
-        <button onclick="updateCartQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-[#0A4D7A] text-white font-black text-xs">+</button>
+        <button onclick="updateCartQty('${item.id}', 1)" class="w-8 h-8 rounded-lg bg-[#0A4D7A] text-white font-black text-xs active:scale-95">+</button>
       </div>
     </div>
   `).join('') : '<div class="text-center py-8 text-xs text-slate-400">Keranjang masih kosong.<br>Pilih produk di samping atau scan barcode.</div>';
@@ -1304,6 +1375,8 @@ function renderCart() {
   const { sub, total } = getCartTotals();
   $('subTotal').textContent = rp(sub);
   $('grandTotal').textContent = rp(total);
+  if ($('mobileBarQty')) $('mobileBarQty').textContent = totalQty;
+  if ($('mobileBarTotal')) $('mobileBarTotal').textContent = rp(total);
   calcChange();
 }
 
@@ -1363,6 +1436,7 @@ function checkout() {
   saveJSON('aj_transactions', transactions);
 
   clearCart();
+  toggleMobileCart(false);
   renderAll();
   syncSheets(false);
   openReceipt(trx.id);
